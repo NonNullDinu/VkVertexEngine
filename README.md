@@ -21,7 +21,7 @@ You can join the official Vertex Engine [Discord Server](https://discord.gg/hA5k
 Vertex aims to be a lightweight and powerful game engine. We plan on supporting multiple rendering APIs including DirectX12 and Vulkan. We also plan on adding Mac support sometime in the future.
 
 ## Contributing
-See [CONTRIBUTING](https://github.com/VertexEngine/VertexEngine/blob/master/CONTRIBUTING.md).
+See [CONTRIBUTING](https://github.com/VertexEngine/VertexEngine/blob/master/.github/CONTRIBUTING.md).
 
 ## Authors
 This project is mainly authored and maintained by me, [Sachin Sushil](https://twitter.com/42_mix).
