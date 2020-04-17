@@ -2,7 +2,7 @@
 
 ![Contributions](https://img.shields.io/badge/contributions-open-green)
 
-Contributions are encouraged, however, discussing the proposed changes beforehand via [twitter or discord](https://github.com/42mix/Vertex#support) is appreciated.
+Contributions are encouraged, however, discussing the proposed changes beforehand via [twitter or discord](https://github.com/VertexEngine/VertexEngine#support) is appreciated.
 
 ## Code style
 
@@ -22,4 +22,4 @@ It is important for a healthy code base to have a consistent style through all i
 * Minimize external dependencies, so that the code can almost work out of the box.
 
 ## Code of conduct
-See [CODE_OF_CONDUCT](https://github.com/42mix/Vertex/blob/master/CODE_OF_CONDUCT.md).
+See [CODE_OF_CONDUCT](https://github.com/VertexEngine/VertexEngine/blob/master/CODE_OF_CONDUCT.md).
