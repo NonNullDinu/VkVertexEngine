@@ -12,9 +12,11 @@ set_target_properties(Vertex PROPERTIES PUBLIC_HEADER include/Vertex.h)
 
 target_include_directories(Vertex PRIVATE Vertex/src)
 
-set_target_properties(Vertex 
-    PROPERTIES COMPILE_DEFINITIONS VX_BUILD_SHARED
-)
+if (MSVC)
+    set_target_properties(Vertex 
+        PROPERTIES COMPILE_DEFINITIONS VX_BUILD_SHARED
+    )
+endif (MSVC)
 
 install(TARGETS Vertex
     CONFIGURATIONS Debug
