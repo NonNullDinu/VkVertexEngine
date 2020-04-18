@@ -1,6 +1,6 @@
 # Vertex Engine
 
-[![License](https://img.shields.io/github/license/42mix/Vertex?color=blue)](https://github.com/VertexEngine/VertexEngine/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/VertexEngine/VertexEngine?color=blue)](https://github.com/VertexEngine/VertexEngine/blob/master/LICENSE)
 
 A powerful C++ based game engine, currently in early development. I'm developing this engine following along [TheCherno](https://www.youtube.com/playlist?list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT)'s tutorial, so there are probably many implementation similarities.
 
