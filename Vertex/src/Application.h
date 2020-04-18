@@ -4,7 +4,7 @@
 
 namespace Vertex {
 
-	class VERTEX_PUBLIC_API Application
+	class VX_PUBLIC_API Application
 	{
 	public:
 		Application();
