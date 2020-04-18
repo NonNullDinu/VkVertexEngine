@@ -1,6 +1,18 @@
 #include <Vertex.h>
 
-int main()
+class SandBoxApp : public Vertex::Application
 {
-	Vertex::Application().Run();
+public:
+	SandBoxApp()
+	{
+	}
+
+	~SandBoxApp()
+	{
+	}
+};
+
+Vertex::Application* Vertex::CreateApplication()
+{
+	return new SandBoxApp();
 }

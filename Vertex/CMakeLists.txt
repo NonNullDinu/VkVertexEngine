@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 project(Vertex)
 
 add_library(Vertex SHARED
-    Vertex/src/Application.cpp
+    Vertex/src/Core/Application.cpp
 )
 
 set_property(TARGET Vertex PROPERTY POSITION_INDEPENDENT_CODE ON)
