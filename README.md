@@ -1,5 +1,6 @@
 # Vertex Engine
 
+[![build](https://github.com/VertexEngine/VertexEngine/workflows/build/badge.svg)](#)
 [![License](https://img.shields.io/github/license/VertexEngine/VertexEngine?color=blue)](https://github.com/VertexEngine/VertexEngine/blob/master/LICENSE)
 
 A powerful C++ based game engine, currently in early development. I'm developing this engine following along [TheCherno](https://www.youtube.com/playlist?list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT)'s tutorial, so there are probably many implementation similarities.
@@ -27,4 +28,4 @@ Vertex aims to be a lightweight and powerful game engine. We plan on supporting 
 See [CONTRIBUTING](https://github.com/VertexEngine/VertexEngine/blob/master/.github/CONTRIBUTING.md).
 
 ## Authors
-This project is mainly authored and maintained by me, [Sachin Sushil](https://twitter.com/42_mix).
+Initial work - [Sachin Sushil](https://github.com/42mix)
