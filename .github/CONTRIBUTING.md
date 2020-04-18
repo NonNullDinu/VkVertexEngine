@@ -15,11 +15,5 @@ It is important for a healthy code base to have a consistent style through all i
 * All classes, structs, and enum classes are in the `PascalCase`.
 * All macros are in the `UPPER_CASE_SNAKE_CASE`.
 
-### Patterns
-* All C++ files have the `.cpp` extension.
-* Attempt to maximize performace.
-* Prefer documented code.
-* Minimize external dependencies, so that the code can almost work out of the box.
-
 ## Code of conduct
-See [CODE_OF_CONDUCT](https://github.com/VertexEngine/VertexEngine/blob/master/CODE_OF_CONDUCT.md).
+See [CODE_OF_CONDUCT](https://github.com/VertexEngine/VertexEngine/blob/master/.github/CODE_OF_CONDUCT.md).
