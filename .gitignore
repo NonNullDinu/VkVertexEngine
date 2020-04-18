@@ -37,3 +37,6 @@
 *.vcxproj
 *.filters
 *.user
+
+# Build artefacts
+build/
