@@ -1,6 +1,6 @@
-#include "Vertex.h"
+#include <Vertex.h>
 
 int main()
 {
-	Application().Run();
+	Vertex::Application().Run();
 }

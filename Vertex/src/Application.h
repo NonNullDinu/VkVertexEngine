@@ -1,8 +1,10 @@
 #pragma once
 
+#include "Core.h"
+
 namespace Vertex {
 
-	class Application
+	class VERTEX_PUBLIC_API Application
 	{
 	public:
 		Application();
