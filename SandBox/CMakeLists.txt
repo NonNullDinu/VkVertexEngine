@@ -7,6 +7,13 @@ add_executable(SandBox
 )
 
 target_include_directories(SandBox PRIVATE Vertex/include)
-target_link_directories(SandBox PRIVATE build/Debug)
 
 target_link_libraries(SandBox Vertex)
+
+install(TARGETS Vertex
+    CONFIGURATIONS Debug
+    LIBRARY DESTINATION Debug/bin)
+
+install(TARGETS Vertex
+    CONFIGURATIONS Release
+    LIBRARY DESTINATION Release/bin)

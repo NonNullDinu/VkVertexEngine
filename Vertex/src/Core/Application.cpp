@@ -4,7 +4,7 @@ namespace Vertex {
 
 	Application::Application()
 	{
-
+		
 	}
 
 	Application::~Application()

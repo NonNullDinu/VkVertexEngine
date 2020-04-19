@@ -33,6 +33,7 @@
 
 # Visual Studio artefacts
 .vs
+.vscode
 *.sln
 *.vcxproj
 *.filters
@@ -40,3 +41,4 @@
 
 # Build artefacts
 build/
+out/

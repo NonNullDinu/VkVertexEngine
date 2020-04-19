@@ -3,5 +3,5 @@ cd ../
 mkdir build 2> NUL
 
 cd build
-cmake ..
+cmake -DCMAKE_BUILD_TYPE=Debug ..
 msbuild SandBox.sln
