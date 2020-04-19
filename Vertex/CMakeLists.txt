@@ -3,19 +3,19 @@ cmake_minimum_required(VERSION 3.10)
 project(Vertex)
 
 add_library(Vertex SHARED
-    Vertex/src/Core/Application.cpp
-    Vertex/src/Core/Logger.cpp
+    ${PROJECT_SOURCE_DIR}/Vertex/src/Core/Application.cpp
+    ${PROJECT_SOURCE_DIR}/Vertex/src/Core/Logger.cpp
 )
 
 target_include_directories(Vertex 
-    PUBLIC Vertex/src
-    PUBLIC Vertex/deps/spdlog/include
+    PUBLIC ${PROJECT_SOURCE_DIR}/Vertex/src
+    PUBLIC ${PROJECT_SOURCE_DIR}/Vertex/deps/spdlog/include
 )
 
 set_target_properties(Vertex PROPERTIES POSITION_INDEPENDENT_CODE ON)
-set_target_properties(Vertex PROPERTIES PUBLIC_HEADER include/Vertex.h)
+set_target_properties(Vertex PROPERTIES PUBLIC_HEADER ${PROJECT_SOURCE_DIR}/include/Vertex.h)
 
-target_precompile_headers(Vertex PUBLIC Vertex/src/Core/vx_pch.h)
+target_precompile_headers(Vertex PUBLIC ${PROJECT_SOURCE_DIR}/Vertex/src/Core/vx_pch.h)
 
 target_compile_definitions(Vertex PRIVATE VX_BUILD_SHARED)
 
