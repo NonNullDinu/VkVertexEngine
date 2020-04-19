@@ -7,9 +7,9 @@ add_library(Vertex SHARED
     Vertex/src/Core/Logger.cpp
 )
 
-target_include_directories(Vertex PUBLIC
-    Vertex/src
-    Vertex/deps/spdlog/include
+target_include_directories(Vertex 
+    PUBLIC Vertex/src
+    PUBLIC Vertex/deps/spdlog/include
 )
 
 set_target_properties(Vertex PROPERTIES POSITION_INDEPENDENT_CODE ON)
