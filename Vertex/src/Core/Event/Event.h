@@ -1,47 +1,54 @@
 #include "Core.h"
 
-#define VX_GET_EVENT_TYPE_CHAR(x) ##x
+#include "spdlog/fmt/fmt.h"
+
+#define VX_GET_EVENT_TYPE_CHAR(x) #x
 
 namespace Vertex {
 
     enum class EventTypes
     {
-        KeyPressEvent, KeyReleaseEvent,
-        MouseClickEvent, MouseReleaseEvent, MouseScrollEvent, MouseMoveEvent
+        WindowResize, WindowClose,
+        KeyPress, KeyRelease,
+        MouseClick, MouseRelease, MouseScroll, MouseMove
+    };
+
+    enum class EventCategories
+    {
+        WindowEvent,
+        KeyEvent,
+        MouseEvent
     };
 
     class Event
     {
-        friend class EventDispatcher;
+        friend class EventHandler;
 
     public:
-        virtual EventTypes  GetEventType();
-        virtual const char* GetEventName();
-        virtual const char* GetDetails();
+        virtual EventCategories GetEventCategory() = 0;
+        virtual EventTypes GetEventType() = 0;
+        virtual const char* GetEventName() = 0;
+        virtual const char* GetDetails() = 0;
     
     protected:
         bool m_Handled;
     };
 
-    class EventDispatcher
+    class EventHandler
     {
     public:
-        EventDispatcher(Event& event)
+        EventHandler(Event& event)
             : m_Event(event)
         {
         }
 
-        template<EventTypes T>
-        void Dispatch(bool(func*)(Event))
+        void Dispatch(bool(*func)(Event))
         {
-            if (T == m_Event.GetEventType())
-            {
-                m_Event.m_Handled = func(m_Event);
-            }
+            m_Event.m_Handled = func(m_Event);
         }
 
     private:
-        Event& m_Event
+        Event& m_Event;
     };
 
 }
