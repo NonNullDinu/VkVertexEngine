@@ -3,10 +3,10 @@ cmake_minimum_required(VERSION 3.10)
 project(SandBox)
 
 add_executable(SandBox 
-    SandBox/src/Application.cpp
+    src/Application.cpp
 )
-
-target_include_directories(SandBox PRIVATE Vertex/include)
+message(STATUS ${VX_INCLUDE_DIRECTORIES})
+target_include_directories(SandBox PRIVATE ${VX_INCLUDE_DIRECTORIES})
 
 target_link_libraries(SandBox Vertex)
 

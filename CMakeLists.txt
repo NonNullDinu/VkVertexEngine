@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(VertexEngine)
+project(VertexEngine CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 
-include(Vertex/CMakeLists.txt)
-include(SandBox/CMakeLists.txt)
+add_subdirectory(Vertex)
+add_subdirectory(SandBox)
