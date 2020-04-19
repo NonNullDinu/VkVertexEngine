@@ -3,7 +3,7 @@
 #include "Core.h"
 #include "Logger.h"
 
-#include "Event/KeyEvent.h"
+#include "Event/Event.h"
 
 namespace Vertex {
 

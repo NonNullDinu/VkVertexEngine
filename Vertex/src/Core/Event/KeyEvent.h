@@ -1,4 +1,6 @@
-#include "Event/Event.h"
+#pragma once
+
+#include "Event.h"
 
 namespace Vertex {
 
