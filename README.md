@@ -1,16 +1,16 @@
 # Vertex Engine
 
-[![build](https://github.com/NonNullDinu/VertexEngine/workflows/build/badge.svg)](#)
-[![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
+[![build](https://github.com/VertexEngine/VertexEngine/workflows/build/badge.svg)](#)
+[![License](https://img.shields.io/github/license/VertexEngine/VertexEngine?color=blue)](https://github.com/VertexEngine/VertexEngine/blob/master/LICENSE)
 
 A powerful C++ based game engine, currently in early development. I'm developing this engine following along [TheCherno](https://www.youtube.com/playlist?list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT)'s tutorial, so there are probably many implementation similarities.
 
 ## Index
 This README file is split into multiple sections:
-* [Support](#support)
-* [Roadmap](#roadmap)
-* [Contributing](#contributing)
-* [Authors and Acknowledgements](#authors)
+* [Support](https://github.com/VertexEngine/VertexEngine#support)
+* [Roadmap](https://github.com/VertexEngine/VertexEngine#roadmap)
+* [Contributing](https://github.com/VertexEngine/VertexEngine#contributing)
+* [Authors and Acknowledgements](https://github.com/VertexEngine/VertexEngine#authors)
 
 ## Why another game engine?
 Well, this project is mainly for learning purposes. Additionally, I wish to build a flexible, powerful and lightweight game engine because I haven't found any game engines that I particularly like.
@@ -25,7 +25,7 @@ Pre-made build scripts are provided for Windows and Linux in the `scripts` direc
 Vertex aims to be a lightweight and powerful game engine. We plan on supporting multiple rendering APIs including DirectX12 and Vulkan. We also plan on adding Mac support sometime in the future.
 
 ## Contributing
-See [CONTRIBUTING](.github/CONTRIBUTING.md).
+See [CONTRIBUTING](https://github.com/VertexEngine/VertexEngine/blob/master/.github/CONTRIBUTING.md).
 
 ## Authors
 Initial work - [Sachin Sushil](https://github.com/42mix)
