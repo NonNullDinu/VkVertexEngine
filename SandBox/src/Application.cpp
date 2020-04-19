@@ -5,6 +5,7 @@ class SandBoxApp : public Vertex::Application
 public:
 	SandBoxApp()
 	{
+		Vertex::Logger::GetClientLogger()->info("lul");
 	}
 
 	~SandBoxApp()

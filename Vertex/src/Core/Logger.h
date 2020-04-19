@@ -9,7 +9,7 @@
 
 namespace Vertex {
 
-    class Logger
+    class VX_PUBLIC_API Logger
     {
     public:
         Logger(const Logger&) = delete;
