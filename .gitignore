@@ -40,6 +40,10 @@
 *.filters
 *.user
 
+# CLion artefacts
+/.idea
+
 # Build artefacts
 build/
 out/
+/cmake-build-debug/
