@@ -1,0 +1,3 @@
+[submodule "Vertex/Deps/spdlog"]
+	path = Vertex/Deps/spdlog
+	url = https://github.com/gabime/spdlog.git
