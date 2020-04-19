@@ -8,6 +8,8 @@ on:
 
 jobs:
   prepare-submodules:
+    runs-on: ubuntu-latest
+
     steps:
       - name: Checkout submodules
         uses: srt32/git-actions@v0.0.3
@@ -22,3 +24,5 @@ jobs:
 
     - name: build
       run: bash scripts/build.sh
+
+    needs: prepare-submodules
