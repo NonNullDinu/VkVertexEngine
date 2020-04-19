@@ -8,7 +8,7 @@ add_library(Vertex SHARED
 )
 
 target_include_directories(Vertex
-    PUBLIC src Deps/spdlog/include
+    PUBLIC src deps/spdlog/include
 )
 
 set_target_properties(Vertex PROPERTIES POSITION_INDEPENDENT_CODE ON)
