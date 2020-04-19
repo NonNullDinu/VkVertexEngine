@@ -1,64 +1,47 @@
-#pragma once
+#include "Core.h"
 
-#include "Core/Core.h"
-
-#include "spdlog/fmt/fmt.h"
-
-#define VX_GET_EVENT_TYPE_CHAR(x) #x
+#define VX_GET_EVENT_TYPE_CHAR(x) ##x
 
 namespace Vertex {
 
     enum class EventTypes
     {
-        WindowResize, WindowClose,
-        KeyPress, KeyRelease,
-        MouseClick, MouseRelease, MouseScroll, MouseMove
-    };
-
-    enum class EventCategories
-    {
-        WindowEvent,
-        KeyEvent,
-        MouseEvent
+        KeyPressEvent, KeyReleaseEvent,
+        MouseClickEvent, MouseReleaseEvent, MouseScrollEvent, MouseMoveEvent
     };
 
     class Event
     {
-        friend class EventHandler;
+        friend class EventDispatcher;
 
     public:
-        virtual EventCategories GetEventCategory() = 0;
-        virtual EventTypes GetEventType() = 0;
-        virtual const char* GetEventName() = 0;
-        virtual const char* GetDetails() = 0;
-    
+        virtual EventTypes  GetEventType();
+        virtual const char* GetEventName();
+        virtual const char* GetDetails();
+
     protected:
         bool m_Handled;
     };
 
-    class EventHandler
+    class EventDispatcher
     {
     public:
-        EventHandler(Event& event)
+        EventDispatcher(Event& event)
             : m_Event(event)
         {
         }
 
-        template<typename T>
-        void Dispatch(T&& func)
+        template<EventTypes T>
+        void Dispatch(bool(func*)(Event))
         {
-            try
+            if (T == m_Event.GetEventType())
             {
                 m_Event.m_Handled = func(m_Event);
-            }
-            catch (const std::invalid_argument& e)
-            {
-                Logger::GetCoreLogger()->debug("Failed attempt to dispatch event at {0}: {1}", &m_Event, m_Event.GetEventName());
             }
         }
 
     private:
-        Event& m_Event;
+        Event& m_Event
     };
 
 }
