@@ -44,7 +44,8 @@ namespace Vertex {
         {
         }
 
-        void Dispatch(bool(*func)(Event))
+        template<typename T>
+        void Dispatch(T&& func)
         {
             m_Event.m_Handled = func(m_Event);
         }
