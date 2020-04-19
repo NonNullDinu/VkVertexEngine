@@ -5,7 +5,6 @@ project(SandBox)
 add_executable(SandBox 
     src/Application.cpp
 )
-message(STATUS ${VX_INCLUDE_DIRECTORIES})
 target_include_directories(SandBox PRIVATE ${VX_INCLUDE_DIRECTORIES})
 
 target_link_libraries(SandBox Vertex)
