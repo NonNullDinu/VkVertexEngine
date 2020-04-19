@@ -2,14 +2,15 @@ cmake_minimum_required(VERSION 3.10)
 
 project(Vertex)
 
+file(GLOB_RECURSE VX_SOURCES src/*.cpp)
+file(GLOB_RECURSE VX_HEADERS include/*.h src/*.h)
+
 add_library(Vertex SHARED
-    src/Core/Application.cpp
-    src/Core/Logger.cpp
-)
+        ${VX_SOURCES}
+        ${VX_HEADERS})
 
 target_include_directories(Vertex
-    PUBLIC src deps/spdlog/include
-)
+        PUBLIC src deps/spdlog/include)
 
 set_target_properties(Vertex PROPERTIES POSITION_INDEPENDENT_CODE ON)
 set_target_properties(Vertex PROPERTIES PUBLIC_HEADER include/Vertex.h)
@@ -21,9 +22,9 @@ target_precompile_headers(Vertex PUBLIC src/Core/vx_pch.h)
 target_compile_definitions(Vertex PRIVATE VX_BUILD_SHARED)
 
 install(TARGETS Vertex
-    CONFIGURATIONS Debug
-    LIBRARY DESTINATION Debug/bin)
+        CONFIGURATIONS Debug
+        LIBRARY DESTINATION Debug/bin)
 
 install(TARGETS Vertex
-    CONFIGURATIONS Release
-    LIBRARY DESTINATION Release/bin)
+        CONFIGURATIONS Release
+        LIBRARY DESTINATION Release/bin)
