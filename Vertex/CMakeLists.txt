@@ -9,11 +9,13 @@ add_library(Vertex SHARED
 
 target_include_directories(Vertex PUBLIC
     Vertex/src
-    Vertex/Deps/spdlog/include
+    Vertex/deps/spdlog/include
 )
 
 set_target_properties(Vertex PROPERTIES POSITION_INDEPENDENT_CODE ON)
 set_target_properties(Vertex PROPERTIES PUBLIC_HEADER include/Vertex.h)
+
+target_precompile_headers(Vertex PUBLIC Vertex/src/Core/vx_pch.h)
 
 target_compile_definitions(Vertex PRIVATE VX_BUILD_SHARED)
 
