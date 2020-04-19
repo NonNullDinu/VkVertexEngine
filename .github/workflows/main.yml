@@ -12,7 +12,12 @@ jobs:
 
     steps:
       - name: Checkout submodules
-        uses: textbook/git-checkout-submodule-action@master
+      - uses: actions/checkout@v2
+        shell: bash
+        run: |
+          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+          git submodule sync --recursive
+          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive
 
   build:
     runs-on: ubuntu-latest
