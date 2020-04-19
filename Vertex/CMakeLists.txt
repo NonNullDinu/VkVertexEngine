@@ -7,7 +7,7 @@ add_library(Vertex SHARED
     ${PROJECT_SOURCE_DIR}/Vertex/src/Core/Logger.cpp
 )
 
-target_include_directories(Vertex 
+target_include_directories(Vertex
     PUBLIC ${PROJECT_SOURCE_DIR}/Vertex/src
     PUBLIC ${PROJECT_SOURCE_DIR}/Vertex/deps/spdlog/include
 )
