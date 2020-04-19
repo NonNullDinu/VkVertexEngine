@@ -1,6 +1,6 @@
 # Vertex Engine
 
-[![build](workflows/build/badge.svg)](#)
+[![build](workflows/.github/workflows/main.yml/badge.svg)](#)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 
 A powerful C++ based game engine, currently in early development. I'm developing this engine following along [TheCherno](https://www.youtube.com/playlist?list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT)'s tutorial, so there are probably many implementation similarities.
