@@ -25,7 +25,7 @@ Pre-made build scripts are provided for Windows and Linux in the `scripts` direc
 Vertex aims to be a lightweight and powerful game engine. We plan on supporting multiple rendering APIs including DirectX12 and Vulkan. We also plan on adding Mac support sometime in the future.
 
 ## Contributing
-See [CONTRIBUTING](https://github.com/VertexEngine/VertexEngine/blob/master/.github/CONTRIBUTING.md).
+Please read [CONTRIBUTING](https://github.com/VertexEngine/VertexEngine/blob/master/.github/CONTRIBUTING.md). before opening a Pull Request.
 
 ## Authors
 * [42mix](https://github.com/42mix) - Initial work

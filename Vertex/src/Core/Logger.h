@@ -9,13 +9,14 @@
 
 namespace Vertex {
 
-    class VX_PUBLIC_API Logger {
+    class VX_PUBLIC_API Logger
+    {
     public:
-        Logger(const Logger &) = delete;
+        Logger(const Logger&) = delete;
 
-        inline static std::shared_ptr<spdlog::logger> &GetCoreLogger() { return s_CoreLogger; }
+        inline static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return s_CoreLogger; }
 
-        inline static std::shared_ptr<spdlog::logger> &GetClientLogger() { return s_ClientLogger; }
+        inline static std::shared_ptr<spdlog::logger>& GetClientLogger() { return s_ClientLogger; }
 
     private:
         Logger() { Init(); }

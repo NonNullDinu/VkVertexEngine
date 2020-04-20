@@ -4,10 +4,11 @@
 
 namespace Vertex {
 
-    class KeyEvent : public Event {
+    class KeyEvent : public Event
+    {
     public:
         KeyEvent(int key)
-                : m_Key(key)
+            : m_Key(key)
         {
         }
 
@@ -19,21 +20,20 @@ namespace Vertex {
         int m_Key;
     };
 
-    class KeyPressEvent : public KeyEvent {
+    class KeyPressEvent : public KeyEvent
+    {
     public:
-        KeyPressEvent(int key,
-                      int repeat_count)
-                : KeyEvent(key), m_RepeatCount(repeat_count)
+        KeyPressEvent(int key, int repeat_count)
+            : KeyEvent(key), m_RepeatCount(repeat_count)
         {
         }
 
         inline int GetRepeatCount() { return m_RepeatCount; }
 
-        inline EventTypes GetEventType() override { return EventTypes::KeyPress; }
+        inline EventTypes  GetEventType() override { return EventTypes::KeyPress; }
+        inline const char* GetEventName() override { return "EventTypes::KeyPress"; }
 
-        inline const char *GetEventName() override { return "EventTypes::KeyPress"; }
-
-        const char *GetDetails() override
+        inline const char* GetDetails() override
         {
             return fmt::format("KeyPressEvent : Key<{0}> RepeatCount<{1}>", m_Key, m_RepeatCount).c_str();
         }
@@ -49,11 +49,10 @@ namespace Vertex {
         {
         }
 
-        inline EventTypes GetEventType() override { return EventTypes::KeyRelease; }
+        inline EventTypes  GetEventType() override { return EventTypes::KeyRelease; }
+        inline const char* GetEventName() override { return "EventTypes::KeyRelease"; }
 
-        inline const char *GetEventName() override { return "EventTypes::KeyRelease"; }
-
-        const char *GetDetails() override
+        inline const char* GetDetails() override
         {
             return fmt::format("KeyReleaseEvent : Key<{0}>", m_Key).c_str();
         }

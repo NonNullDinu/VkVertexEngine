@@ -4,7 +4,7 @@ namespace Vertex {
 
     Application::Application()
     {
-        m_Window.reset(new GLFWWindowImpl());
+        m_Window.reset(new WindowImpl());
         m_Window->SetEventCallback(VX_BIND_FUNC_1(Application::OnEvent));
     }
 
@@ -12,7 +12,7 @@ namespace Vertex {
     {
     }
 
-    void Application::OnEvent(Event &event)
+    void Application::OnEvent(Event& event)
     {
     }
 
