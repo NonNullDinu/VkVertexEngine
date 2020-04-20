@@ -5,15 +5,18 @@ project(Vertex CXX)
 file(GLOB_RECURSE VX_SOURCES src/Core/*.cpp)
 file(GLOB_RECURSE VX_HEADERS include/Core/*.h src/Core/*.h)
 
+
+# GLAD
+add_subdirectory(deps/glad)
+
 if (WIN32)
     file(GLOB_RECURSE VX_PLATFORM_HEADERS src/Platforms/Windows/*.h)
     file(GLOB_RECURSE VX_PLATFORM_SOURCES src/Platforms/Windows/*.cpp)
 
-    add_subdirectory(deps/glad)
     add_subdirectory(deps/glfw)
 
     set(PLATFORM_SPECIFIC_INCLUDES deps/glad/include deps/glfw/include ${GLFW_INCLUDE_DIRS})
-    set(PLATFORM_SPECIFIC_LIBS glfw glad)
+    set(PLATFORM_SPECIFIC_LIBS glfw)
 elseif (UNIX AND NOT APPLE)
     file(GLOB_RECURSE VX_PLATFORM_HEADERS src/Platforms/Linux/*.h)
     file(GLOB_RECURSE VX_PLATFORM_SOURCES src/Platforms/Linux/*.cpp)
@@ -22,15 +25,12 @@ elseif (UNIX AND NOT APPLE)
     # OpenGL
     find_package(OpenGL REQUIRED)
 
-    # GLEW
-    find_package(GLEW REQUIRED)
-
     # GLFW
     find_package(glfw3 REQUIRED)
     set(GLFW_LIBRARY glfw)
 
     set(PLATFORM_SPECIFIC_INCLUDES ${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS})
-    set(PLATFORM_SPECIFIC_LIBS ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${GLFW_LIBRARY})
+    set(PLATFORM_SPECIFIC_LIBS ${OPENGL_LIBRARIES} ${GLFW_LIBRARY})
 else ()
     message(FATAL_ERROR Unsupported platform)
 endif ()
@@ -45,7 +45,7 @@ target_include_directories(Vertex
         PUBLIC src deps/spdlog/include ${PLATFORM_SPECIFIC_INCLUDES})
 
 target_link_libraries(Vertex
-        PUBLIC ${PLATFORM_SPECIFIC_LIBS}
+        PUBLIC ${PLATFORM_SPECIFIC_LIBS} glad
         )
 
 set_target_properties(Vertex PROPERTIES POSITION_INDEPENDENT_CODE ON)
