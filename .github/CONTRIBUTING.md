@@ -15,7 +15,7 @@ It is important for a healthy code base to have a consistent style through all i
 * Implicit casts should be done as such: `(foo)bar`.
 * All variables, and arguments are in the `snake_case`.
 * Static and private member variables must be prefixed with `s_` and `m_` respectively, and be followed by its name in `PascalCase`.
-* All classes, structs, and enum classes are in the `PascalCase`.
+* All classes, structs, functions, and enum classes are in the `PascalCase`.
 * All macros are in the `UPPER_CASE_SNAKE_CASE`.
 * Macros must be indented.
 
