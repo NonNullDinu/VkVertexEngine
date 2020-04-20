@@ -17,7 +17,7 @@ namespace Vertex {
         Logger::GetCoreLogger()->info(event.GetDetails());
 
         EventHandler handler(event);
-        handler.Dispatch()
+        handler.Dispatch(&Application::OnWindowCloseEvent);
     }
 
     void Application::Run()
