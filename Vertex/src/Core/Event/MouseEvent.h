@@ -89,7 +89,7 @@ namespace Vertex {
 
         inline std::string GetDetails() override
         {
-            return fmt::format("MouseScroll : Positions: X<{0}> Y<{1}>", m_PosX, m_PosY);
+            return fmt::format("MouseMove : Positions: X<{0}> Y<{1}>", m_PosX, m_PosY);
         }
 
     private:
