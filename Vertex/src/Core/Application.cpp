@@ -14,6 +14,7 @@ namespace Vertex {
 
     void Application::OnEvent(Event& event)
     {
+        Logger::GetCoreLogger()->info(event.GetDetails());
     }
 
     void Application::Run()
