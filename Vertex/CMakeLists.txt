@@ -64,6 +64,11 @@ target_precompile_headers(Vertex PUBLIC src/Core/vx_pch.h)
 
 target_compile_definitions(Vertex PRIVATE VX_BUILD_SHARED)
 
+
+if ($ENV{CLION_IDE})
+    target_compile_options(Vertex PRIVATE -include Core/vx_pch.h)
+endif()
+
 install(TARGETS Vertex
         CONFIGURATIONS Debug
         LIBRARY DESTINATION Debug/bin)

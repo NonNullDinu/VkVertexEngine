@@ -1,8 +1,5 @@
 #include "WindowImpl.h"
 
-#include <Core/Logger.h>
-#include <glad/glad.h>
-
 #include "Core/Event/KeyEvent.h"
 #include "Core/Event/MouseEvent.h"
 
@@ -15,8 +12,7 @@ namespace Vertex {
         Logger::GetCoreLogger()->error("GLFW error {0} : {1}", error, description);
     }
 
-    namespace GLFWInputCallbacks
-    {
+    namespace GLFWInputCallbacks {
         static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
         {
             WindowProperties* properties = (WindowProperties*)glfwGetWindowUserPointer(window);
