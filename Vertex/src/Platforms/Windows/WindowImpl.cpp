@@ -21,7 +21,7 @@ namespace Vertex {
             int success = glfwInit();
 
             if (!success)
-                Logger::GetCoreLogger()->error("Could not inisialize GLFW");
+                Logger::GetCoreLogger()->error("Could not initialize GLFW");
 
             s_GLFW_Initialized = true;
         }
