@@ -24,15 +24,26 @@ namespace Vertex {
                 return;
             }
 
-            if (action == GLFW_PRESS)
+            switch (action)
             {
-                KeyPressEvent e(key, 1);
-                properties->event_callback(e);
-            }
-            else if (action == GLFW_RELEASE)
-            {
-                KeyReleaseEvent e(key);
-                properties->event_callback(e);
+                case GLFW_PRESS:
+                {
+                    KeyPressEvent e(key, 0);
+                    properties->event_callback(e);
+                    break;
+                }
+                case GLFW_REPEAT:
+                {
+                    KeyPressEvent e(key, 1); // set to 1 for now
+                    properties->event_callback(e);
+                    break;
+                }
+                case GLFW_RELEASE:
+                {
+                    KeyReleaseEvent e(key);
+                    properties->event_callback(e);
+                    break;
+                }
             }
         }
 
