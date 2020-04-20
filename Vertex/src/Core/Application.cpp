@@ -17,7 +17,7 @@ namespace Vertex {
         Logger::GetCoreLogger()->info(event.GetDetails());
 
         EventHandler handler(event);
-        handler.Dispatch(&Application::OnWindowCloseEvent);
+        handler.Dispatch(VX_BIND_FUNC_1(Application::OnWindowCloseEvent));
     }
 
     void Application::Run()
@@ -32,6 +32,7 @@ namespace Vertex {
     bool Application::OnWindowCloseEvent(Event& event)
     {
         m_Running = false;
+        return true;
     }
 
 }

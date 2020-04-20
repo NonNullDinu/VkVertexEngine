@@ -46,11 +46,11 @@ namespace Vertex {
         {
             try
             {
-                m_Event.m_Handled = (*func)(m_Event);
+                m_Event.m_Handled = func(m_Event);
             }
             catch (const std::invalid_argument& e)
             {
-                Logger::GetCoreLogger()->debug("Failed attempt to dispatch event at {0}: {1}", &m_Event, m_Event.GetEventName());
+                Logger::GetCoreLogger()->debug("Failed attempt to dispatch  {1}", m_Event.GetEventName());
             }
         }
 
