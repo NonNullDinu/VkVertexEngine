@@ -102,6 +102,7 @@ namespace Vertex {
 
             s_GLFW_Initialized = true;
         }
+        glfwSetErrorCallback(GLFWErrorCallback);
 
         m_Window = glfwCreateWindow((int)m_Data.width, (int)m_Data.height, m_Data.title, nullptr, nullptr);
 
