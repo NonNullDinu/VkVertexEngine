@@ -22,11 +22,11 @@ namespace Vertex {
         }
     };
 
-    class Window : public IWindow
+    class GLFWWindowImpl : public IWindow
     {
     public:
-        Window(const WindowProperties properties = WindowProperties());
-        ~Window();
+	    GLFWWindowImpl(const WindowProperties properties = WindowProperties());
+        ~GLFWWindowImpl();
 
         void OnUpdate() override;
 
