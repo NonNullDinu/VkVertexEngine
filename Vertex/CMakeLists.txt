@@ -5,6 +5,7 @@ project(Vertex)
 file(GLOB_RECURSE VX_SOURCES src/*.cpp)
 file(GLOB_RECURSE VX_HEADERS include/*.h src/*.h)
 
+add_subdirectory(deps/glad)
 add_subdirectory(deps/glfw)
 
 add_library(Vertex SHARED
@@ -12,10 +13,10 @@ add_library(Vertex SHARED
         ${VX_HEADERS})
 
 target_include_directories(Vertex
-        PUBLIC src deps/spdlog/include deps/glfw/include)
+        PUBLIC src deps/spdlog/include deps/glfw/include ${glfw_INCLUDE_DIRS} deps/glad/include)
 
 target_link_libraries(Vertex
-        PUBLIC glfw
+        PUBLIC glfw glad
 )
 
 set_target_properties(Vertex PROPERTIES POSITION_INDEPENDENT_CODE ON)

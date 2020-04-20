@@ -10,7 +10,7 @@ namespace Vertex {
         const char* title;
         unsigned int width, height;
 
-        void(*event_callback)(Event&);
+        std::function<void(Event&)> event_callback;
 
         WindowProperties(const char* _title = "Vertex",
                          unsigned int _width = 1024,
@@ -21,7 +21,7 @@ namespace Vertex {
         }
     };
 
-    class VX_PUBLIC_API Window : public ABCWindow
+    class Window : public ABCWindow
     {
     public:
         Window(const WindowProperties properties = WindowProperties());
@@ -29,10 +29,10 @@ namespace Vertex {
 
         void OnUpdate() override;
 
-        unsigned int GetWidth() const override;
-        unsigned int GetHeight() const override;
+        unsigned int GetWidth() const override { return m_Data.width; }
+        unsigned int GetHeight() const override { return m_Data.height; }
 
-        inline void SetEventCallback(T&& func) override { m_Data.event_callback = &func; }
+        inline void SetEventCallback(std::function<void(Event&)> func) override { m_Data.event_callback = func; }
 
         inline void SetVSync(bool conf) override { glfwSwapInterval((conf) ? 1 : 0); m_Data.v_sync = conf; }
         inline bool IsVSync() const override { return m_Data.v_sync; }
@@ -42,6 +42,9 @@ namespace Vertex {
     private:
         GLFWwindow* m_Window;
         WindowProperties m_Data;
+
+    private:
+        void ShutDown();
     };
 
 }

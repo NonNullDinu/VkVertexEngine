@@ -9,6 +9,7 @@ add_executable(SandBox
         ${SANDBOX_SOURCES}
         ${SANDBOX_HEADERS}
         )
+
 target_include_directories(SandBox PRIVATE ${VX_INCLUDE_DIRECTORIES})
 
 target_link_libraries(SandBox Vertex)
