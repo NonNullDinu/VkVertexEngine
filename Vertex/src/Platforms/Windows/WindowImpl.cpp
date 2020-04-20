@@ -27,6 +27,13 @@ namespace Vertex {
             properties->event_callback(e);
         }
 
+        static void WindowCloseCallback(GLFWwindow* window)
+        {
+            WindowProperties* properties = (WindowProperties*)glfwGetWindowUserPointer(window);
+            WindowCloseEvent e;
+            properties->event_callback(e);
+        }
+
         static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
         {
             WindowProperties* properties = (WindowProperties*)glfwGetWindowUserPointer(window);
@@ -138,6 +145,7 @@ namespace Vertex {
 
         // set up glfw input callbacks
         glfwSetWindowSizeCallback(m_Window, GLFWInputCallbacks::WindowSizeCallback);
+        glfwSetWindowCloseCallback(m_Window, GLFWInputCallbacks::WindowCloseCallback);
         glfwSetKeyCallback(m_Window, GLFWInputCallbacks::KeyCallback);
         glfwSetMouseButtonCallback(m_Window, GLFWInputCallbacks::MouseButtonCallback);
         glfwSetScrollCallback(m_Window, GLFWInputCallbacks::MouseScrollCallback);
