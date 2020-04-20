@@ -1,4 +1,6 @@
 #include "WindowImpl.h"
+#include <Core/Logger.h>
+#include <glad/glad.h>
 
 namespace Vertex {
 
