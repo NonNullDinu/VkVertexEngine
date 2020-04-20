@@ -1,5 +1,8 @@
 #include "WindowImpl.h"
 
+#include <Core/Logger.h>
+#include <glad/glad.h>
+
 #include "Core/Event/KeyEvent.h"
 #include "Core/Event/MouseEvent.h"
 
