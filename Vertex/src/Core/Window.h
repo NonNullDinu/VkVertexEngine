@@ -6,7 +6,7 @@
 
 namespace Vertex {
 
-    class ABCWindow
+    class IWindow
     {
     public:
         virtual void OnUpdate() = 0;

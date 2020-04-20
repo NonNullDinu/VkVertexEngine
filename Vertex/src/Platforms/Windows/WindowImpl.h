@@ -1,5 +1,6 @@
 #pragma once
 
+#include <GLFW/glfw3.h>
 #include "Core/Window.h"
 
 namespace Vertex {
@@ -21,7 +22,7 @@ namespace Vertex {
         }
     };
 
-    class Window : public ABCWindow
+    class Window : public IWindow
     {
     public:
         Window(const WindowProperties properties = WindowProperties());
