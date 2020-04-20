@@ -1,3 +1,5 @@
+#include <Core/Logger.h>
+#include <glad/glad.h>
 #include "WindowImpl.h"
 
 namespace Vertex {
@@ -9,7 +11,7 @@ namespace Vertex {
         Logger::GetCoreLogger()->error("GLFW error {0} : {1}", error, description);
     }
 
-    Window::Window(WindowProperties properties)
+	GLFWWindowImpl::GLFWWindowImpl(WindowProperties properties)
         : m_Data(properties)
     {
         Logger::GetCoreLogger()->info("Creating window {}", m_Data.title);
@@ -19,7 +21,7 @@ namespace Vertex {
             int success = glfwInit();
 
             if (!success)
-                Logger::GetCoreLogger()->error("Could not inisialize GLFW");
+                Logger::GetCoreLogger()->error("Could not initialize GLFW");
 
             s_GLFW_Initialized = true;
         }
@@ -34,17 +36,17 @@ namespace Vertex {
         glfwSetWindowUserPointer(m_Window, &m_Data);
     }
 
-    Window::~Window()
+	GLFWWindowImpl::~GLFWWindowImpl()
     {
         ShutDown();
     }
 
-    void Window::ShutDown()
+    void GLFWWindowImpl::ShutDown()
     {
         glfwDestroyWindow(m_Window); // we may want to shutdown before the window's scope is over
     }
 
-    void Window::OnUpdate()
+    void GLFWWindowImpl::OnUpdate()
     {
         glfwPollEvents();
         glfwSwapBuffers(m_Window);

@@ -1,23 +1,52 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.16)
 
-project(Vertex)
+project(Vertex CXX)
 
-file(GLOB_RECURSE VX_SOURCES src/*.cpp)
-file(GLOB_RECURSE VX_HEADERS include/*.h src/*.h)
+file(GLOB_RECURSE VX_SOURCES src/Core/*.cpp)
+file(GLOB_RECURSE VX_HEADERS include/Core/*.h src/Core/*.h)
 
-add_subdirectory(deps/glad)
-add_subdirectory(deps/glfw)
+if (WIN32)
+    file(GLOB_RECURSE VX_PLATFORM_HEADERS src/Platforms/Windows/*.h)
+    file(GLOB_RECURSE VX_PLATFORM_SOURCES src/Platforms/Windows/*.cpp)
+
+    add_subdirectory(deps/glad)
+    add_subdirectory(deps/glfw)
+
+    set(PLATFORM_SPECIFIC_INCLUDES deps/glad/include deps/glfw/include ${GLFW_INCLUDE_DIRS})
+    set(PLATFORM_SPECIFIC_LIBS glfw glad)
+elseif (UNIX AND NOT APPLE)
+    file(GLOB_RECURSE VX_PLATFORM_HEADERS src/Platforms/Linux/*.h)
+    file(GLOB_RECURSE VX_PLATFORM_SOURCES src/Platforms/Linux/*.cpp)
+    add_compile_definitions(GLFW_INCLUDE_NONE) # required to use GLEW
+
+    # OpenGL
+    find_package(OpenGL REQUIRED)
+
+    # GLEW
+    find_package(GLEW REQUIRED)
+
+    # GLFW
+    find_package(glfw3 3.3 REQUIRED)
+    set(GLFW_LIBRARY glfw)
+
+    set(PLATFORM_SPECIFIC_INCLUDES ${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS})
+    set(PLATFORM_SPECIFIC_LIBS ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${GLFW_LIBRARY})
+else ()
+    message(FATAL_ERROR Unsupported platform)
+endif ()
 
 add_library(Vertex SHARED
         ${VX_SOURCES}
-        ${VX_HEADERS})
+        ${VX_HEADERS}
+        ${VX_PLATFORM_HEADERS}
+        ${VX_PLATFORM_SOURCES})
 
 target_include_directories(Vertex
-        PUBLIC src deps/spdlog/include deps/glfw/include ${glfw_INCLUDE_DIRS} deps/glad/include)
+        PUBLIC src deps/spdlog/include ${PLATFORM_SPECIFIC_INCLUDES})
 
 target_link_libraries(Vertex
-        PUBLIC glfw glad
-)
+        PUBLIC ${PLATFORM_SPECIFIC_LIBS}
+        )
 
 set_target_properties(Vertex PROPERTIES POSITION_INDEPENDENT_CODE ON)
 set_target_properties(Vertex PROPERTIES PUBLIC_HEADER include/Vertex.h)
