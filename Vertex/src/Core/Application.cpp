@@ -15,14 +15,23 @@ namespace Vertex {
     void Application::OnEvent(Event& event)
     {
         Logger::GetCoreLogger()->info(event.GetDetails());
+
+        EventHandler handler(event);
+        handler.Dispatch(&Application::OnWindowCloseEvent);
     }
 
     void Application::Run()
     {
-        while (!m_Window->ShouldClose())
+        while (!m_Running)
         {
             m_Window->OnUpdate();
         }
+    }
+
+    // Application specific event callbacks
+    bool Application::OnWindowCloseEvent(Event& event)
+    {
+        m_Running = false;
     }
 
 }

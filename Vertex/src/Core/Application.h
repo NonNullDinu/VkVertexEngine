@@ -28,7 +28,13 @@ namespace Vertex {
         inline IWindow& GetWindow() { return *m_Window; }
 
     private:
+        bool m_Running;
+        // we want this^ variable since the application might close for multiple reasons
         std::shared_ptr<IWindow> m_Window;
+
+    private:
+        // Application specific event callbacks
+        bool OnWindowCloseEvent(Event& event);
     };
 
 }

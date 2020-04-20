@@ -46,7 +46,7 @@ namespace Vertex {
         {
             try
             {
-                m_Event.m_Handled = func(m_Event);
+                m_Event.m_Handled = (*func)(m_Event);
             }
             catch (const std::invalid_argument& e)
             {
