@@ -8,52 +8,52 @@
 
 namespace Vertex {
 
-	static bool s_GLFW_Initialized = false;
+    static bool s_GLFW_Initialized = false;
 
-	static void GLFWErrorCallback(int error,
-	                              const char *description)
-	{
-		Logger::GetCoreLogger()->error("GLFW error {0} : {1}", error, description);
-	}
+    static void GLFWErrorCallback(int error,
+                                  const char *description)
+    {
+        Logger::GetCoreLogger()->error("GLFW error {0} : {1}", error, description);
+    }
 
-	GLFWWindowImpl::GLFWWindowImpl(WindowProperties properties)
-			: m_Data(properties)
-	{
-		Logger::GetCoreLogger()->info("Creating window {}", m_Data.title);
+    GLFWWindowImpl::GLFWWindowImpl(WindowProperties properties)
+            : m_Data(properties)
+    {
+        Logger::GetCoreLogger()->info("Creating window {}", m_Data.title);
 
-		if (!s_GLFW_Initialized) {
-			int success = glfwInit();
+        if (!s_GLFW_Initialized) {
+            int success = glfwInit();
 
-			if (!success)
-				Logger::GetCoreLogger()->error("Could not initialize GLFW");
+            if (!success)
+                Logger::GetCoreLogger()->error("Could not initialize GLFW");
 
-			s_GLFW_Initialized = true;
-		}
+            s_GLFW_Initialized = true;
+        }
 
-		m_Window = glfwCreateWindow((int) m_Data.width, (int) m_Data.height, m_Data.title, nullptr, nullptr);
+        m_Window = glfwCreateWindow((int) m_Data.width, (int) m_Data.height, m_Data.title, nullptr, nullptr);
 
-		glfwMakeContextCurrent(m_Window);
+        glfwMakeContextCurrent(m_Window);
 
-		if (glewInit() != GLEW_OK)
-			Logger::GetCoreLogger()->error("Could not initialize glew.");
+        if (glewInit() != GLEW_OK)
+            Logger::GetCoreLogger()->error("Could not initialize glew.");
 
-		glfwSetWindowUserPointer(m_Window, &m_Data);
-	}
+        glfwSetWindowUserPointer(m_Window, &m_Data);
+    }
 
-	GLFWWindowImpl::~GLFWWindowImpl()
-	{
-		ShutDown();
-	}
+    GLFWWindowImpl::~GLFWWindowImpl()
+    {
+        ShutDown();
+    }
 
-	void GLFWWindowImpl::ShutDown()
-	{
-		glfwDestroyWindow(m_Window); // we may want to shutdown before the window's scope is over
-	}
+    void GLFWWindowImpl::ShutDown()
+    {
+        glfwDestroyWindow(m_Window); // we may want to shutdown before the window's scope is over
+    }
 
-	void GLFWWindowImpl::OnUpdate()
-	{
-		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
-	}
+    void GLFWWindowImpl::OnUpdate()
+    {
+        glfwPollEvents();
+        glfwSwapBuffers(m_Window);
+    }
 
 }

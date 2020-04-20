@@ -6,29 +6,31 @@
 #include "Event/Event.h"
 
 #if defined(_WIN32)
-  #include "Platforms/Windows/WindowImpl.h"
+#include "Platforms/Windows/WindowImpl.h"
 #elif defined(__linux__)
-  #include "Platforms/Linux/GLFWWindowImpl.h"
+
+#include "Platforms/Linux/GLFWWindowImpl.h"
+
 #else
-  #error Unsupported platform.
+#error Unsupported platform.
 #endif
 
 namespace Vertex {
 
-	class VX_PUBLIC_API Application {
-	public:
-		Application();
+    class VX_PUBLIC_API Application {
+    public:
+        Application();
 
-		~Application();
+        ~Application();
 
-		void OnEvent(Event &event);
+        void OnEvent(Event &event);
 
-		void Run();
+        void Run();
 
-		inline IWindow &GetWindow() { return *m_Window; }
+        inline IWindow &GetWindow() { return *m_Window; }
 
-	private:
-		std::shared_ptr<IWindow> m_Window;
-	};
+    private:
+        std::shared_ptr<IWindow> m_Window;
+    };
 
 }

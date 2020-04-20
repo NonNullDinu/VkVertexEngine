@@ -2,14 +2,14 @@
 
 #if defined(_WIN32)
 
-    #if defined(VX_BUILD_SHARED)
-        #define VX_PUBLIC_API __declspec(dllexport)
-    #else
-        #define VX_PUBLIC_API __declspec(dllimport)
-    #endif // VX_BUILD_SHARED
+#if defined(VX_BUILD_SHARED)
+#define VX_PUBLIC_API __declspec(dllexport)
+#else
+#define VX_PUBLIC_API __declspec(dllimport)
+#endif // VX_BUILD_SHARED
 
 #else
-    #define VX_PUBLIC_API
+#define VX_PUBLIC_API
 
 #endif // _WIN32
 
