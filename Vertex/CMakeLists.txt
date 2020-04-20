@@ -26,7 +26,7 @@ elseif (UNIX AND NOT APPLE)
     find_package(GLEW REQUIRED)
 
     # GLFW
-    find_package(glfw3 3.3 REQUIRED)
+    find_package(glfw3 REQUIRED)
     set(GLFW_LIBRARY glfw)
 
     set(PLATFORM_SPECIFIC_INCLUDES ${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS})
