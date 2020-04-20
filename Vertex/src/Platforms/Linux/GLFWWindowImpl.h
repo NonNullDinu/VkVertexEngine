@@ -48,6 +48,8 @@ namespace Vertex {
 
         inline void *GetNativeWindow() const override { return m_Window; }
 
+        inline bool ShouldClose() { return glfwWindowShouldClose(this->m_Window); };
+
     private:
         GLFWwindow *m_Window;
         WindowProperties m_Data;
