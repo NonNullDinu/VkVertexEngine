@@ -27,7 +27,7 @@ namespace Vertex {
         virtual EventCategories GetEventCategory() = 0;
         virtual EventTypes GetEventType() = 0;
         virtual const char* GetEventName() = 0;
-        virtual const char* GetDetails() = 0;
+        virtual std::string GetDetails() = 0;
 
     protected:
         bool m_Handled;

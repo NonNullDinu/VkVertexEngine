@@ -33,9 +33,9 @@ namespace Vertex {
         inline EventTypes  GetEventType() override { return EventTypes::KeyPress; }
         inline const char* GetEventName() override { return "EventTypes::KeyPress"; }
 
-        inline const char* GetDetails() override
+        inline std::string GetDetails() override
         {
-            return fmt::format("KeyPressEvent : Key<{0}> RepeatCount<{1}>", m_Key, m_RepeatCount).c_str();
+            return fmt::format("KeyPressEvent : Key<{0}> RepeatCount<{1}>", m_Key, m_RepeatCount);
         }
 
     private:
@@ -52,9 +52,9 @@ namespace Vertex {
         inline EventTypes  GetEventType() override { return EventTypes::KeyRelease; }
         inline const char* GetEventName() override { return "EventTypes::KeyRelease"; }
 
-        inline const char* GetDetails() override
+        inline std::string GetDetails() override
         {
-            return fmt::format("KeyReleaseEvent : Key<{0}>", m_Key).c_str();
+            return fmt::format("KeyReleaseEvent : Key<{0}>", m_Key);
         }
     };
 

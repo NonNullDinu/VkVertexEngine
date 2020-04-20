@@ -18,7 +18,8 @@ namespace Vertex {
 
     void Application::Run()
     {
-        while (!m_Window->ShouldClose()) {
+        while (!m_Window->ShouldClose())
+        {
             m_Window->OnUpdate();
         }
     }
