@@ -58,8 +58,8 @@ namespace Vertex {
         {
         }
 
-        inline const int GetOffsetX() { return m_OffsetX; }
-        inline const int GetOffsetY() { return m_OffsetY; }
+        inline const float GetOffsetX() { return m_OffsetX; }
+        inline const float GetOffsetY() { return m_OffsetY; }
 
         inline EventTypes  GetEventType() override { return EventTypes::MouseScroll; }
         inline const char* GetEventName() override { return "EventTypes::MouseScroll"; }
