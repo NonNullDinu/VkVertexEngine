@@ -12,3 +12,5 @@
     #define VX_PUBLIC_API
 
 #endif // _WIN32
+
+#define VX_BIND_FUNC_1(x) std::bind(&x, this, std::placeholders::_1)

@@ -19,7 +19,14 @@ namespace Vertex {
 		Application();
 		~Application();
 
+		void OnEvent(Event& event);
+
 		void Run();
+
+		inline Window& GetWindow() { return *m_Window; }
+
+	private:
+		std::shared_ptr<Window> m_Window;
 	};
 
 }
