@@ -31,7 +31,7 @@ namespace Vertex {
         inline int GetRepeatCount() { return m_RepeatCount; }
 
         inline EventTypes  GetEventType() override { return EventTypes::KeyPress; }
-        inline const char* GetEventName() override { return VX_GET_EVENT_TYPE_CHAR(EventTypes::KeyPress); }
+        inline const char* GetEventName() override { return "EventTypes::KeyPress"; }
 
         const char* GetDetails() override
         {
@@ -51,7 +51,7 @@ namespace Vertex {
         }
 
         inline EventTypes  GetEventType() override { return EventTypes::KeyRelease; }
-        inline const char* GetEventName() override { return VX_GET_EVENT_TYPE_CHAR(EventTypes::KeyRelease); }
+        inline const char* GetEventName() override { return "EventTypes::KeyRelease"; }
 
         const char* GetDetails() override
         {

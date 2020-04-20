@@ -19,7 +19,7 @@ namespace Vertex {
         }
 
         inline EventTypes  GetEventType() override { return EventTypes::MouseClick; }
-        inline const char* GetEventName() override { return VX_GET_EVENT_TYPE_CHAR(EventTypes::MouseClick); }
+        inline const char* GetEventName() override { return "EventTypes::MouseClick"; }
 
         const char* GetDetails() override
         {
@@ -39,7 +39,7 @@ namespace Vertex {
         }
 
         inline EventTypes  GetEventType() override { return EventTypes::MouseRelease; }
-        inline const char* GetEventName() override { return VX_GET_EVENT_TYPE_CHAR(EventTypes::MouseRelease); }
+        inline const char* GetEventName() override { return "EventTypes::MouseRelease"; }
 
         const char* GetDetails() override
         {
@@ -62,7 +62,7 @@ namespace Vertex {
         inline const int GetOffsetY() { return m_OffsetY; }
 
         inline EventTypes  GetEventType() override { return EventTypes::MouseScroll; }
-        inline const char* GetEventName() override { return VX_GET_EVENT_TYPE_CHAR(EventTypes::MouseScroll); }
+        inline const char* GetEventName() override { return "EventTypes::MouseScroll"; }
 
         const char* GetDetails() override
         {
@@ -85,7 +85,7 @@ namespace Vertex {
         inline const float GetPosY() { return m_PosY; }
 
         inline EventTypes  GetEventType() override { return EventTypes::MouseMove; }
-        inline const char* GetEventName() override { return VX_GET_EVENT_TYPE_CHAR(EventTypes::MouseMove); }
+        inline const char* GetEventName() override { return "EventTypes::MouseMove"; }
 
         const char* GetDetails() override
         {

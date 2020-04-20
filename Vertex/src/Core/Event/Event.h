@@ -4,8 +4,6 @@
 
 #include "spdlog/fmt/fmt.h"
 
-#define VX_GET_EVENT_TYPE_CHAR(x) #x
-
 namespace Vertex {
     enum class EventTypes
     {

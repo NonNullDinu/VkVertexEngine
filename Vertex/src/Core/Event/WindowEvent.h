@@ -22,7 +22,7 @@ namespace Vertex {
         inline unsigned int GetHeight() { return m_Height; }
 
         inline EventTypes  GetEventType() override { return EventTypes::WindowResize; }
-        inline const char* GetEventName() override { return VX_GET_EVENT_TYPE_CHAR(EventTypes::WindowResize); }
+        inline const char* GetEventName() override { return "EventTypes::WindowResize"; }
 
         const char* GetDetails() override
         {
@@ -42,7 +42,7 @@ namespace Vertex {
         }
 
         inline EventTypes  GetEventType() override { return EventTypes::WindowClose; }
-        inline const char* GetEventName() override { return VX_GET_EVENT_TYPE_CHAR(EventTypes::WindowClose); }
+        inline const char* GetEventName() override { return "EventTypes::WindowClose"; }
 
         const char* GetDetails() override
         {
