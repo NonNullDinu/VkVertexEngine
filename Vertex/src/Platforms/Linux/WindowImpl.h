@@ -2,6 +2,8 @@
 
 #include "Core/Window.h"
 
+#include <GLFW/glfw3.h>
+
 namespace Vertex {
 
     struct WindowProperties
@@ -16,7 +18,7 @@ namespace Vertex {
                          unsigned int _width = 1024,
                          unsigned int _height = 576,
                          bool _v_sync = true)
-                : title(_title), width(_width), height(_height), v_sync(_v_sync)
+            : title(_title), width(_width), height(_height), v_sync(_v_sync)
         {
         }
     };
@@ -43,8 +45,8 @@ namespace Vertex {
         inline bool IsVSync() const override { return m_Data.v_sync; }
 
         inline void* GetNativeWindow() const override { return m_Window; }
-        
-        inline bool ShouldClose() const override { return glfwWindowShouldClose(m_Window); };
+
+        inline bool ShouldClose() const override { return glfwWindowShouldClose(m_Window); }
 
     private:
         GLFWwindow* m_Window;

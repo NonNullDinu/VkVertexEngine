@@ -21,14 +21,14 @@ namespace Vertex {
         inline EventTypes  GetEventType() override { return EventTypes::MouseClick; }
         inline const char* GetEventName() override { return "EventTypes::MouseClick"; }
 
-        inline const char* GetDetails() override
+        inline std::string GetDetails() override
         {
-            return fmt::format("MouseClickEvent : Button<{0}>", m_Button).c_str();
+            return fmt::format("MouseClickEvent : Button<{0}>", m_Button);
         }
 
     private:
         int m_Button;
-    }
+    };
 
     class MouseReleaseEvent : public MouseEvent
     {
@@ -41,9 +41,9 @@ namespace Vertex {
         inline EventTypes  GetEventType() override { return EventTypes::MouseRelease; }
         inline const char* GetEventName() override { return "EventTypes::MouseRelease"; }
 
-        const char* GetDetails() override
+        inline std::string GetDetails() override
         {
-            return fmt::format("MouseReleaseEvent : Button<{0}>", m_Button).c_str();
+            return fmt::format("MouseReleaseEvent : Button<{0}>", m_Button);
         }
 
     private:
@@ -64,9 +64,9 @@ namespace Vertex {
         inline EventTypes  GetEventType() override { return EventTypes::MouseScroll; }
         inline const char* GetEventName() override { return "EventTypes::MouseScroll"; }
 
-        inline const char* GetDetails() override
+        inline std::string GetDetails() override
         {
-            return fmt::format("MouseScroll : Offsets: X<{0}> Y<{1}>", m_OffsetX, m_OffsetY).c_str();
+            return fmt::format("MouseScroll : Offsets: X<{0}> Y<{1}>", m_OffsetX, m_OffsetY);
         }
 
     private:
@@ -87,9 +87,9 @@ namespace Vertex {
         inline EventTypes  GetEventType() override { return EventTypes::MouseMove; }
         inline const char* GetEventName() override { return "EventTypes::MouseMove"; }
 
-        inline const char* GetDetails() override
+        inline std::string GetDetails() override
         {
-            return fmt::format("MouseScroll : Positions: X<{0}> Y<{1}>", m_PosX, m_PosY).c_str();
+            return fmt::format("MouseScroll : Positions: X<{0}> Y<{1}>", m_PosX, m_PosY);
         }
 
     private:

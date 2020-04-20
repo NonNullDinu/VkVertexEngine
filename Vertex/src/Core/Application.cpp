@@ -14,11 +14,13 @@ namespace Vertex {
 
     void Application::OnEvent(Event& event)
     {
+        Logger::GetCoreLogger()->info(event.GetDetails());
     }
 
     void Application::Run()
     {
-        while (!m_Window->ShouldClose()) {
+        while (!m_Window->ShouldClose())
+        {
             m_Window->OnUpdate();
         }
     }
