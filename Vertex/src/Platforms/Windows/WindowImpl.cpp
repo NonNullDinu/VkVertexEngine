@@ -33,7 +33,7 @@ namespace Vertex {
             }
             else
             {
-                Logger::GetCoreLogger()->info("Got something weird from glfw(key callback): {}", action);
+                Logger::GetCoreLogger()->info("Got something weird from glfw(key callback): {0}", action);
                 return;
             }
         }
@@ -68,7 +68,7 @@ namespace Vertex {
             }
             else
             {
-                Logger::GetCoreLogger()->info("Got something weird from glfw(mouse callback): {}", action);
+                Logger::GetCoreLogger()->info("Got something weird from glfw(mouse callback): {0}", action);
                 return;
             }
         }
