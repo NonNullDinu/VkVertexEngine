@@ -6,13 +6,11 @@
 #include "Event/Event.h"
 
 #if defined(_WIN32)
-#include "Platforms/Windows/WindowImpl.h"
+  #include "Platforms/Windows/WindowImpl.h"
 #elif defined(__linux__)
-
-#include "Platforms/Linux/GLFWWindowImpl.h"
-
+  #include "Platforms/Linux/GLFWWindowImpl.h"
 #else
-#error Unsupported platform.
+  #error Unsupported platform.
 #endif
 
 namespace Vertex {
