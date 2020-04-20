@@ -5,7 +5,8 @@
 
 #include "Event/Event.h"
 
-#if defined(_WIN32)
+/* For now, all platforms use the windows implementation. */
+#if defined(_WIN32) || defined(__linux__) || defined(__APPLE__)
 	#include "Platforms/Windows/WindowImpl.h"
 #else
 	#error Unsupported platform.
