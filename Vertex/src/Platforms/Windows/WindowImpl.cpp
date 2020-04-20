@@ -1,8 +1,7 @@
 #include "WindowImpl.h"
-#include <Core/Logger.h>
-#include <glad/glad.h>
-#include <Core/Event/KeyEvent.h>
-#include <Core/Event/MouseEvent.h>
+
+#include "Core/Event/KeyEvent.h"
+#include "Core/Event/MouseEvent.h"
 
 namespace Vertex {
 
@@ -12,15 +11,19 @@ namespace Vertex {
     {
         Logger::GetCoreLogger()->error("GLFW error {0} : {1}", error, description);
     }
-    namespace GLFWInputCallbacks {
-        void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+
+    namespace GLFWInputCallbacks
+    {
+        static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
         {
             WindowProperties* properties = (WindowProperties*)glfwGetWindowUserPointer(window);
+
             if (properties == nullptr)
             {
                 Logger::GetCoreLogger()->error("Null window properties");
                 return;
             }
+
             if (action == GLFW_PRESS)
             {
                 KeyPressEvent e(key, 1);
@@ -31,31 +34,32 @@ namespace Vertex {
                 KeyReleaseEvent e(key);
                 properties->event_callback(e);
             }
-            else
-            {
-                Logger::GetCoreLogger()->info("Got something weird from glfw(key callback): {0}", action);
-                return;
-            }
         }
-        static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
+
+        static void CursorPositionCallback(GLFWwindow* window, double xpos, double ypos)
         {
             WindowProperties* properties = (WindowProperties*)glfwGetWindowUserPointer(window);
+
             if (properties == nullptr)
             {
                 Logger::GetCoreLogger()->error("Null window properties");
                 return;
             }
+
             MouseMoveEvent e((int)xpos, (int)ypos);
             properties->event_callback(e);
         }
-        void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+
+        static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
         {
             WindowProperties* properties = (WindowProperties*)glfwGetWindowUserPointer(window);
+
             if (properties == nullptr)
             {
                 Logger::GetCoreLogger()->error("Null window properties");
                 return;
             }
+
             if (action == GLFW_PRESS)
             {
                 MouseClickEvent e(button);
@@ -66,21 +70,18 @@ namespace Vertex {
                 MouseReleaseEvent e(button);
                 properties->event_callback(e);
             }
-            else
-            {
-                Logger::GetCoreLogger()->info("Got something weird from glfw(mouse callback): {0}", action);
-                return;
-            }
         }
 
-        void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+        static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
         {
             WindowProperties* properties = (WindowProperties*)glfwGetWindowUserPointer(window);
+
             if (properties == nullptr)
             {
                 Logger::GetCoreLogger()->error("Null window properties");
                 return;
             }
+
             MouseScrollEvent e(xoffset, yoffset);
             properties->event_callback(e);
         }
@@ -112,10 +113,10 @@ namespace Vertex {
         glfwSetWindowUserPointer(m_Window, &m_Data);
 
         // set up glfw input callbacks
-        glfwSetKeyCallback(m_Window, GLFWInputCallbacks::key_callback); // keys
-        glfwSetCursorPosCallback(m_Window, GLFWInputCallbacks::cursor_position_callback); // mouse movement
-        glfwSetMouseButtonCallback(m_Window, GLFWInputCallbacks::mouse_button_callback); // mouse buttons
-        glfwSetScrollCallback(m_Window, GLFWInputCallbacks::scroll_callback); // mouse scroll
+        glfwSetKeyCallback(m_Window, GLFWInputCallbacks::KeyCallback);
+        glfwSetCursorPosCallback(m_Window, GLFWInputCallbacks::CursorPositionCallback);
+        glfwSetMouseButtonCallback(m_Window, GLFWInputCallbacks::MouseButtonCallback);
+        glfwSetScrollCallback(m_Window, GLFWInputCallbacks::ScrollCallback);
     }
 
     WindowImpl::~WindowImpl()
