@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(Vertex)
+project(Vertex CXX)
 
 file(GLOB_RECURSE VX_SOURCES src/*.cpp)
 file(GLOB_RECURSE VX_HEADERS include/*.h src/*.h)

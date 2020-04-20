@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(SandBox)
+project(SandBox CXX)
 
 file(GLOB_RECURSE SANDBOX_SOURCES *.cpp)
 file(GLOB_RECURSE SANDBOX_HEADERS *.h)
