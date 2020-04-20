@@ -2,23 +2,23 @@
 
 namespace Vertex {
 
-	Application::Application()
-	{
-		m_Window.reset(new GLFWWindowImpl());
-		m_Window->SetEventCallback(VX_BIND_FUNC_1(Application::OnEvent));
-	}
+    Application::Application()
+    {
+        m_Window.reset(new GLFWWindowImpl());
+        m_Window->SetEventCallback(VX_BIND_FUNC_1(Application::OnEvent));
+    }
 
-	Application::~Application()
-	{
-	}
+    Application::~Application()
+    {
+    }
 
-	void Application::OnEvent(Event& event)
-	{
-	}
+    void Application::OnEvent(Event &event)
+    {
+    }
 
-	void Application::Run()
-	{
-		while (true);
-	}
+    void Application::Run()
+    {
+        while (true);
+    }
 
 }
