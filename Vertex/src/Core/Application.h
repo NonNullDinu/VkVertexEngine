@@ -28,6 +28,7 @@ namespace Vertex {
         inline IWindow& GetWindow() { return *m_Window; }
 
     private:
+        bool m_Running;
         std::shared_ptr<IWindow> m_Window;
     };
 

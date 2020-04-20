@@ -1,5 +1,6 @@
 #include "WindowImpl.h"
 
+#include "Core/Event/WindowEvent.h"
 #include "Core/Event/KeyEvent.h"
 #include "Core/Event/MouseEvent.h"
 
@@ -14,6 +15,18 @@ namespace Vertex {
 
     namespace GLFWInputCallbacks
     {
+
+        static void WindowSizeCallback(GLFWwindow* window, int width, int height)
+        {
+            WindowProperties* properties = (WindowProperties*)glfwGetWindowUserPointer(window);
+
+            properties->width = width;
+            properties->height = height;
+
+            WindowResizeEvent e(width, height);
+            properties->event_callback(e);
+        }
+
         static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
         {
             WindowProperties* properties = (WindowProperties*)glfwGetWindowUserPointer(window);
@@ -47,20 +60,6 @@ namespace Vertex {
             }
         }
 
-        static void CursorPositionCallback(GLFWwindow* window, double xpos, double ypos)
-        {
-            WindowProperties* properties = (WindowProperties*)glfwGetWindowUserPointer(window);
-
-            if (properties == nullptr)
-            {
-                Logger::GetCoreLogger()->error("Null window properties");
-                return;
-            }
-
-            MouseMoveEvent e((int)xpos, (int)ypos);
-            properties->event_callback(e);
-        }
-
         static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
         {
             WindowProperties* properties = (WindowProperties*)glfwGetWindowUserPointer(window);
@@ -83,7 +82,7 @@ namespace Vertex {
             }
         }
 
-        static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+        static void MouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
         {
             WindowProperties* properties = (WindowProperties*)glfwGetWindowUserPointer(window);
 
@@ -96,6 +95,21 @@ namespace Vertex {
             MouseScrollEvent e(xoffset, yoffset);
             properties->event_callback(e);
         }
+
+        static void CursorPositionCallback(GLFWwindow* window, double xpos, double ypos)
+        {
+            WindowProperties* properties = (WindowProperties*)glfwGetWindowUserPointer(window);
+
+            if (properties == nullptr)
+            {
+                Logger::GetCoreLogger()->error("Null window properties");
+                return;
+            }
+
+            MouseMoveEvent e((int)xpos, (int)ypos);
+            properties->event_callback(e);
+        }
+
     }
 
     WindowImpl::WindowImpl(WindowProperties properties)
@@ -123,10 +137,11 @@ namespace Vertex {
         glfwSetWindowUserPointer(m_Window, &m_Data);
 
         // set up glfw input callbacks
+        glfwSetWindowSizeCallback(m_Window, GLFWInputCallbacks::WindowSizeCallback);
         glfwSetKeyCallback(m_Window, GLFWInputCallbacks::KeyCallback);
-        glfwSetCursorPosCallback(m_Window, GLFWInputCallbacks::CursorPositionCallback);
         glfwSetMouseButtonCallback(m_Window, GLFWInputCallbacks::MouseButtonCallback);
-        glfwSetScrollCallback(m_Window, GLFWInputCallbacks::ScrollCallback);
+        glfwSetScrollCallback(m_Window, GLFWInputCallbacks::MouseScrollCallback);
+        glfwSetCursorPosCallback(m_Window, GLFWInputCallbacks::CursorPositionCallback);
     }
 
     WindowImpl::~WindowImpl()
