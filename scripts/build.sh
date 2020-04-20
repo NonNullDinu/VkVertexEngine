@@ -1,5 +1,6 @@
 set -e
-
-cd ../
-
-mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make -j
+cd ..
+mkdir -p build || exit $?
+pushd build
+cmake -DCMAKE_BUILD_TYPE=Debug .. && make -j "$(nproc)"
+popd

@@ -16,4 +16,4 @@ It is important for a healthy code base to have a consistent style through all i
 * All macros are in the `UPPER_CASE_SNAKE_CASE`.
 
 ## Code of conduct
-See [CODE_OF_CONDUCT](https://github.com/VertexEngine/VertexEngine/blob/master/.github/CODE_OF_CONDUCT.md).
+See [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md).

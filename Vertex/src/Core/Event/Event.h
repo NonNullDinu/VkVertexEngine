@@ -7,7 +7,6 @@
 #define VX_GET_EVENT_TYPE_CHAR(x) #x
 
 namespace Vertex {
-
     enum class EventTypes
     {
         WindowResize, WindowClose,
@@ -47,14 +46,14 @@ namespace Vertex {
         template<typename T>
         void Dispatch(T&& func)
         {
-            try
-            {
-                m_Event.m_Handled = func(m_Event);
-            }
-            catch (const std::invalid_argument& e)
-            {
-                Logger::GetCoreLogger()->debug("Failed attempt to dispatch event at {0}: {1}", &m_Event, m_Event.GetEventName());
-            }
+	        try
+	        {
+		        m_Event.m_Handled = func(m_Event);
+	        }
+	        catch (const std::invalid_argument& e)
+	        {
+		        Logger::GetCoreLogger()->debug("Failed attempt to dispatch event at {0}: {1}", &m_Event, m_Event.GetEventName());
+	        }
         }
 
     private:
