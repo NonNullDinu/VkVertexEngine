@@ -1,9 +1,8 @@
 #include "Application.h"
-#include
 
 namespace Vertex {
 
-    Application::Application(IWindow &window) : m_Window(std::make_shared<IWindow>(window))
+    Application::Application()
     {
         m_Window.reset(new GLFWWindowImpl());
         m_Window->SetEventCallback(VX_BIND_FUNC_1(Application::OnEvent));
@@ -19,7 +18,7 @@ namespace Vertex {
 
     void Application::Run()
     {
-        while (true){
+        while (true) {
 
         }
     }
