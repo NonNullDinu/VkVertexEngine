@@ -19,7 +19,7 @@ namespace Vertex {
 
     class VX_PUBLIC_API Application {
     public:
-        Application();
+        Application(IWindow &window);
 
         ~Application();
 
