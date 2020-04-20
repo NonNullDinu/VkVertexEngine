@@ -4,7 +4,7 @@
 
 namespace Vertex {
 
-    class KeyEvent : Event
+    class KeyEvent : public Event
     {
     public:
         KeyEvent(int key)

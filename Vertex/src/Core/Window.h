@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Core.hpp"
+#include "Core.h"
 
 #include "Event/Event.h"
 
 namespace Vertex {
 
-    class Window
+    class ABCWindow
     {
     public:
         virtual void OnUpdate() = 0;
