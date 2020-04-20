@@ -1,13 +1,3 @@
 ## Vendor Conventions ##
 
-# Caches
-- (^|/)cache/
-
-# Dependencies
-- ^[Dd]ependencies/
-
-# Distributions
-- (^|/)dist/
-
-# C deps
-- ^deps/
+- deps/
