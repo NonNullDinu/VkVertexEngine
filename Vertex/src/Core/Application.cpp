@@ -14,12 +14,14 @@ namespace Vertex {
 
     void Application::OnEvent(Event& event)
     {
-        Logger::GetCoreLogger()->info(event.GetDetails());
+        Logger::GetCoreLogger()->debug(event.GetDetails());
 
-        if (event.GetEventType() == EventTypes::WindowClose)
+        EventHandler handler(event);
+        handler.Dispatch<WindowCloseEvent>(VX_BIND_FUNC_1(Application::OnWindowCloseEvent));
+
+        for (std::vector<Layer*>::iterator it = m_LayerStack.end(); it != m_LayerStack.begin();)
         {
-            EventHandler handler(event);
-            handler.Dispatch(VX_BIND_FUNC_1(Application::OnWindowCloseEvent));
+            (*--it)->OnEvent(event);
         }
     }
 
@@ -27,6 +29,9 @@ namespace Vertex {
     {
         while (m_Running)
         {
+            for (Layer* layer : m_LayerStack)
+                layer->OnUpdate();
+
             m_Window->OnUpdate();
         }
     }

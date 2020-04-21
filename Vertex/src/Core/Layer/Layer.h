@@ -5,14 +5,10 @@
 
 namespace Vertex {
 
-    class Layer
+    class VX_PUBLIC_API Layer
     {
     public:
-        Layer(const char* name = "layer")
-            : m_Name(name)
-        {
-        }
-
+        Layer(const char* name = "layer");
         virtual ~Layer();
 
         virtual void OnAttach() {}
