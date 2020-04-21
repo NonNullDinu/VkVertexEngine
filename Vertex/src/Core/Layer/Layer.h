@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core/Core.hpp"
-#include "Core/Event/Event.hpp"
+#include "Core/Core.h"
+#include "Core/Event/Event.h"
 
 namespace Vertex {
 
