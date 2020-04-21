@@ -6,6 +6,7 @@ namespace Vertex {
     {
         m_Window.reset(new WindowImpl());
         m_Window->SetEventCallback(VX_BIND_FUNC_1(Application::OnEvent));
+        this->m_Running = true;
     }
 
     Application::~Application()
@@ -16,8 +17,11 @@ namespace Vertex {
     {
         Logger::GetCoreLogger()->debug(event.GetDetails());
 
-        EventHandler handler(event);
-        handler.Dispatch<WindowCloseEvent>(VX_BIND_FUNC_1(Application::OnWindowCloseEvent));
+        if (event.GetEventType() == EventTypes::WindowClose)
+        {
+            EventHandler handler(event);
+            handler.Dispatch<WindowCloseEvent>(VX_BIND_FUNC_1(Application::OnWindowCloseEvent));
+        }
 
         for (std::vector<Layer*>::iterator it = m_LayerStack.end(); it != m_LayerStack.begin();)
         {
