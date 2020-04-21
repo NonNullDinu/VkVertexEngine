@@ -49,4 +49,55 @@ namespace Vertex {
         }
     };
 
+    class WindowGainedFocusEvent : public WindowEvent {
+    public:
+        WindowGainedFocusEvent() {}
+
+        inline EventTypes  GetEventType() override { return EventTypes::WindowGainedFocus; }
+        inline const char* GetEventName() override { return "EventTypes::WindowGainedFocus"; }
+
+        inline std::string GetDetails() override
+        {
+            return "WindowGainedFocusEvent";
+        }
+    };
+
+    class WindowLostFocusEvent : public WindowEvent {
+    public:
+        WindowLostFocusEvent() {}
+
+        inline EventTypes  GetEventType() override { return EventTypes::WindowLostFocus; }
+        inline const char* GetEventName() override { return "EventTypes::WindowLostFocus"; }
+
+        inline std::string GetDetails() override
+        {
+            return "WindowLostFocusEvent";
+        }
+    };
+
+    class WindowCursorEnteredEvent : public WindowEvent {
+     public:
+        WindowCursorEnteredEvent() {}
+
+        inline EventTypes  GetEventType() override { return EventTypes::WindowCursorEntered; }
+        inline const char* GetEventName() override { return "EventTypes::WindowCursorEntered"; }
+
+        inline std::string GetDetails() override
+        {
+            return "WindowCursorEnteredEvent";
+        }
+    };
+
+    class WindowCursorLeftEvent : public WindowEvent {
+     public:
+        WindowCursorLeftEvent() {}
+
+        inline EventTypes  GetEventType() override { return EventTypes::WindowCursorLeft; }
+        inline const char* GetEventName() override { return "EventTypes::WindowCursorLeft"; }
+
+        inline std::string GetDetails() override
+        {
+            return "WindowCursorLeftEvent";
+        }
+    };
 }
