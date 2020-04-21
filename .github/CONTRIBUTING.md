@@ -10,14 +10,47 @@ It is important for a healthy code base to have a consistent style through all i
 
 ### Code formatting
 * Indents are 4 spaces, and not tabs.
-* Refs `&` and pointers `*` must be attached to the typename or the variable name if the typename is not applicable.
-* Curly braces must be on the next line of function definitions if not inline.
+
+* Refs `&` and pointers `*` must be attached to the typename or the variable name if the typename is not applicable. For example:
+
+```cpp
+const char* foo;
+Foo& bar;
+void* foo = &bar;
+```
+
+* Curly braces must be on the next line of function definitions if not inline. For example:
+
+```cpp
+if (condition)
+{
+    // do something
+}
+
+namespace Foo
+{
+
+    void Bar()
+    {
+
+    }
+
+}
+```
+
 * Implicit casts should be done as such: `(foo)bar`.
+
 * All variables, and arguments are in the `snake_case`.
+
 * Static and private member variables must be prefixed with `s_` and `m_` respectively, and be followed by its name in `PascalCase`.
+
 * All classes, structs, functions, and enum classes are in the `PascalCase`.
+
 * All macros are in the `UPPER_CASE_SNAKE_CASE`.
+
 * Macros must be indented.
+
+* Use `#pragma once` instead of include guards.
 
 ## Code of conduct
 See [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md).
