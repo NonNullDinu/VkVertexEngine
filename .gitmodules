@@ -4,3 +4,6 @@
 [submodule "Vertex/deps/glfw"]
 	path = Vertex/deps/glfw
 	url = https://github.com/glfw/glfw
+[submodule "Vertex/deps/imgui"]
+	path = Vertex/deps/imgui
+	url = https://github.com/VertexEngine/imgui
