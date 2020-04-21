@@ -16,13 +16,16 @@ namespace Vertex {
     {
         Logger::GetCoreLogger()->info(event.GetDetails());
 
-        EventHandler handler(event);
-        handler.Dispatch(VX_BIND_FUNC_1(Application::OnWindowCloseEvent));
+        if (event.GetEventType() == EventTypes::WindowClose)
+        {
+            EventHandler handler(event);
+            handler.Dispatch(VX_BIND_FUNC_1(Application::OnWindowCloseEvent));
+        }
     }
 
     void Application::Run()
     {
-        while (!m_Running)
+        while (m_Running)
         {
             m_Window->OnUpdate();
         }
