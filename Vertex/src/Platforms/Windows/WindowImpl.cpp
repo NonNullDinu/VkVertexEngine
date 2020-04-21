@@ -133,12 +133,12 @@ namespace Vertex {
                 return;
             }
 
-            if(focused == GLFW_TRUE)
+            if (focused == GLFW_TRUE)
             {
                 WindowGainedFocusEvent e;
                 properties->event_callback(e);
             }
-            else if(focused == GLFW_FALSE)
+            else if (focused == GLFW_FALSE)
             {
                 WindowLostFocusEvent e;
                 properties->event_callback(e);
@@ -153,6 +153,7 @@ namespace Vertex {
                 Logger::GetCoreLogger()->error("Null window properties");
                 return;
             }
+            
             if (entered == GLFW_TRUE)
             {
                 WindowCursorEnteredEvent e;
