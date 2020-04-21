@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.16)
 
 project(Vertex CXX)
 
-file(GLOB_RECURSE VX_SOURCES src/Core/*.cpp)
-file(GLOB_RECURSE VX_HEADERS include/Core/*.h src/Core/*.h)
+file(GLOB_RECURSE VX_SOURCES src/Core/*.cpp src/Core/Layer/*.cpp)
+file(GLOB_RECURSE VX_HEADERS include/Core/*.h src/Core/*.h src/Core/Layer/*.h)
 
 
 # GLAD

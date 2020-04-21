@@ -1,9 +1,11 @@
 #pragma once
 
 #include "Core.h"
-#include "Logger.h"
 
 #include "Event/Event.h"
+#include "Event/WindowEvent.h"
+
+#include "Layer/LayerStack.h"
 
 #if defined(_WIN32)
 	#include "Platforms/Windows/WindowImpl.h"
@@ -21,6 +23,12 @@ namespace Vertex {
         Application();
         ~Application();
 
+        inline void PushLayer(Layer* layer) { m_LayerStack.PushLayer(layer); layer->OnAttach(); }
+        inline void PopLayer(Layer* layer) { m_LayerStack.PopLayer(layer); }
+        
+        inline void PushOverlay(Layer* overlay) { m_LayerStack.PushOverlay(overlay); overlay->OnAttach(); }
+        inline void PopOverlay(Layer* overlay) { m_LayerStack.PopOverlay(overlay); }
+
         void OnEvent(Event& event);
 
         void Run();
@@ -30,6 +38,8 @@ namespace Vertex {
     private:
         bool m_Running;
         // we want this^ variable since the application might close for multiple reasons
+        LayerStack m_LayerStack;
+
         std::shared_ptr<IWindow> m_Window;
 
     private:

@@ -19,7 +19,7 @@ namespace Vertex {
         MouseEvent
     };
 
-    class Event
+    class VX_PUBLIC_API Event
     {
         friend class EventHandler;
 
@@ -28,6 +28,8 @@ namespace Vertex {
         virtual EventTypes GetEventType() = 0;
         virtual const char* GetEventName() = 0;
         virtual std::string GetDetails() = 0;
+
+        inline bool IsHandled() const { return m_Handled; }
 
     protected:
         bool m_Handled;
@@ -41,17 +43,10 @@ namespace Vertex {
         {
         }
 
-        template<typename T>
-        void Dispatch(T&& func)
+        template<typename T, typename F>
+        void Dispatch(F&& func)
         {
-            try
-            {
-                m_Event.m_Handled = func(m_Event);
-            }
-            catch (const std::invalid_argument& e)
-            {
-                Logger::GetCoreLogger()->debug("Failed attempt to dispatch  {1}", m_Event.GetEventName());
-            }
+            m_Event.m_Handled = func((T&)(m_Event));
         }
 
     private:
