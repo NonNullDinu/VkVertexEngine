@@ -5,6 +5,7 @@
 #include "spdlog/fmt/fmt.h"
 
 namespace Vertex {
+
     enum class EventTypes
     {
         WindowResize, WindowClose, WindowGainedFocus, WindowLostFocus, WindowCursorEntered, WindowCursorLeft,
@@ -43,10 +44,13 @@ namespace Vertex {
         {
         }
 
-        template<typename T, typename F>
+        template<auto T, typename F>
         void Dispatch(F&& func)
         {
-            m_Event.m_Handled = func((T&)(m_Event));
+            if (m_Event.GetEventType() == T && !m_Event.m_Handled)
+            {
+                m_Event.m_Handled = func(m_Event);
+            }
         }
 
     private:
