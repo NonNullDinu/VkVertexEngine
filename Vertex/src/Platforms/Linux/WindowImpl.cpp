@@ -46,25 +46,32 @@ namespace Vertex {
 
             switch (action)
             {
-                case GLFW_PRESS:
-                {
-                    KeyPressEvent e(key, 0);
-                    properties->event_callback(e);
-                    break;
-                }
-                case GLFW_REPEAT:
-                {
-                    KeyPressEvent e(key, 1); // set to 1 for now
-                    properties->event_callback(e);
-                    break;
-                }
-                case GLFW_RELEASE:
-                {
-                    KeyReleaseEvent e(key);
-                    properties->event_callback(e);
-                    break;
-                }
+            case GLFW_PRESS:
+            {
+                KeyPressEvent e(key, 0);
+                properties->event_callback(e);
+                break;
             }
+            case GLFW_REPEAT:
+            {
+                KeyPressEvent e(key, 1); // set to 1 for now
+                properties->event_callback(e);
+                break;
+            }
+            case GLFW_RELEASE:
+            {
+                KeyReleaseEvent e(key);
+                properties->event_callback(e);
+                break;
+            }
+            }
+        }
+
+        static void KeyCharInputCallback(GLFWwindow* window, unsigned int codepoint)
+        {
+            WindowProperties* properties = (WindowProperties*)glfwGetWindowUserPointer(window);
+            KeyCharInputEvent e(codepoint);
+            properties->event_callback(e);
         }
 
         static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
@@ -189,12 +196,15 @@ namespace Vertex {
         // set up glfw input callbacks
         glfwSetWindowSizeCallback(m_Window, GLFWInputCallbacks::WindowSizeCallback);
         glfwSetWindowCloseCallback(m_Window, GLFWInputCallbacks::WindowCloseCallback);
+        glfwSetWindowFocusCallback(m_Window, GLFWInputCallbacks::WindowFocusCallback);
+        glfwSetCursorEnterCallback(m_Window, GLFWInputCallbacks::CursorEnterLeaveCallback);
+
         glfwSetKeyCallback(m_Window, GLFWInputCallbacks::KeyCallback);
+        glfwSetCharCallback(m_Window, GLFWInputCallbacks::KeyCharInputCallback);
+
         glfwSetMouseButtonCallback(m_Window, GLFWInputCallbacks::MouseButtonCallback);
         glfwSetScrollCallback(m_Window, GLFWInputCallbacks::MouseScrollCallback);
         glfwSetCursorPosCallback(m_Window, GLFWInputCallbacks::CursorPositionCallback);
-        glfwSetWindowFocusCallback(m_Window, GLFWInputCallbacks::WindowFocusCallback);
-        glfwSetCursorEnterCallback(m_Window, GLFWInputCallbacks::CursorEnterLeaveCallback);
     }
 
     WindowImpl::~WindowImpl()
