@@ -42,10 +42,11 @@ namespace Vertex {
         int m_RepeatCount;
     };
 
-    class KeyReleaseEvent : public KeyEvent {
+    class KeyReleaseEvent : public KeyEvent
+    {
     public:
         KeyReleaseEvent(int key)
-                : KeyEvent(key)
+            : KeyEvent(key)
         {
         }
 
@@ -57,5 +58,22 @@ namespace Vertex {
             return fmt::format("KeyReleaseEvent : Key<{0}>", m_Key);
         }
     };
+
+    class KeyCharInputEvent : public KeyEvent
+    {
+    public:
+        KeyCharInputEvent(int key)
+            : KeyEvent(key)
+        {
+        }
+
+        inline EventTypes  GetEventType() override { return EventTypes::KeyCharInput; }
+        inline const char* GetEventName() override { return "EventTypes::KeyCharInput"; }
+
+        inline std::string GetDetails() override
+        {
+            return fmt::format("EventTypes::KeyCharInput : Key<{0}>", m_Key);
+        }
+    }
 
 }

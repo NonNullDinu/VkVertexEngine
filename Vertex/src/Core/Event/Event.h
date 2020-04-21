@@ -8,8 +8,11 @@ namespace Vertex {
 
     enum class EventTypes
     {
-        WindowResize, WindowClose, WindowGainedFocus, WindowLostFocus, WindowCursorEntered, WindowCursorLeft,
-        KeyPress, KeyRelease,
+        WindowResize, WindowClose, WindowGainedFocus, WindowLostFocus,
+        WindowCursorEntered, WindowCursorLeft,
+        
+        KeyPress, KeyRelease, KeyCharInput,
+        
         MouseClick, MouseRelease, MouseScroll, MouseMove
     };
 
