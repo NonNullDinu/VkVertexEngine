@@ -44,7 +44,7 @@ namespace Vertex {
         {
         }
 
-        template<auto T, typename F>
+        template<EventTypes T, typename F>
         void Dispatch(F&& func)
         {
             if (m_Event.GetEventType() == T && !m_Event.m_Handled)
