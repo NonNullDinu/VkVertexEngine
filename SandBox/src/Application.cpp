@@ -15,7 +15,7 @@ public:
 
 	void OnEvent(Vertex::Event& event)
 	{
-		Vertex::Logger::GetClientLogger()->info("{0} event : {1}", GetName(), event.GetDetails());
+		Vertex::Logger::GetClientLogger()->debug("{0} event : {1}", GetName(), event.GetDetails());
 	}
 };
 
