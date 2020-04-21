@@ -113,9 +113,51 @@ namespace Vertex {
                 return;
             }
 
-            MouseMoveEvent e((int)xpos, (int)ypos);
+            MouseMoveEvent e(xpos, ypos);
             properties->event_callback(e);
         }
+        static void WindowFocusCallback(GLFWwindow* window, int focused)
+        {
+            WindowProperties* properties = (WindowProperties*)glfwGetWindowUserPointer(window);
+
+            if (properties == nullptr)
+            {
+                Logger::GetCoreLogger()->error("Null window properties");
+                return;
+            }
+
+            if(focused == GLFW_TRUE)
+            {
+                WindowGainedFocusEvent e;
+                properties->event_callback(e);
+            }
+            else if(focused == GLFW_FALSE)
+            {
+                WindowLostFocusEvent e;
+                properties->event_callback(e);
+            }
+        }
+        void CursorEnterLeaveCallback(GLFWwindow* window, int entered)
+        {
+            WindowProperties* properties = (WindowProperties*)glfwGetWindowUserPointer(window);
+
+            if (properties == nullptr)
+            {
+                Logger::GetCoreLogger()->error("Null window properties");
+                return;
+            }
+            if (entered == GLFW_TRUE)
+            {
+                WindowCursorEnteredEvent e;
+                properties->event_callback(e);
+            }
+            else
+            {
+                WindowCursorLeftEvent e;
+                properties->event_callback(e);
+            }
+        }
+
 
     }
 
@@ -151,6 +193,8 @@ namespace Vertex {
         glfwSetMouseButtonCallback(m_Window, GLFWInputCallbacks::MouseButtonCallback);
         glfwSetScrollCallback(m_Window, GLFWInputCallbacks::MouseScrollCallback);
         glfwSetCursorPosCallback(m_Window, GLFWInputCallbacks::CursorPositionCallback);
+        glfwSetWindowFocusCallback(m_Window, GLFWInputCallbacks::WindowFocusCallback);
+        glfwSetCursorEnterCallback(m_Window, GLFWInputCallbacks::CursorEnterLeaveCallback);
     }
 
     WindowImpl::~WindowImpl()
