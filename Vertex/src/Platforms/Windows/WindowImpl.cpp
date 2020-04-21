@@ -196,12 +196,15 @@ namespace Vertex {
         // set up glfw input callbacks
         glfwSetWindowSizeCallback(m_Window, GLFWInputCallbacks::WindowSizeCallback);
         glfwSetWindowCloseCallback(m_Window, GLFWInputCallbacks::WindowCloseCallback);
+        glfwSetWindowFocusCallback(m_Window, GLFWInputCallbacks::WindowFocusCallback);
+        glfwSetCursorEnterCallback(m_Window, GLFWInputCallbacks::CursorEnterLeaveCallback);
+
         glfwSetKeyCallback(m_Window, GLFWInputCallbacks::KeyCallback);
+        glfwSetCharCallback(m_Window, GLFWInputCallbacks::KeyCharInputCallback);
+
         glfwSetMouseButtonCallback(m_Window, GLFWInputCallbacks::MouseButtonCallback);
         glfwSetScrollCallback(m_Window, GLFWInputCallbacks::MouseScrollCallback);
         glfwSetCursorPosCallback(m_Window, GLFWInputCallbacks::CursorPositionCallback);
-        glfwSetWindowFocusCallback(m_Window, GLFWInputCallbacks::WindowFocusCallback);
-        glfwSetCursorEnterCallback(m_Window, GLFWInputCallbacks::CursorEnterLeaveCallback);
     }
 
     WindowImpl::~WindowImpl()
