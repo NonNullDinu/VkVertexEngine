@@ -74,6 +74,6 @@ namespace Vertex {
         {
             return fmt::format("EventTypes::KeyCharInput : Key<{0}>", m_Key);
         }
-    }
+    };
 
 }
