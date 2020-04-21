@@ -67,6 +67,13 @@ namespace Vertex {
             }
         }
 
+        static void KeyCharInputCallback(GLFWwindow* window, unsigned int codepoint)
+        {
+            WindowProperties* properties = (WindowProperties*)glfwGetWindowUserPointer(window);
+            KeyCharInputEvent e(codepoint);
+            properties->event_callback(e);
+        }
+
         static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
         {
             WindowProperties* properties = (WindowProperties*)glfwGetWindowUserPointer(window);
