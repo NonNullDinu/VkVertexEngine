@@ -6,7 +6,7 @@ file(GLOB_RECURSE VX_SOURCES
         src/Core/*.cpp
         src/Core/Layer/*.cpp
         src/GL/*.cpp
-        src/ImgGui/*.cpp)
+        src/ImGui/*.cpp)
 
 file(GLOB_RECURSE VX_HEADERS
         src/Core/*.h
@@ -73,7 +73,7 @@ set(VX_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/include PARENT_SCOPE)
 
 target_precompile_headers(Vertex PUBLIC src/Core/vx_pch.h)
 
-target_compile_definitions(Vertex PRIVATE VX_BUILD_SHARED)
+target_compile_definitions(Vertex PRIVATE VX_BUILD_SHARED IMGUI_IMPL_OPENGL_LOADER_GLAD=1)
 
 
 if ($ENV{CLION_IDE})
