@@ -1,11 +1,12 @@
 #pragma once
 
 #include "imgui.h"
+
 #include "Core/Layer/Layer.h"
 
-#include "GL/ImGuiRenderer.hpp" // <- todo
+#include "GL/ImGuiRenderer.h" // <- todo
 
-#include "Core/Application.hpp"
+#include "Core/Application.h"
 
 #include "Event/KeyEvent.h"
 #include "Event/MouseEvent.h"
@@ -33,8 +34,8 @@ namespace Vertex {
         bool OnKeyReleaseEvent(KeyReleaseEvent& event);
         bool OnKeyCharInputEvent(KeyCharInput& event);
 
-        bool OnMouseButtonPressEvent(MouseClickEvent& event);
-        bool OnMouseButtonReleaseEvent(MouseReleaseEvent& event);
+        bool OnMouseClickEvent(MouseClickEvent& event);
+        bool OnMouseReleaseEvent(MouseReleaseEvent& event);
         bool OnMouseScrollEvent(MouseScrollEvent& event);
         bool OnMouseMoveEvent(MouseMoveEvent& event);
     };

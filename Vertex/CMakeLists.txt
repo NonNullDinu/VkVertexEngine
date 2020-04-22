@@ -9,6 +9,9 @@ file(GLOB_RECURSE VX_HEADERS include/Core/*.h src/Core/*.h src/Core/Layer/*.h)
 # GLAD
 add_subdirectory(deps/glad)
 
+# ImGui
+add_subdirectory(deps/imgui)
+
 if (WIN32)
     # Get all windows specific headers and sources in VX_PLATFORM_HEADERS and VX_PLATFORM_SOURCES
     file(GLOB_RECURSE VX_PLATFORM_HEADERS src/Platforms/Windows/*.h)
@@ -47,11 +50,11 @@ add_library(Vertex SHARED
 
 # add the paths in PLATFORM_SPECIFIC_INCLUDES to Vertex's include directories
 target_include_directories(Vertex
-        PUBLIC src deps/spdlog/include ${PLATFORM_SPECIFIC_INCLUDES})
+        PUBLIC src deps/spdlog/include deps/imgui ${PLATFORM_SPECIFIC_INCLUDES})
 
 # use the libs specified above in PLATFORM_SPECIFIC_LIBS and glad
 target_link_libraries(Vertex
-        PUBLIC ${PLATFORM_SPECIFIC_LIBS} glad
+        PUBLIC ${PLATFORM_SPECIFIC_LIBS} glad imgui
         )
 
 set_target_properties(Vertex PROPERTIES POSITION_INDEPENDENT_CODE ON)
