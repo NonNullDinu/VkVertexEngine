@@ -4,17 +4,17 @@
 
 #include "Core/Layer/Layer.h"
 
-#include "GL/ImGuiRenderer.h" // <- todo
+#include "GL/ImGuiRenderer.h"
 
 #include "Core/Application.h"
 
-#include "Event/KeyEvent.h"
-#include "Event/MouseEvent.h"
-#include "Event/WindowEvent.h"
+#include "Core/Event/KeyEvent.h"
+#include "Core/Event/MouseEvent.h"
+#include "Core/Event/WindowEvent.h"
 
 namespace Vertex {
 
-    class ImGuiLayer : public Layer
+    class VX_PUBLIC_API ImGuiLayer : public Layer
     {
     public:
         ImGuiLayer();
@@ -27,12 +27,15 @@ namespace Vertex {
         void OnEvent(Event& event) override;
 
     private:
+        float m_Time;
+
+    private:
         // event callbacks
         bool OnWindowResizeEvent(WindowResizeEvent& event);
 
         bool OnKeyPressEvent(KeyPressEvent& event);
         bool OnKeyReleaseEvent(KeyReleaseEvent& event);
-        bool OnKeyCharInputEvent(KeyCharInput& event);
+        bool OnKeyCharInputEvent(KeyCharInputEvent& event);
 
         bool OnMouseClickEvent(MouseClickEvent& event);
         bool OnMouseReleaseEvent(MouseReleaseEvent& event);

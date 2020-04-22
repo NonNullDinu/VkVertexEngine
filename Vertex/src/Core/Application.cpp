@@ -2,11 +2,15 @@
 
 namespace Vertex {
 
+    Application* Application::s_AppInstance = nullptr;
+
     Application::Application()
+        : m_Running(true)
     {
+        VX_CORE_ASSERT((!s_AppInstance), "Application cannot be instantiated twice!")
+
         m_Window.reset(new WindowImpl());
         m_Window->SetEventCallback(VX_BIND_FUNC_1(Application::OnEvent));
-        this->m_Running = true;
     }
 
     Application::~Application()
@@ -38,6 +42,8 @@ namespace Vertex {
 
             m_Window->OnUpdate();
         }
+
+        return;
     }
 
     // Application specific event callbacks

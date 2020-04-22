@@ -25,9 +25,11 @@
 
 #pragma once
 
-#include "../src/Core/Core.h"
+#include "Core/Core.h"
 // -------------------------------------
 // ---- Main function defined here -----
-#include "../src/Core/EntryPoint.h"
+#include "Core/EntryPoint.h"
 // -------------------------------------
-#include "../src/Core/Application.h"
+#include "Core/Application.h"
+
+#include "ImGui/ImGuiLayer.h"
