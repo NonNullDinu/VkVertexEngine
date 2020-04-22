@@ -16,6 +16,8 @@ file(GLOB_RECURSE VX_HEADERS
 
 # GLAD
 add_subdirectory(deps/glad)
+# ImGui
+add_subdirectory(deps/imgui)
 
 if (WIN32)
     # Get all windows specific headers and sources in VX_PLATFORM_HEADERS and VX_PLATFORM_SOURCES
@@ -49,17 +51,7 @@ endif ()
 
 add_library(Vertex SHARED
         ${VX_SOURCES}
-        deps/imgui/imgui_demo.cpp
-        deps/imgui/imgui_draw.cpp
-        deps/imgui/imgui_widgets.cpp
-        deps/imgui/imgui.cpp
         ${VX_HEADERS}
-        deps/imgui/imconfig.h
-        deps/imgui/imgui_internal.h
-        deps/imgui/imstb_rectpack.h
-        deps/imgui/imstb_textedit.h
-        deps/imgui/imstb_truetype.h
-        deps/imgui/imgui.h
 
         ${VX_PLATFORM_HEADERS}
         ${VX_PLATFORM_SOURCES})
@@ -70,7 +62,7 @@ target_include_directories(Vertex
 
 # use the libs specified above in PLATFORM_SPECIFIC_LIBS and glad
 target_link_libraries(Vertex
-        PUBLIC ${PLATFORM_SPECIFIC_LIBS} glad
+        PUBLIC ${PLATFORM_SPECIFIC_LIBS} glad imgui
         )
 
 set_target_properties(Vertex PROPERTIES POSITION_INDEPENDENT_CODE ON)
