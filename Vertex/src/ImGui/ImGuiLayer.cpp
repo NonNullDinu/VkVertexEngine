@@ -153,6 +153,8 @@ namespace Vertex {
         ImGuiIO& io = ImGui::GetIO();
         io.MouseDown[event.GetButton()] = true;
 
+        Logger::GetCoreLogger()->debug("Mouse click event");
+
         return false;
     }
 

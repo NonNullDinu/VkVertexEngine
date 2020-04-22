@@ -15,7 +15,7 @@ public:
 
 	void OnEvent(Vertex::Event& event)
 	{
-		Vertex::Logger::GetClientLogger()->debug("{0} event : {1}", GetName(), event.GetDetails());
+		// Vertex::Logger::GetClientLogger()->debug("{0} event : {1}", GetName(), event.GetDetails());
 	}
 };
 
@@ -25,7 +25,7 @@ public:
 	SandBoxApp()
 	{
 		PushLayer(new TestLayer());
-		PushLayer(new Vertex::ImGuiLayer());
+		PushOverlay(new Vertex::ImGuiLayer());
 	}
 
 	~SandBoxApp()

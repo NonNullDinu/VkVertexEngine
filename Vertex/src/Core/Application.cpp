@@ -23,11 +23,8 @@ namespace Vertex {
     {
         Logger::GetCoreLogger()->debug(event.GetDetails());
 
-        if (event.GetEventType() == EventTypes::WindowClose)
-        {
-            EventHandler handler(event);
-            handler.Dispatch<EventTypes::WindowClose, WindowCloseEvent>(VX_BIND_FUNC_1(Application::OnWindowCloseEvent));
-        }
+        EventHandler handler(event);
+        handler.Dispatch<EventTypes::WindowClose, WindowCloseEvent>(VX_BIND_FUNC_1(Application::OnWindowCloseEvent));
 
         for (std::vector<Layer*>::iterator it = m_LayerStack.end(); it != m_LayerStack.begin();)
         {
