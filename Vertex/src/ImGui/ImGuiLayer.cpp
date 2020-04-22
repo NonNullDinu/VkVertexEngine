@@ -1,4 +1,6 @@
 #include "ImGuiLayer.h"
+#include <Core/Event/Event.h>
+#include <imgui.h>
 
 namespace Vertex {
 
@@ -58,7 +60,9 @@ namespace Vertex {
 
         ImGuiIO& io = ImGui::GetIO();
 
-        io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());
+        IWindow& window = app.GetWindow();
+
+        io.DisplaySize = ImVec2(window.GetWidth(), window.GetHeight());
 
         float time = (float)glfwGetTime();
         io.DeltaTime = (m_Time > 0.0f) ? (time - m_Time) : (1.0f / 60.0f);
@@ -76,18 +80,18 @@ namespace Vertex {
 
     void ImGuiLayer::OnEvent(Event& event)
     {
-        EventDispatcher handler(event);
+        EventHandler handler(event);
 
-        handler.Dispatch<EventTypes::WindowResize>(VX_BIND_FUNC_1(ImGuiLayer::OnWindowResizeEvent));
+        handler.Dispatch<EventTypes::WindowResize, WindowResizeEvent>(VX_BIND_FUNC_1(ImGuiLayer::OnWindowResizeEvent));
 
-        handler.Dispatch<EventTypes::KeyPress>(VX_BIND_FUNC_1(ImGuiLayer::OnKeyPressEvent));
-        handler.Dispatch<EventTypes::KeyRelease>(VX_BIND_FUNC_1(ImGuiLayer::OnKeyReleaseEvent));
-        handler.Dispatch<EventTypes::KeyCharInput>(VX_BIND_FUNC_1(ImGuiLayer::OnKeyCharInputEvent));
+        handler.Dispatch<EventTypes::KeyPress, KeyPressEvent>(VX_BIND_FUNC_1(ImGuiLayer::OnKeyPressEvent));
+        handler.Dispatch<EventTypes::KeyRelease, KeyReleaseEvent>(VX_BIND_FUNC_1(ImGuiLayer::OnKeyReleaseEvent));
+        handler.Dispatch<EventTypes::KeyCharInput, KeyCharInputEvent>(VX_BIND_FUNC_1(ImGuiLayer::OnKeyCharInputEvent));
 
-        handler.Dispatch<EventTypes::MouseClick>(VX_BIND_FUNC_1(ImGuiLayer::OnMouseClickEvent));
-        handler.Dispatch<EventTypes::MouseRelease>(VX_BIND_FUNC_1(ImGuiLayer::OnMouseReleaseEvent));
-        handler.Dispatch<EventTypes::MouseScroll>(VX_BIND_FUNC_1(ImGuiLayer::OnMouseScrollEvent));
-        handler.Dispatch<EventTypes::MouseMove>(VX_BIND_FUNC_1(ImGuiLayer::OnMouseMoveEvent));
+        handler.Dispatch<EventTypes::MouseClick, MouseClickEvent>(VX_BIND_FUNC_1(ImGuiLayer::OnMouseClickEvent));
+        handler.Dispatch<EventTypes::MouseRelease, MouseReleaseEvent>(VX_BIND_FUNC_1(ImGuiLayer::OnMouseReleaseEvent));
+        handler.Dispatch<EventTypes::MouseScroll, MouseScrollEvent>(VX_BIND_FUNC_1(ImGuiLayer::OnMouseScrollEvent));
+        handler.Dispatch<EventTypes::MouseMove, MouseMoveEvent>(VX_BIND_FUNC_1(ImGuiLayer::OnMouseMoveEvent));
     }
 
     // events
@@ -136,7 +140,7 @@ namespace Vertex {
         return false;
     }
 
-    bool ImGuiLayer::OnKeyCharInputEvent(KeyCharInput& event)
+    bool ImGuiLayer::OnKeyCharInputEvent(KeyCharInputEvent& event)
     {
         ImGuiIO& io = ImGui::GetIO();
         io.AddInputCharacter(event.GetKey());

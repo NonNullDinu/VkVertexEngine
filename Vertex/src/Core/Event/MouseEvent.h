@@ -18,6 +18,8 @@ namespace Vertex {
         {
         }
 
+        inline int GetButton() { return m_Button; }
+
         inline EventTypes  GetEventType() override { return EventTypes::MouseClick; }
         inline const char* GetEventName() override { return "EventTypes::MouseClick"; }
 
@@ -37,6 +39,8 @@ namespace Vertex {
             : m_Button(button)
         {
         }
+
+        inline int GetButton() { return m_Button; }
 
         inline EventTypes  GetEventType() override { return EventTypes::MouseRelease; }
         inline const char* GetEventName() override { return "EventTypes::MouseRelease"; }
