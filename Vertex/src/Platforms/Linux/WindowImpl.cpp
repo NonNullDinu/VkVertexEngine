@@ -7,6 +7,8 @@
 namespace Vertex {
 
     static bool s_GLFW_Initialized = false;
+    
+    Input* Input::s_Instance = new InputImpl();
 
     static void GLFWErrorCallback(int error, const char* description)
     {

@@ -2,7 +2,14 @@
 
 #include "Core/Window.h"
 
-#include <GLFW/glfw3.h>
+#include "Core/Input.h"
+#include "InputImpl.h"
+
+#ifndef VX_INCLUDED_WINDOW
+    #define VX_INCLUDED_WINDOW
+#else
+    #error Platform specific window class already included, do not include multiple window classes.
+#endif
 
 namespace Vertex {
 
