@@ -36,7 +36,7 @@ namespace Vertex {
     {
         while (m_Running)
         {
-            glClearColor(1, 1, 1, 1);
+            glClearColor(0.001f, 0.001f, 0.02f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
             for (Layer* layer : m_LayerStack)
