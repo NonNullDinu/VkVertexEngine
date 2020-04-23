@@ -6,7 +6,7 @@ namespace Vertex {
     {
         GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 
-        auto state = glfwGetkey(window, key);
+        auto state = glfwGetKey(window, key);
 
         return (state == GLFW_PRESS || state == GLFW_REPEAT);
     }
