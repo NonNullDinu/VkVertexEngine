@@ -39,6 +39,9 @@ namespace Vertex {
             glClearColor(0.001f, 0.001f, 0.02f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
+            if (Input::IsKeyPressed(VX_KEY_SPACE))
+                Logger::GetCoreLogger()->debug("Space bar pressed");
+
             for (Layer* layer : m_LayerStack)
                 layer->OnUpdate();
 
