@@ -2,10 +2,14 @@
 
 #include "Core.h"
 
+class ImGuiLayer; // <- forward declare it to be accessible from application
+
 #include "Event/Event.h"
 #include "Event/WindowEvent.h"
 
 #include "Layer/LayerStack.h"
+
+#include "ImGui/ImGuiLayer.h"
 
 #if defined(_WIN32)
 	#include "Platforms/Windows/WindowImpl.h"
@@ -41,6 +45,8 @@ namespace Vertex {
         bool m_Running;
         // we want this^ variable since the application might close for multiple reasons
         LayerStack m_LayerStack;
+
+        ImGuiLayer* m_ImGuiLayer;
 
         std::shared_ptr<IWindow> m_Window;
 

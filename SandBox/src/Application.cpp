@@ -25,7 +25,6 @@ public:
 	SandBoxApp()
 	{
 		PushLayer(new TestLayer());
-		PushOverlay(new Vertex::ImGuiLayer());
 	}
 
 	~SandBoxApp()

@@ -31,5 +31,3 @@
 #include "Core/EntryPoint.h"
 // -------------------------------------
 #include "Core/Application.h"
-
-#include "ImGui/ImGuiLayer.h"

@@ -1,10 +1,13 @@
 #pragma once
 
-#include "imgui.h"
+#include <imgui.h>
+
+#include <examples/imgui_impl_glfw.h>    // imgui
+#include <examples/imgui_impl_opengl3.h> // imgui
+
+#include "Core/Core.h"
 
 #include "Core/Layer/Layer.h"
-
-#include "GL/ImGuiRenderer.h"
 
 #include "Core/Application.h"
 
@@ -14,7 +17,7 @@
 
 namespace Vertex {
 
-    class VX_PUBLIC_API ImGuiLayer : public Layer
+    class ImGuiLayer : public Layer
     {
     public:
         ImGuiLayer();
@@ -23,24 +26,13 @@ namespace Vertex {
         void OnAttach() override;
         void OnDetach() override;
 
-        void OnUpdate() override;
-        void OnEvent(Event& event) override;
+        void OnImguiRender() override;
+
+        void Begin();
+        void End();
 
     private:
         float m_Time;
-
-    private:
-        // event callbacks
-        bool OnWindowResizeEvent(WindowResizeEvent& event);
-
-        bool OnKeyPressEvent(KeyPressEvent& event);
-        bool OnKeyReleaseEvent(KeyReleaseEvent& event);
-        bool OnKeyCharInputEvent(KeyCharInputEvent& event);
-
-        bool OnMouseClickEvent(MouseClickEvent& event);
-        bool OnMouseReleaseEvent(MouseReleaseEvent& event);
-        bool OnMouseScrollEvent(MouseScrollEvent& event);
-        bool OnMouseMoveEvent(MouseMoveEvent& event);
     };
 
 }

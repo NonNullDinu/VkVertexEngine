@@ -17,6 +17,8 @@ namespace Vertex {
         virtual void OnUpdate() {}
         virtual void OnEvent(Event& event) {}
 
+        virtual void OnImguiRender() {}
+
         inline const char* GetName() { return m_Name; }
 
     protected:

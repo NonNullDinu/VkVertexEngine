@@ -12,7 +12,8 @@ file(GLOB_RECURSE VX_HEADERS
         src/Core/*.h
         src/Core/Layer/*.h
         src/GL/*.h
-        src/ImGui/*.h)
+        src/ImGui/*.h
+        deps/glm/glm/*.hpp)
 
 # GLAD
 add_subdirectory(deps/glad)
@@ -51,14 +52,18 @@ endif ()
 
 add_library(Vertex SHARED
         ${VX_SOURCES}
+        deps/imgui/examples/imgui_impl_glfw.cpp
+        deps/imgui/examples/imgui_impl_opengl3.cpp
         ${VX_HEADERS}
+        deps/imgui/examples/imgui_impl_glfw.h
+        deps/imgui/examples/imgui_impl_opengl3.h
 
         ${VX_PLATFORM_HEADERS}
         ${VX_PLATFORM_SOURCES})
 
 # add the paths in PLATFORM_SPECIFIC_INCLUDES to Vertex's include directories
 target_include_directories(Vertex
-        PUBLIC src deps/spdlog/include deps/imgui ${PLATFORM_SPECIFIC_INCLUDES})
+        PUBLIC src deps/spdlog/include deps/imgui deps/glm ${PLATFORM_SPECIFIC_INCLUDES})
 
 # use the libs specified above in PLATFORM_SPECIFIC_LIBS and glad
 target_link_libraries(Vertex

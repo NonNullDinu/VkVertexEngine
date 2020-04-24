@@ -1,5 +1,7 @@
 #include "Application.h"
 
+#include <glm/glm.hpp>
+
 namespace Vertex {
 
     Application* Application::s_AppInstance = nullptr;
@@ -13,6 +15,9 @@ namespace Vertex {
         m_Window->SetEventCallback(VX_BIND_FUNC_1(Application::OnEvent));
 
         s_AppInstance = this;
+
+        ImGuiLayer* m_ImGuiLayer = new ImGuiLayer;
+        PushOverlay(m_ImGuiLayer);
     }
 
     Application::~Application()
@@ -21,8 +26,6 @@ namespace Vertex {
 
     void Application::OnEvent(Event& event)
     {
-        Logger::GetCoreLogger()->debug(event.GetDetails());
-
         EventHandler handler(event);
         handler.Dispatch<EventTypes::WindowClose, WindowCloseEvent>(VX_BIND_FUNC_1(Application::OnWindowCloseEvent));
 
@@ -44,6 +47,13 @@ namespace Vertex {
 
             for (Layer* layer : m_LayerStack)
                 layer->OnUpdate();
+
+            m_ImGuiLayer->Begin();
+
+            for (Layer* layer : m_LayerStack)
+                layer->OnImguiRender();
+            
+            m_ImGuiLayer->End();
 
             m_Window->OnUpdate();
         }
