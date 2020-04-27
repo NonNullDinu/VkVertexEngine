@@ -18,6 +18,29 @@ namespace Vertex {
 
         ImGuiLayer* m_ImGuiLayer = new ImGuiLayer;
         PushOverlay(m_ImGuiLayer);
+
+        glGenVertexArrays(1, &m_VertexArr);
+        glBindVertexArray(m_VertexArr);
+
+        glGenBuffers(1, &m_VertexBuf);
+        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuf);
+
+        float vertices[9] = {
+            -0.5f, -0.5f, 0.0f,
+             0.5f, -0.5f, 0.0f,
+             0.0f,  0.5f, 0.0f
+        };
+
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+        glGenBuffers(1, &m_IndexBuf);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuf);
+
+        unsigned int indices[3] = { 0, 1, 2 };
+
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices, GL_STATIC_DRAW);
     }
 
     Application::~Application()
@@ -39,8 +62,11 @@ namespace Vertex {
     {
         while (m_Running)
         {
-            glClearColor(0.001f, 0.001f, 0.02f, 1.0f);
+            glClearColor(0.1f, 0.1f, 0.12f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
+
+            glBindVertexArray(m_VertexArr);
+            glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 
             if (Input::IsKeyPressed(VX_KEY_SPACE))
                 Logger::GetCoreLogger()->debug("Space bar pressed");

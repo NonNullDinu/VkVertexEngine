@@ -53,6 +53,8 @@ namespace Vertex {
         static Application* s_AppInstance;
         // ^ application is a singleton class
 
+        unsigned int m_VertexArr, m_VertexBuf, m_IndexBuf;
+
     private:
         // Application specific event callbacks
         bool OnWindowCloseEvent(Event& event);
