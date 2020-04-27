@@ -189,10 +189,7 @@ namespace Vertex {
 
         m_Window = glfwCreateWindow((int)m_Data.width, (int)m_Data.height, m_Data.title, nullptr, nullptr);
 
-        glfwMakeContextCurrent(m_Window);
-
-        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-            Logger::GetCoreLogger()->error("Could not initialize glad.");
+        m_Context = new OpenGLContext(m_Window);
 
         glfwSetWindowUserPointer(m_Window, &m_Data);
 
@@ -223,7 +220,7 @@ namespace Vertex {
     void WindowImpl::OnUpdate()
     {
         glfwPollEvents();
-        glfwSwapBuffers(m_Window);
+        m_Context->SwapBuffers();
     }
 
 }

@@ -5,6 +5,9 @@
 #include "Core/Input.h"
 #include "InputImpl.h"
 
+#include "Renderer/GraphicsContext.h"
+#include "GL/OpenGL/OpenGLContext.h"
+
 #ifndef VX_INCLUDED_WINDOW
     #define VX_INCLUDED_WINDOW
 #else
@@ -57,6 +60,7 @@ namespace Vertex {
 
     private:
         GLFWwindow* m_Window;
+        GraphicsContext* m_Context;
         WindowProperties m_Data;
 
     private:

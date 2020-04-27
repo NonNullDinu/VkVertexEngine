@@ -5,13 +5,15 @@ project(Vertex CXX)
 file(GLOB_RECURSE VX_SOURCES
         src/Core/*.cpp
         src/Core/Layer/*.cpp
-        src/GL/*.cpp
+        src/Renderer/*.cpp
+        src/GL/OpenGL/*.cpp
         src/ImGui/*.cpp)
 
 file(GLOB_RECURSE VX_HEADERS
         src/Core/*.h
         src/Core/Layer/*.h
-        src/GL/*.h
+        src/Renderer/*.h
+        src/GL/OpenGL/*.h
         src/ImGui/*.h
         deps/glm/glm/*.hpp)
 
