@@ -1,7 +1,10 @@
 cd ../
 
 mkdir build 2> NUL
-
 cd build
-cmake -DCMAKE_BUILD_TYPE=Debug ..
-msbuild SandBox.sln
+
+cmake .. && msbuild VertexEngine.sln -m
+
+cd ../scripts
+
+PAUSE
