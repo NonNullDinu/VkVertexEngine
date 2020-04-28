@@ -27,14 +27,15 @@ You can join the official Vertex Engine [Discord Server](https://discord.gg/hA5k
 ## Build
 Pre-made build scripts are provided for Windows and Linux in the `scripts` directory. The build scripts **must be run from within that directory.**
 
-## Goals
-* A level editor
-* Maximum efficiency, and lightweightedness
+## Features to come
+* Scene system
+* 3D Rendering
+* Visual editor
 * Support for mac, mobile, and consoles
 * Support for Vulkan, DirectX12, and Metal
 
 ## Contributing
-Please read [CONTRIBUTING](https://github.com/VertexEngine/VertexEngine/blob/master/.github/CONTRIBUTING.md). before opening a Pull Request.
+Please read [CONTRIBUTING](https://github.com/VertexEngine/VertexEngine/blob/master/.github/CONTRIBUTING.md) before opening a Pull Request.
 
 ## Authors
 * [42mix](https://github.com/42mix) - Initial work
