@@ -65,7 +65,7 @@ namespace Vertex {
 
         // Vertex and fragment shaders are successfully compiled.
         // Link them together into a program and get a program object.
-        m_ID; = glCreateProgram();
+        m_ID = glCreateProgram();
 
         // Attach our shaders to our program
         glAttachShader(m_ID, vertex_shader);
@@ -107,12 +107,12 @@ namespace Vertex {
         glDeleteProgram(m_ID);
     }
 
-    void Shader::Bind()
+    void Shader::Bind() const
     {
         glUseProgram(m_ID);
     }
 
-    void Shader::Unbind()
+    void Shader::Unbind() const
     {
         glUseProgram(0);
     }
