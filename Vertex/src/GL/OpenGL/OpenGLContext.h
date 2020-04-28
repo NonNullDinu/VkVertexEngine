@@ -2,8 +2,6 @@
 
 #include "Core/Core.h"
 
-#include "Core/Window.h"
-
 #include "Renderer/GraphicsContext.h"
 
 namespace Vertex {

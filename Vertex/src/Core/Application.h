@@ -14,13 +14,15 @@ class ImGuiLayer; // <- forward declare it to be accessible from application
 
 #include "GL/OpenGL/Shader.h"
 
-#if defined(_WIN32)
-	#include "Platforms/Windows/WindowImpl.h"
-#elif defined(__linux__)
-	#include "Platforms/Linux/WindowImpl.h"
-#else
-	#error Unsupported platform.
-#endif
+#include "Platforms/Linux/LinuxWindow.h"
+#include "Platforms/Windows/WindowsWindow.h"
+
+// ------------- TODOS -------------
+/*
+* Abstract Shader class
+* Abstract Window class properly
+*/
+// ---------------------------------
 
 namespace Vertex {
 
@@ -30,7 +32,7 @@ namespace Vertex {
         Application();
         ~Application();
 
-        inline IWindow& GetWindow() { return *m_Window; }
+        inline Window& GetWindow() { return *m_Window; }
         
         static inline Application& Get() { return *s_AppInstance; }
 
@@ -51,7 +53,7 @@ namespace Vertex {
 
         ImGuiLayer* m_ImGuiLayer;
 
-        std::shared_ptr<IWindow> m_Window;
+        std::shared_ptr<Window> m_Window;
 
         static Application* s_AppInstance;
         // ^ application is a singleton class
