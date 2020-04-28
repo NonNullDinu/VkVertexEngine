@@ -187,6 +187,11 @@ namespace Vertex {
         }
         glfwSetErrorCallback(GLFWErrorCallback);
 
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, m_Data.gl_major_version);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, m_Data.gl_minor_version);
+        if(m_Data.gl_major_version > 3 || (m_Data.gl_major_version == 3 && m_Data.gl_minor_version >= 2))
+            glfwWindowHint(GLFW_OPENGL_PROFILE, m_Data.gl_use_compat ? GLFW_OPENGL_COMPAT_PROFILE : GLFW_OPENGL_CORE_PROFILE);
+
         m_Window = glfwCreateWindow((int)m_Data.width, (int)m_Data.height, m_Data.title, nullptr, nullptr);
 
         m_Context = new OpenGLContext(m_Window);
