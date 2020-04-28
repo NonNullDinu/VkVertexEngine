@@ -5,11 +5,14 @@
 class ImGuiLayer; // <- forward declare it to be accessible from application
 
 #include "Event/Event.h"
+
 #include "Event/WindowEvent.h"
 
 #include "Layer/LayerStack.h"
 
 #include "ImGui/ImGuiLayer.h"
+
+#include "GL/OpenGL/Shader.h"
 
 #if defined(_WIN32)
 	#include "Platforms/Windows/WindowImpl.h"
@@ -53,7 +56,12 @@ namespace Vertex {
         static Application* s_AppInstance;
         // ^ application is a singleton class
 
+        // ------------- Temporary --------------
+
         unsigned int m_VertexArr, m_VertexBuf, m_IndexBuf;
+        std::unique_ptr<Shader> m_Shader;
+
+        // --------------------------------------
 
     private:
         // Application specific event callbacks

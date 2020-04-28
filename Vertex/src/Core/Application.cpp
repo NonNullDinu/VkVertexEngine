@@ -12,12 +12,18 @@ namespace Vertex {
         VX_CORE_ASSERT((!s_AppInstance), "Application cannot be instantiated twice!")
 
         m_Window.reset(new WindowImpl());
+        
         m_Window->SetEventCallback(VX_BIND_FUNC_1(Application::OnEvent));
 
         s_AppInstance = this;
 
         ImGuiLayer* m_ImGuiLayer = new ImGuiLayer;
         PushOverlay(m_ImGuiLayer);
+
+        // --------------------------------------
+        // ------------- Temporary --------------
+        // --------- Will be abstracted ---------
+        // --------------------------------------
 
         glGenVertexArrays(1, &m_VertexArr);
         glBindVertexArray(m_VertexArr);
@@ -41,6 +47,32 @@ namespace Vertex {
         unsigned int indices[3] = { 0, 1, 2 };
 
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices, GL_STATIC_DRAW);
+
+        const char* vertex_src = R"(
+            #version 330 core
+
+            layout(location = 0) in vec4 a_Position;
+
+            void main()
+            {
+                gl_Position = a_Position;
+            }
+        )";
+
+        const char* fragment_src = R"(
+            #version 330 core
+
+            layout(location = 0) out vec4 o_Color;
+
+            void main()
+            {
+                o_Color = vec4(0.0, 1.0, 0.7, 1.0);
+            }
+        )";
+
+        m_Shader.reset(new Shader(vertex_src, fragment_src));
+
+        // --------------------------------------
     }
 
     Application::~Application()
@@ -62,11 +94,16 @@ namespace Vertex {
     {
         while (m_Running)
         {
+            // ------------- Temporary --------------
+
             glClearColor(0.1f, 0.1f, 0.12f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
+            m_Shader->Bind();
             glBindVertexArray(m_VertexArr);
             glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+
+            // --------------------------------------
 
             if (Input::IsKeyPressed(VX_KEY_SPACE))
                 Logger::GetCoreLogger()->debug("Space bar pressed");
