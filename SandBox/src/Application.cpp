@@ -13,7 +13,7 @@ public:
 		// Vertex::Logger::GetClientLogger()->info("{0} update", GetName()); // <- eyes hurt
 	}
 
-	void OnEvent(Vertex::Event& event)
+	void OnEvent(Vertex::Event& event) override
 	{
 		// Vertex::Logger::GetClientLogger()->debug("{0} event : {1}", GetName(), event.GetDetails());
 	}

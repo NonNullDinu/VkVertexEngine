@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Renderer/GraphicsContext.h>
 #include "Core.h"
 
 #include "Event/Event.h"
@@ -22,6 +23,8 @@ namespace Vertex {
         virtual void* GetNativeWindow() const = 0;
 
         virtual bool ShouldClose() const = 0;
+
+        virtual GraphicsContext &GetGraphicsContext() const = 0;
     };
 
 }
