@@ -5,6 +5,4 @@ cd build
 
 cmake .. && msbuild VertexEngine.sln -m
 
-cd ../scripts
-
 PAUSE
