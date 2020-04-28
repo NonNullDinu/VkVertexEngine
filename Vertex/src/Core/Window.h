@@ -24,7 +24,7 @@ namespace Vertex {
 
         virtual bool ShouldClose() const = 0;
 
-        virtual GraphicsContext &GetGraphicsContext() const = 0;
+        virtual GraphicsContext& GetGraphicsContext() const = 0;
     };
 
 }
