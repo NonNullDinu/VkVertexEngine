@@ -33,8 +33,8 @@ namespace Vertex {
         // --------- Will be abstracted ---------
         // --------------------------------------
 
-        glGenVertexArrays(1, &m_VertexArr);
-        glBindVertexArray(m_VertexArr);
+//        glGenVertexArrays(1, &m_VertexArr);
+//        glBindVertexArray(m_VertexArr);
 
         float vertices[9] = {
             -0.5f, -0.5f, 0.0f,
@@ -43,43 +43,43 @@ namespace Vertex {
         };
 
         m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
-
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+//
+//        glEnableVertexAttribArray(0);
+//        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
         uint32_t indices[3] = { 0, 1, 2 };
 
         m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices)));
 
-        const char* vertex_src = R"(
-            #version 330 core
-
-            layout(location = 0) in vec4 a_Position;
-
-            void main()
-            {
-                gl_Position = a_Position;
-            }
-        )";
-
-        const char* fragment_src = R"(
-            #version 330 core
-
-            layout(location = 0) out vec4 o_Color;
-
-            uniform vec3 color;
-
-            void main()
-            {
-                o_Color = vec4(color, 1.0);
-            }
-        )";
-
-        m_Shader.reset(Shader::Create(vertex_src, fragment_src));
-
-        m_Shader->Bind();
-        dynamic_cast<OpenGLShader*>(m_Shader.get())->LoadUniform("color");
-        m_Shader->Unbind();
+//        const char* vertex_src = R"(
+//            #version 330 core
+//
+//            layout(location = 0) in vec4 a_Position;
+//
+//            void main()
+//            {
+//                gl_Position = a_Position;
+//            }
+//        )";
+//
+//        const char* fragment_src = R"(
+//            #version 330 core
+//
+//            layout(location = 0) out vec4 o_Color;
+//
+//            uniform vec3 color;
+//
+//            void main()
+//            {
+//                o_Color = vec4(color, 1.0);
+//            }
+//        )";
+//
+//        m_Shader.reset(Shader::Create(vertex_src, fragment_src));
+//
+//        m_Shader->Bind();
+//        dynamic_cast<OpenGLShader*>(m_Shader.get())->LoadUniform("color");
+//        m_Shader->Unbind();
 
         // --------------------------------------
     }
@@ -106,14 +106,14 @@ namespace Vertex {
         {
             // ------------- Temporary --------------
 
-            glClearColor(0.1f, 0.1f, 0.12f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT);
+//            glClearColor(0.1f, 0.1f, 0.12f, 1.0f);
+//            glClear(GL_COLOR_BUFFER_BIT);
 
-            m_Shader->Bind();
-            (*dynamic_cast<OpenGLShader*>(m_Shader.get()))["color"] = glm::vec3(0.2f, 0.8f, 0.9f);
+//            m_Shader->Bind();
+//            (*dynamic_cast<OpenGLShader*>(m_Shader.get()))["color"] = glm::vec3(0.2f, 0.8f, 0.9f);
 
-            glBindVertexArray(m_VertexArr);
-            glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+//            glBindVertexArray(m_VertexArr);
+//            glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 
             // --------------------------------------
 

@@ -191,8 +191,11 @@ namespace Vertex {
 #endif
 
         m_Window = glfwCreateWindow((int)m_Data.width, (int)m_Data.height, m_Data.title, nullptr, nullptr);
-
+#if VX_RENDER_API == VX_RENDER_API_OPENGL
         m_Context = new OpenGLContext(m_Window);
+#elif VX_RENDER_API == VX_RENDER_API_VULKAN
+        m_Context = new VulkanContext(m_Window);
+#endif
 
         glfwSetWindowUserPointer(m_Window, &m_Data);
 

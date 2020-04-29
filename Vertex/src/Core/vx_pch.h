@@ -5,6 +5,7 @@
 #pragma once
 
 #include <map>
+#include <set>
 #include <memory>
 #include <vector>
 #include <cassert>
