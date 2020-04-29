@@ -1,4 +1,4 @@
-#include "WindowImpl.h"
+#include "WindowsWindow.h"
 
 #include "Core/Event/WindowEvent.h"
 #include "Core/Event/KeyEvent.h"
@@ -8,8 +8,6 @@ namespace Vertex {
 
     static bool s_GLFW_Initialized = false;
     
-    Input* Input::s_Instance = new InputImpl();
-
     static void GLFWErrorCallback(int error, const char* description)
     {
         Logger::GetCoreLogger()->error("GLFW error {0} : {1}", error, description);
@@ -171,10 +169,10 @@ namespace Vertex {
 
     }
 
-    WindowImpl::WindowImpl(WindowProperties properties)
+    WindowsWindow::WindowsWindow(WindowProperties properties)
         : m_Data(properties)
     {
-        Logger::GetCoreLogger()->info("Creating window {}", m_Data.title);
+        Logger::GetCoreLogger()->info("Creating window {0}", m_Data.title);
 
         if (!s_GLFW_Initialized)
         {
@@ -185,12 +183,8 @@ namespace Vertex {
 
             s_GLFW_Initialized = true;
         }
-        glfwSetErrorCallback(GLFWErrorCallback);
 
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, m_Data.gl_major_version);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, m_Data.gl_minor_version);
-        if(m_Data.gl_major_version > 3 || (m_Data.gl_major_version == 3 && m_Data.gl_minor_version >= 2))
-            glfwWindowHint(GLFW_OPENGL_PROFILE, m_Data.gl_use_compat ? GLFW_OPENGL_COMPAT_PROFILE : GLFW_OPENGL_CORE_PROFILE);
+        glfwSetErrorCallback(GLFWErrorCallback);
 
         m_Window = glfwCreateWindow((int)m_Data.width, (int)m_Data.height, m_Data.title, nullptr, nullptr);
 
@@ -212,17 +206,17 @@ namespace Vertex {
         glfwSetCursorPosCallback(m_Window, GLFWInputCallbacks::CursorPositionCallback);
     }
 
-    WindowImpl::~WindowImpl()
+    WindowsWindow::~WindowsWindow()
     {
         ShutDown();
     }
 
-    void WindowImpl::ShutDown()
+    void WindowsWindow::ShutDown()
     {
         glfwDestroyWindow(m_Window); // we may want to shutdown before the window's scope is over
     }
 
-    void WindowImpl::OnUpdate()
+    void WindowsWindow::OnUpdate()
     {
         glfwPollEvents();
         m_Context->SwapBuffers();

@@ -4,15 +4,9 @@
 
 #include "Core/Application.h"
 
-#ifndef VX_INCLUDED_INPUTS
-    #define VX_INCLUDED_INPUTS
-#else
-    #error Already included platform specific inputs. Do not include multiple input classes.
-#endif
-
 namespace Vertex {
 
-    class InputImpl : public Input
+    class WindowsInput : public Input
     {
     protected:
         bool IsKeyPressedImpl(int key) override;

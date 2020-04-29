@@ -1,7 +1,5 @@
 #include "Application.h"
 
-#include <glm/glm.hpp>
-
 namespace Vertex {
 
     Application* Application::s_AppInstance = nullptr;
@@ -9,15 +7,25 @@ namespace Vertex {
     Application::Application()
         : m_Running(true)
     {
-        VX_CORE_ASSERT((!s_AppInstance), "Application cannot be instantiated twice!")
+        VX_CORE_ASSERT((!s_AppInstance), "Application cannot be instantiated twice!");
 
-        m_Window.reset(new WindowImpl());
+#if defined(_WIN32)
+        Input::Create(new WindowsInput());
+
+        m_Window.reset(new WindowsWindow());
+
+#elif defined(__linux__)
+        Input::Create(new LinuxInput());
+
+        m_Window.reset(new LinuxWindow());
+        
+#endif // _WIN32
         
         m_Window->SetEventCallback(VX_BIND_FUNC_1(Application::OnEvent));
 
         s_AppInstance = this;
 
-        ImGuiLayer* m_ImGuiLayer = new ImGuiLayer;
+        ImGuiLayer* m_ImGuiLayer = new ImGuiLayer();
         PushOverlay(m_ImGuiLayer);
 
         // --------------------------------------
@@ -83,7 +91,6 @@ namespace Vertex {
     {
         EventHandler handler(event);
         handler.Dispatch<EventTypes::WindowClose, WindowCloseEvent>(VX_BIND_FUNC_1(Application::OnWindowCloseEvent));
-        handler.Dispatch<EventTypes::WindowResize, WindowResizeEvent>(VX_BIND_FUNC_1(Application::OnWindowResizeEvent));
 
         for (std::vector<Layer*>::iterator it = m_LayerStack.end(); it != m_LayerStack.begin();)
         {
