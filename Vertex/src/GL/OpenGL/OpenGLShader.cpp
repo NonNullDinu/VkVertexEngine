@@ -2,7 +2,7 @@
 
 namespace Vertex {
 
-    OpenGLShader::OpenGLShader(const char* vertex_src, const char* fragment_src)
+    OpenGLShader::OpenGLShader(const char* vertex_src, const char* fragment_src) : m_UniformPack (&m_ID)
     {
         // from khronos.org
 
@@ -115,6 +115,26 @@ namespace Vertex {
     void OpenGLShader::Unbind() const
     {
         glUseProgram(0);
+    }
+
+    void OpenGLShader::StartLoadingUniformsToPack()
+    {
+        m_UniformPack.StartLoadingLocations();
+    }
+
+    void OpenGLShader::LoadToUniformToPack(std::string uniform_var_name)
+    {
+        m_UniformPack.LoadUniformLocation(uniform_var_name);
+    }
+
+    void OpenGLShader::StopLoadingUniformsToPack()
+    {
+        m_UniformPack.EndLoadingLocations();
+    }
+
+    OpenGLUniform& OpenGLShader::operator[](std::string name)
+    {
+        return m_UniformPack[name];
     }
 
 }
