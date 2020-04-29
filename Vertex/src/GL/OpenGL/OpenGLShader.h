@@ -3,7 +3,8 @@
 #include "Core/Core.h"
 
 #include "Renderer/Shader.h"
-#include "OpenGLUniformPack.h"
+
+#include "OpenGLUniform.h"
 
 namespace Vertex {
 
@@ -13,11 +14,9 @@ namespace Vertex {
         OpenGLShader(const char* vertex_src, const char* fragment_src);
         ~OpenGLShader();
 
-        void StartLoadingUniformsToPack();
-        void LoadToUniformToPack(std::string uniform_var_name);
-        void StopLoadingUniformsToPack();
+        void LoadUniform(const char* uniform_var_name);
 
-        OpenGLUniform& operator[](std::string name);
+        OpenGLUniform& operator[](const char* name);
 
         void Bind() const override;
         void Unbind() const override;

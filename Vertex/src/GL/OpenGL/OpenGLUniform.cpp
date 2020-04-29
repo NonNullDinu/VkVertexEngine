@@ -2,7 +2,7 @@
 
 namespace Vertex {
 
-    OpenGLUniform::OpenGLUniform(int location, std::string uniform_name)
+    OpenGLUniform::OpenGLUniform(int location, const char* uniform_name)
         : m_Location(location), m_UniformName(uniform_name)
     {
     }
@@ -10,11 +10,6 @@ namespace Vertex {
     bool operator<(OpenGLUniform a, OpenGLUniform b)
     {
         return a.m_UniformName < b.m_UniformName;
-    }
-
-    std::string OpenGLUniform::GetName()
-    {
-        return m_UniformName;
     }
 
     template<>
@@ -59,6 +54,26 @@ namespace Vertex {
         {
             this->operator()(v);
         }, value);
+    }
+
+    // ----------------------------------
+    // ---------- Uniform Pack ----------
+    // ----------------------------------
+
+    OpenGLUniformPack::OpenGLUniformPack(uint32_t * program_id)
+        : m_ProgramId(*program_id)
+    {
+    }
+
+    void OpenGLUniformPack::LoadUniformLocation(const char* uniform_var_name)
+    {
+        OpenGLUniform uniform(glGetUniformLocation(m_ProgramId, uniform_var_name), uniform_var_name);
+        m_UniformMap.insert(std::pair<const char*, OpenGLUniform>(uniform_var_name, uniform));
+    }
+    
+    OpenGLUniform& OpenGLUniformPack::operator[](const char* uniform_name)
+    {
+        return m_UniformMap.at(uniform_name);
     }
     
 }
