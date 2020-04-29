@@ -8,7 +8,7 @@ A powerful and modern C++ based game engine, currently in early development.
 ## Index
 This README file is split into multiple sections:
 * [Support](https://github.com/VertexEngine/VertexEngine#support)
-* [Roadmap](https://github.com/VertexEngine/VertexEngine#roadmap)
+* [Roadmap](https://github.com/VertexEngine/VertexEngine#features-to-come)
 * [Contributing](https://github.com/VertexEngine/VertexEngine#contributing)
 * [Authors and Acknowledgements](https://github.com/VertexEngine/VertexEngine#authors)
 
