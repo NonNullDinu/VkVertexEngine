@@ -7,7 +7,6 @@ file(GLOB_RECURSE VX_SOURCES
         src/Core/Layer/*.cpp
         src/Renderer/*.cpp
         src/GL/OpenGL/*.cpp
-        src/Window/*.cpp
         src/ImGui/*.cpp)
 
 file(GLOB_RECURSE VX_HEADERS
@@ -15,8 +14,8 @@ file(GLOB_RECURSE VX_HEADERS
         src/Core/Layer/*.h
         src/Renderer/*.h
         src/GL/OpenGL/*.h
-        src/Window/*.h
         src/ImGui/*.h
+        
         deps/glm/glm/*.hpp)
 
 # GLAD
