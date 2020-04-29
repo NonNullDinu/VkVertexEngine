@@ -19,6 +19,19 @@ namespace Vertex {
     void OpenGLContext::SwapBuffers()
     {
         glfwSwapBuffers(m_WindowHandle);
+
+        if (m_NeedViewportUpdate)
+        {
+            m_NeedViewportUpdate = false;
+            glViewport(0, 0, m_CurrentWidth, m_CurrentHeight);
+        }
+    }
+
+    void OpenGLContext::NotifyResize(int new_width, int new_height)
+    {
+        m_CurrentWidth = new_width;
+        m_CurrentHeight = new_height;
+        m_NeedViewportUpdate = true;
     }
 
 }

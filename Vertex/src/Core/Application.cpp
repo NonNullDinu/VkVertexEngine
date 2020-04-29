@@ -139,4 +139,10 @@ namespace Vertex {
         return true;
     }
 
+    bool Application::OnWindowResizeEvent(WindowResizeEvent& event)
+    {
+        m_Window->GetGraphicsContext().NotifyResize(event.GetWidth(), event.GetHeight());
+        return true;
+    }
+
 }

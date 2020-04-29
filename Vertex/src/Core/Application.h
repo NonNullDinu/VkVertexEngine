@@ -68,6 +68,7 @@ namespace Vertex {
     private:
         // Application specific event callbacks
         bool OnWindowCloseEvent(Event& event);
+        bool OnWindowResizeEvent(WindowResizeEvent& event);
     };
 
 }
