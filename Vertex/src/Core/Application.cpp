@@ -67,13 +67,21 @@ namespace Vertex {
 
             layout(location = 0) out vec4 o_Color;
 
+            uniform vec3 color;
+
             void main()
             {
-                o_Color = vec4(0.0, 1.0, 0.7, 1.0);
+                o_Color = vec4(color, 1.0);
             }
         )";
 
-        m_Shader.reset(new OpenGLShader(vertex_src, fragment_src));
+        OpenGLShader *shader_ptr = new OpenGLShader(vertex_src, fragment_src);
+        m_Shader.reset(shader_ptr);
+        m_Shader->Bind();
+        shader_ptr->StartLoadingUniformsToPack();
+        shader_ptr->LoadToUniformToPack("color");
+        shader_ptr->StopLoadingUniformsToPack();
+        m_Shader->Unbind();
 
         // --------------------------------------
     }
@@ -86,6 +94,7 @@ namespace Vertex {
     {
         EventHandler handler(event);
         handler.Dispatch<EventTypes::WindowClose, WindowCloseEvent>(VX_BIND_FUNC_1(Application::OnWindowCloseEvent));
+        handler.Dispatch<EventTypes::WindowResize, WindowResizeEvent>(VX_BIND_FUNC_1(Application::OnWindowResizeEvent));
 
         for (std::vector<Layer*>::iterator it = m_LayerStack.end(); it != m_LayerStack.begin();)
         {
@@ -95,6 +104,9 @@ namespace Vertex {
 
     void Application::Run()
     {
+        // --- Temporary ----
+        glm::vec3 color (0, 1, 0.7);
+        // ------------------
         while (m_Running)
         {
             // ------------- Temporary --------------
@@ -103,6 +115,11 @@ namespace Vertex {
             glClear(GL_COLOR_BUFFER_BIT);
 
             m_Shader->Bind();
+            color += glm::vec3(((float)rand()) / ((float)RAND_MAX),((float)rand()) / ((float)RAND_MAX),((float)rand()) / ((float)RAND_MAX)) * 0.06f;
+            color.x -= glm::floor(color.x);
+            color.y -= glm::floor(color.y);
+            color.z -= glm::floor(color.z);
+            (*dynamic_cast<OpenGLShader*>(m_Shader.get()))["color"](color);
             glBindVertexArray(m_VertexArr);
             glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 
