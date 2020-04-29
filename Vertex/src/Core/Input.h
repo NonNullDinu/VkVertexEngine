@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core.h"
+#include "Core/Core.h"
 
 namespace Vertex {
 
@@ -13,6 +13,8 @@ namespace Vertex {
         
         inline static float GetMouseX() { return s_Instance->GetMouseXImpl(); }
         inline static float GetMouseY() { return s_Instance->GetMouseYImpl(); }
+
+        inline static void Create(Input* input_impl_obj) { s_Instance = input_impl_obj; }
 
     protected:
         virtual bool IsKeyPressedImpl(int key) = 0;
