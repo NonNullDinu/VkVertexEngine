@@ -19,6 +19,8 @@ namespace Vertex {
     {
     public:
         virtual ~VertexBuffer() {}
+
+        static VertexBuffer* Create(float* vertices, size_t size);
     };
 
     // ----------------------------------
@@ -31,6 +33,8 @@ namespace Vertex {
         virtual ~IndexBuffer() {}
 
         virtual uint32_t GetCount() const = 0;
+
+        static IndexBuffer* Create(uint32_t* indices, size_t size);
     };
 
 }
