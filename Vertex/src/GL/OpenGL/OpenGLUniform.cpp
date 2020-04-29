@@ -1,17 +1,22 @@
 #include "OpenGLUniform.h"
+
 namespace Vertex {
+
     OpenGLUniform::OpenGLUniform(int location, std::string uniform_name)
         : m_Location(location), m_UniformName(uniform_name)
     {
     }
+
     OpenGLUniform::OpenGLUniform(const OpenGLUniform& uniform)
         : OpenGLUniform(uniform.m_Location, uniform.m_UniformName)
     {
     }
+
     bool operator<(OpenGLUniform a, OpenGLUniform b)
     {
         return a.m_UniformName < b.m_UniformName;
     }
+
     std::string OpenGLUniform::GetName()
     {
         return m_UniformName;
@@ -60,4 +65,5 @@ namespace Vertex {
             this->operator()(v);
         }, value);
     }
+    
 }
