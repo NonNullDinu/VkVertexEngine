@@ -14,7 +14,7 @@ class ImGuiLayer; // <- forward declare it to be accessible from application
 #include "Platforms/Linux/LinuxWindow.h"
 #include "Platforms/Windows/WindowsWindow.h"
 
-#include "GL/OpenGL/Shader.h"
+#include "GL/OpenGL/OpenGLShader.h"
 #include "GL/OpenGL/OpenGLBuffer.h"
 
 // ------------- TODOS -------------

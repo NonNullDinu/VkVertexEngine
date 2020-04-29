@@ -73,7 +73,7 @@ namespace Vertex {
             }
         )";
 
-        m_Shader.reset(new Shader(vertex_src, fragment_src));
+        m_Shader.reset(new OpenGLShader(vertex_src, fragment_src));
 
         // --------------------------------------
     }

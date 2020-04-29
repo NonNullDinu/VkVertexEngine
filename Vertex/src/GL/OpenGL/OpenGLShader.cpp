@@ -1,8 +1,8 @@
-#include "Shader.h"
+#include "OpenGLShader.h"
 
 namespace Vertex {
 
-    Shader::Shader(const char* vertex_src, const char* fragment_src)
+    OpenGLShader::OpenGLShader(const char* vertex_src, const char* fragment_src)
     {
         // from khronos.org
 
@@ -102,17 +102,17 @@ namespace Vertex {
         glDetachShader(m_ID, fragment_shader);
     }
 
-    Shader::~Shader()
+    OpenGLShader::~OpenGLShader()
     {
         glDeleteProgram(m_ID);
     }
 
-    void Shader::Bind() const
+    void OpenGLShader::Bind() const
     {
         glUseProgram(m_ID);
     }
 
-    void Shader::Unbind() const
+    void OpenGLShader::Unbind() const
     {
         glUseProgram(0);
     }
