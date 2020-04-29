@@ -4,7 +4,8 @@ namespace Vertex {
         : m_Location(location), m_UniformName(uniform_name)
     {
     }
-    OpenGLUniform::OpenGLUniform(const OpenGLUniform& uniform) : OpenGLUniform(uniform.m_Location, uniform.m_UniformName)
+    OpenGLUniform::OpenGLUniform(const OpenGLUniform& uniform)
+        : OpenGLUniform(uniform.m_Location, uniform.m_UniformName)
     {
     }
     bool operator<(OpenGLUniform a, OpenGLUniform b)
@@ -15,7 +16,6 @@ namespace Vertex {
     {
         return m_UniformName;
     }
-
 
     template<>
     void OpenGLUniform::operator()(float value)
@@ -51,5 +51,13 @@ namespace Vertex {
     void OpenGLUniform::operator()(glm::mat4 value)
     {
         glUniformMatrix4fv(m_Location, 1, GL_FALSE, glm::value_ptr(value));
+    }
+
+    void OpenGLUniform::operator=(std::variant<float, double, glm::vec2, glm::vec3, glm::vec4, glm::mat4> value)
+    {
+        std::visit([this](auto&& v) -> void
+        {
+            this->operator()(v);
+        }, value);
     }
 }
