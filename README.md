@@ -13,7 +13,7 @@ This README file is split into multiple sections:
 * [Authors and Acknowledgements](https://github.com/VertexEngine/VertexEngine#authors)
 
 ## Why another game engine?
-Well, this project is mainly for learning purposes. Also, I want to make a powerful, flexible and lightweight game engine, since I haven't really found any game engine's thtat I like...
+Well, this project is mainly for learning purposes. Also, I want to make a powerful, flexible and lightweight game engine, since I haven't really found any game engine's that I like...
 
 ## Supported platforms and rendering APIs
 | Platform | Rendering API |

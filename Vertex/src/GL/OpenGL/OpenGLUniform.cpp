@@ -58,7 +58,7 @@ namespace Vertex {
         glUniformMatrix4fv(m_Location, 1, GL_FALSE, glm::value_ptr(value));
     }
 
-    void OpenGLUniform::operator=(std::variant<float, double, glm::vec2, glm::vec3, glm::vec4, glm::mat4> value)
+    void OpenGLUniform::operator=(OpenGLUniformValue value)
     {
         std::visit([this](auto&& v) -> void
         {
