@@ -27,6 +27,13 @@ namespace Vertex {
     // ----------------------------------
     // ---------- Uniform Pack ----------
     // ----------------------------------
+    struct OpenGLUniformPackMapKeyCompFunctor
+    {
+        bool operator()(const char* a, const char* b) const
+        {
+            return strcmp(a, b) < 0;
+        }
+    };
 
     class OpenGLUniformPack
     {
@@ -36,9 +43,8 @@ namespace Vertex {
         void LoadUniformLocation(const char* uniform_var_name);
 
         OpenGLUniform& operator[](const char* uniform_name);
-
     private:
-        std::map<const char*, OpenGLUniform> m_UniformMap;
+        std::map<const char*, OpenGLUniform, OpenGLUniformPackMapKeyCompFunctor > m_UniformMap;
         const uint32_t& m_ProgramId;
     };
 
