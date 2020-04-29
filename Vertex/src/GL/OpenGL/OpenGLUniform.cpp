@@ -7,11 +7,6 @@ namespace Vertex {
     {
     }
 
-    OpenGLUniform::OpenGLUniform(const OpenGLUniform& uniform)
-        : OpenGLUniform(uniform.m_Location, uniform.m_UniformName)
-    {
-    }
-
     bool operator<(OpenGLUniform a, OpenGLUniform b)
     {
         return a.m_UniformName < b.m_UniformName;
