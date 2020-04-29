@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Core.h"
+#include "Core/Core.h"
 
-#include "Event/Event.h"
+#include "Core/Event/Event.h"
 
 #include "Renderer/GraphicsContext.h"
 
 namespace Vertex {
 
-    class IWindow
+    class Window
     {
     public:
         virtual void OnUpdate() = 0;
@@ -24,8 +24,26 @@ namespace Vertex {
         virtual void* GetNativeWindow() const = 0;
 
         virtual bool ShouldClose() const = 0;
-
+        
         virtual GraphicsContext& GetGraphicsContext() const = 0;
+    };
+
+    // utility class
+    struct WindowProperties
+    {
+        bool v_sync;
+        const char* title;
+        unsigned int width, height;
+
+        std::function<void(Event&)> event_callback;
+
+        WindowProperties(const char* _title = "Vertex",
+                         unsigned int _width = 1024,
+                         unsigned int _height = 576,
+                         bool _v_sync = true)
+            : title(_title), width(_width), height(_height), v_sync(_v_sync)
+        {
+        }
     };
 
 }
