@@ -1,9 +1,10 @@
 #pragma once
 
-#include <Renderer/GraphicsContext.h>
 #include "Core.h"
 
 #include "Event/Event.h"
+
+#include "Renderer/GraphicsContext.h"
 
 namespace Vertex {
 
