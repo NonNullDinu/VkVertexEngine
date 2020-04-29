@@ -6,17 +6,22 @@ file(GLOB_RECURSE VX_SOURCES
         src/Core/*.cpp
         src/Core/Layer/*.cpp
         src/Renderer/*.cpp
-        src/GL/OpenGL/*.cpp
         src/ImGui/*.cpp)
 
 file(GLOB_RECURSE VX_HEADERS
         src/Core/*.h
         src/Core/Layer/*.h
         src/Renderer/*.h
-        src/GL/OpenGL/*.h
         src/ImGui/*.h
         
         deps/glm/glm/*.hpp)
+if ($ENV{USE_VK})
+    file(GLOB_RECURSE VX_GRAPHICS_SOURCES src/GL/Vulkan/*.cpp)
+    file(GLOB_RECURSE VX_GRAPHICS_HEADERS src/GL/Vulkan/*.h)
+else ()
+    file(GLOB_RECURSE VX_GRAPHICS_SOURCES src/GL/OpenGL/*.cpp)
+    file(GLOB_RECURSE VX_GRAPHICS_HEADERS src/GL/OpenGL/*.h)
+endif()
 
 # GLAD
 add_subdirectory(deps/glad)
@@ -62,7 +67,10 @@ add_library(Vertex SHARED
         deps/imgui/examples/imgui_impl_opengl3.h
 
         ${VX_PLATFORM_HEADERS}
-        ${VX_PLATFORM_SOURCES})
+        ${VX_PLATFORM_SOURCES}
+
+        ${VX_GRAPHICS_HEADERS}
+        ${VX_GRAPHICS_SOURCES})
 
 # add the paths in PLATFORM_SPECIFIC_INCLUDES to Vertex's include directories
 target_include_directories(Vertex
@@ -82,6 +90,14 @@ set(VX_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/include PARENT_SCOPE)
 target_precompile_headers(Vertex PUBLIC src/Core/vx_pch.h)
 
 target_compile_definitions(Vertex PRIVATE VX_BUILD_SHARED IMGUI_IMPL_OPENGL_LOADER_GLAD=1)
+
+target_compile_definitions(Vertex PRIVATE VX_RENDER_API_OPENGL=1 VX_RENDER_API_VULKAN=2)
+
+if ($ENV{USE_VK})
+    target_compile_definitions(Vertex PRIVATE VX_RENDER_API=VX_RENDER_API_VULKAN)
+else()
+    target_compile_definitions(Vertex PRIVATE VX_RENDER_API=VX_RENDER_API_OPENGL)
+endif()
 
 
 if ($ENV{CLION_IDE})

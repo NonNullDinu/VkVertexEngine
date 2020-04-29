@@ -185,6 +185,10 @@ namespace Vertex {
         }
 
         glfwSetErrorCallback(GLFWErrorCallback);
+#if VX_RENDER_API == VX_RENDER_API_VULKAN
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // this is only temporary
+#endif
 
         m_Window = glfwCreateWindow((int)m_Data.width, (int)m_Data.height, m_Data.title, nullptr, nullptr);
 
@@ -213,6 +217,8 @@ namespace Vertex {
 
     void LinuxWindow::ShutDown()
     {
+#if VX_RENDER_API == VX_RENDER_API_VULKAN
+#endif
         glfwDestroyWindow(m_Window); // we may want to shutdown before the window's scope is over
     }
 

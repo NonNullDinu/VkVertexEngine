@@ -6,7 +6,7 @@ namespace Vertex {
         : m_Location(location), m_UniformName(uniform_name)
     {
     }
-    
+
     bool operator<(OpenGLUniform a, OpenGLUniform b)
     {
         return a.m_UniformName < b.m_UniformName;
