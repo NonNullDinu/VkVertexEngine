@@ -129,7 +129,7 @@ namespace Vertex {
 
     void OpenGLShader::StopLoadingUniformsToPack()
     {
-        m_UniformPack.StartLoadingLocations();
+        m_UniformPack.EndLoadingLocations();
     }
 
     OpenGLUniform& OpenGLShader::operator[](std::string name)
