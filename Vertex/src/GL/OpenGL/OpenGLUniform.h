@@ -9,7 +9,6 @@ namespace Vertex {
     {
     public:
         OpenGLUniform(int location, std::string uniform_name);
-        OpenGLUniform(const OpenGLUniform& uniform);
         
         friend bool operator<(OpenGLUniform, OpenGLUniform);
         std::string GetName();
