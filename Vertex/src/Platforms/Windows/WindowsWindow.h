@@ -35,6 +35,8 @@ namespace Vertex {
 
         inline bool ShouldClose() const override { return glfwWindowShouldClose(m_Window); }
 
+        inline GraphicsContext &GetGraphicsContext() const override { return *m_Context; }
+
     private:
         GLFWwindow* m_Window;
         GraphicsContext* m_Context;
