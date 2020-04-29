@@ -119,7 +119,7 @@ namespace Vertex {
             color.x -= glm::floor(color.x);
             color.y -= glm::floor(color.y);
             color.z -= glm::floor(color.z);
-            (*dynamic_cast<OpenGLShader*>(m_Shader.get()))["color"](color);
+            (*dynamic_cast<OpenGLShader*>(m_Shader.get()))["color"] = color;
             glBindVertexArray(m_VertexArr);
             glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 

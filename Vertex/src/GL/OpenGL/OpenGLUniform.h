@@ -12,5 +12,8 @@ namespace Vertex {
 
         template<typename T>
         void operator()(T value);
+
+        template<typename T>
+        inline void operator=(T value) { this->operator()(value); }
     };
 }
