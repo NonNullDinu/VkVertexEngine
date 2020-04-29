@@ -3,7 +3,7 @@
 [![build](https://github.com/VertexEngine/VertexEngine/workflows/build/badge.svg)](#)
 [![License](https://img.shields.io/github/license/VertexEngine/VertexEngine?color=blue)](https://github.com/VertexEngine/VertexEngine/blob/master/LICENSE)
 
-A powerful C++ based game engine, currently in early development.
+A powerful and modern C++ based game engine, currently in early development.
 
 ## Index
 This README file is split into multiple sections:
@@ -18,8 +18,8 @@ Well, this project is mainly for learning purposes. Additionally, I wish to buil
 ## Supported platforms and rendering APIs
 | Platform | Rendering API |
 |----------|---------------|
-| Windows  | OpenGL        |
-| Linux    | OpenGL        |
+| Windows  | OpenGL 4.5+   |
+| Linux    | OpenGL 4.5+   |
 
 ## Support
 You can join the official Vertex Engine [Discord Server](https://discord.gg/hA5kHnK), to ask for help or make a feature request. You can also contact me on [Twitter](https://twitter.com/42_mix).
