@@ -42,14 +42,14 @@ namespace Vertex {
              0.0f,  0.5f, 0.0f
         };
 
-        m_VertexBuffer.reset(new OpenGLVertexBuffer(vertices, sizeof(vertices)));
+        m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
         uint32_t indices[3] = { 0, 1, 2 };
 
-        m_IndexBuffer.reset(new OpenGLIndexBuffer(indices, sizeof(indices)));
+        m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices)));
 
         const char* vertex_src = R"(
             #version 330 core
@@ -75,7 +75,7 @@ namespace Vertex {
             }
         )";
 
-        m_Shader.reset(new OpenGLShader(vertex_src, fragment_src));
+        m_Shader.reset(Shader::Create(vertex_src, fragment_src));
 
         m_Shader->Bind();
         dynamic_cast<OpenGLShader*>(m_Shader.get())->LoadUniform("color");
