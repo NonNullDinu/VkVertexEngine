@@ -4,11 +4,15 @@
 
 namespace Vertex {
 
+    // -----------------------------------
+    // ---------- Vertex Buffer ----------
+    // -----------------------------------
+
     class OpenGLVertexBuffer : public VertexBuffer
     {
     public:
-        OpenGLVertexBuffer(float* vertices, uint32_t size);
-        ~OpenGLVertexBuffer() {}
+        OpenGLVertexBuffer(float* vertices, size_t size);
+        ~OpenGLVertexBuffer();
 
         void Bind() const override;
         void Unbind() const override;
@@ -17,17 +21,24 @@ namespace Vertex {
         uint32_t m_ID;
     };
 
+    // ----------------------------------
+    // ---------- Index Buffer ----------
+    // ----------------------------------
+
     class OpenGLIndexBuffer : public IndexBuffer
     {
     public:
-        OpenGLIndexBuffer(uint32_t indices, uint32_t size);
-        ~OpenGLIndexBuffer() {}
+        OpenGLIndexBuffer(uint32_t* indices, size_t size);
+        ~OpenGLIndexBuffer();
 
         void Bind() const override;
         void Unbind() const override;
 
+        uint32_t GetCount() const override { return m_Count; }
+
     private:
         uint32_t m_ID;
+        uint32_t m_Count;
     };
 
 }

@@ -36,25 +36,20 @@ namespace Vertex {
         glGenVertexArrays(1, &m_VertexArr);
         glBindVertexArray(m_VertexArr);
 
-        glGenBuffers(1, &m_VertexBuf);
-        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuf);
-
         float vertices[9] = {
             -0.5f, -0.5f, 0.0f,
              0.5f, -0.5f, 0.0f,
              0.0f,  0.5f, 0.0f
         };
 
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
+        m_VertexBuffer.reset(new OpenGLVertexBuffer(vertices, sizeof(vertices)));
+
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
-        glGenBuffers(1, &m_IndexBuf);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuf);
+        uint32_t indices[3] = { 0, 1, 2 };
 
-        unsigned int indices[3] = { 0, 1, 2 };
-
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices, GL_STATIC_DRAW);
+        m_IndexBuffer.reset(new OpenGLIndexBuffer(indices, sizeof(indices)));
 
         const char* vertex_src = R"(
             #version 330 core

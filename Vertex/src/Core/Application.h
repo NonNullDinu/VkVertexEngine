@@ -5,17 +5,17 @@
 class ImGuiLayer; // <- forward declare it to be accessible from application
 
 #include "Event/Event.h"
-
 #include "Event/WindowEvent.h"
 
 #include "Layer/LayerStack.h"
 
 #include "ImGui/ImGuiLayer.h"
 
-#include "GL/OpenGL/Shader.h"
-
 #include "Platforms/Linux/LinuxWindow.h"
 #include "Platforms/Windows/WindowsWindow.h"
+
+#include "GL/OpenGL/Shader.h"
+#include "GL/OpenGL/OpenGLBuffer.h"
 
 // ------------- TODOS -------------
 /*
@@ -60,8 +60,12 @@ namespace Vertex {
 
         // ------------- Temporary --------------
 
-        unsigned int m_VertexArr, m_VertexBuf, m_IndexBuf;
+        unsigned int m_VertexArr;
+
         std::unique_ptr<Shader> m_Shader;
+
+        std::unique_ptr<VertexBuffer> m_VertexBuffer;
+        std::unique_ptr<IndexBuffer> m_IndexBuffer;
 
         // --------------------------------------
 

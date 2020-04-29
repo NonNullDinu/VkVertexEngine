@@ -11,20 +11,26 @@ namespace Vertex {
         virtual void Unbind() const = 0;
     };
 
+    // -----------------------------------
+    // ---------- Vertex Buffer ----------
+    // -----------------------------------
+
     class VertexBuffer : public Buffer
     {
     public:
         virtual ~VertexBuffer() {}
-
-        virtual VertexBuffer* Create(float* vertices, uint32_t size);
     };
+
+    // ----------------------------------
+    // ---------- Index Buffer ----------
+    // ----------------------------------
 
     class IndexBuffer : public Buffer
     {
     public:
         virtual ~IndexBuffer() {}
 
-        virtual IndexBuffer* Create(uint32_t indices, uint32_t size);
+        virtual uint32_t GetCount() const = 0;
     };
 
 }
