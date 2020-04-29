@@ -117,22 +117,12 @@ namespace Vertex {
         glUseProgram(0);
     }
 
-    void OpenGLShader::StartLoadingUniformsToPack()
-    {
-        m_UniformPack.StartLoadingLocations();
-    }
-
-    void OpenGLShader::LoadToUniformToPack(std::string uniform_var_name)
+    void OpenGLShader::LoadUniform(const char* uniform_var_name)
     {
         m_UniformPack.LoadUniformLocation(uniform_var_name);
     }
 
-    void OpenGLShader::StopLoadingUniformsToPack()
-    {
-        m_UniformPack.EndLoadingLocations();
-    }
-
-    OpenGLUniform& OpenGLShader::operator[](std::string name)
+    OpenGLUniform& OpenGLShader::operator[](const char* name)
     {
         return m_UniformPack[name];
     }

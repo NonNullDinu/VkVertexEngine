@@ -75,12 +75,10 @@ namespace Vertex {
             }
         )";
 
-        OpenGLShader *shader_ptr = new OpenGLShader(vertex_src, fragment_src);
-        m_Shader.reset(shader_ptr);
+        m_Shader.reset(new OpenGLShader(vertex_src, fragment_src));
+
         m_Shader->Bind();
-        shader_ptr->StartLoadingUniformsToPack();
-        shader_ptr->LoadToUniformToPack("color");
-        shader_ptr->StopLoadingUniformsToPack();
+        dynamic_cast<OpenGLShader*>(m_Shader.get())->LoadUniform("color");
         m_Shader->Unbind();
 
         // --------------------------------------
@@ -104,9 +102,6 @@ namespace Vertex {
 
     void Application::Run()
     {
-        // --- Temporary ----
-        glm::vec3 color (0, 1, 0.7);
-        // ------------------
         while (m_Running)
         {
             // ------------- Temporary --------------
@@ -115,18 +110,12 @@ namespace Vertex {
             glClear(GL_COLOR_BUFFER_BIT);
 
             m_Shader->Bind();
-            color += glm::vec3(((float)rand()) / ((float)RAND_MAX),((float)rand()) / ((float)RAND_MAX),((float)rand()) / ((float)RAND_MAX)) * 0.06f;
-            color.x -= glm::floor(color.x);
-            color.y -= glm::floor(color.y);
-            color.z -= glm::floor(color.z);
-            (*dynamic_cast<OpenGLShader*>(m_Shader.get()))["color"] = color;
+            (*dynamic_cast<OpenGLShader*>(m_Shader.get()))["color"] = glm::vec3(0.2f, 0.8f, 0.9f);
+
             glBindVertexArray(m_VertexArr);
             glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 
             // --------------------------------------
-
-            if (Input::IsKeyPressed(VX_KEY_SPACE))
-                Logger::GetCoreLogger()->debug("Space bar pressed");
 
             for (Layer* layer : m_LayerStack)
                 layer->OnUpdate();

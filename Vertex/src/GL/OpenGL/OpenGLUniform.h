@@ -7,20 +7,38 @@ namespace Vertex {
     class OpenGLUniform
     {
     public:
-        OpenGLUniform(int location, std::string uniform_name);
-        OpenGLUniform(const OpenGLUniform& uniform);
+        OpenGLUniform(int location, const char* uniform_name);
         
         friend bool operator<(OpenGLUniform, OpenGLUniform);
-        std::string GetName();
+        
+        inline const char* GetName() const { return m_UniformName; }
 
         void operator=(std::variant<float, double, glm::vec2, glm::vec3, glm::vec4, glm::mat4> value);
 
     private:
         int m_Location;
-        std::string m_UniformName;
+        const char* m_UniformName;
 
         template<typename T>
         void operator()(T value);
+    };
+
+    // ----------------------------------
+    // ---------- Uniform Pack ----------
+    // ----------------------------------
+
+    class OpenGLUniformPack
+    {
+    public:
+        OpenGLUniformPack(uint32_t* program_id);
+
+        void LoadUniformLocation(const char* uniform_var_name);
+
+        OpenGLUniform& operator[](const char* uniform_name);
+
+    private:
+        std::map<const char*, OpenGLUniform> m_UniformMap;
+        const uint32_t& m_ProgramId;
     };
 
 }
