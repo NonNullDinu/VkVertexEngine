@@ -1,5 +1,7 @@
 #include "OpenGLUniformPack.h"
+
 namespace Vertex {
+
     OpenGLUniformPack::OpenGLUniformPack(uint32_t * program_id)
         : m_ProgramId(*program_id)
     {
@@ -20,8 +22,10 @@ namespace Vertex {
     {
         // empty for now
     }
+    
     OpenGLUniform& OpenGLUniformPack::operator[](std::string uniform_name)
     {
         return m_UniformMap.at(uniform_name);
     }
+
 }
