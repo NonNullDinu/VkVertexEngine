@@ -8,7 +8,7 @@ namespace Vertex {
         switch(type)
         {
             case ShaderDataType::Bool   : return 1;
-            case ShaderDataType::Mat3   : return 27;
+            case ShaderDataType::Mat3   : return 36;
             case ShaderDataType::Mat4   : return 64;
             case ShaderDataType::Int    : return 4;
             case ShaderDataType::Int2   : return 8;
