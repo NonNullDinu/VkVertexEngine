@@ -1,5 +1,7 @@
 #include "VulkanContext.h"
+
 namespace Vertex {
+
     Vertex::VulkanContext::VulkanContext(GLFWwindow* window)
     {
         VkApplicationInfo appInfo{};
@@ -53,4 +55,5 @@ namespace Vertex {
     {
         vkDestroyInstance(m_VkInstance, nullptr);
     }
+    
 }
