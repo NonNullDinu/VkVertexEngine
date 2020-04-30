@@ -69,6 +69,8 @@ namespace Vertex {
 
         // --------------------------------------
 
+        void Render();
+
     private:
         // Application specific event callbacks
         bool OnWindowCloseEvent(Event& event);

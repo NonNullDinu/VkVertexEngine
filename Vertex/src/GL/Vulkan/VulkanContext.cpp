@@ -22,8 +22,7 @@ namespace Vertex {
         VK_KHR_SWAPCHAIN_EXTENSION_NAME
     };
 
-    VkInstance* VulkanContext::s_VkInstance;
-    VulkanContext* VulkanContext::s_Context;
+    std::shared_ptr<VulkanContext> VulkanContext::s_Context;
     VulkanContext::VulkanContext(GLFWwindow* window)
         : m_WindowHandle(window)
     {
@@ -36,42 +35,63 @@ namespace Vertex {
         CreateRenderPass();
         CreateFrameBuffers();
         CreateCommandPool();
+        CreateCommandBuffers();
+        CreateSemaphores();
+        CreateDescriptorPool();
 
-        s_Context = this;
+        s_Context.reset(this);
+        Logger::GetCoreLogger()->info("Created the Vulkan Context");
     }
-
 
     VulkanContext::~VulkanContext()
     {
+        Logger::GetCoreLogger()->info("Cleaning up the Vulkan Context");
         CleanUpContext();
     }
 
     void VulkanContext::Render()
     {
-        for (size_t i = 0; i < m_CommandBuffers.size(); i++)
+        uint32_t imageIndex;
+        if (vkAcquireNextImageKHR(m_Device, m_SwapChain, UINT64_MAX, m_ImageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex)
+            != VK_SUCCESS)
         {
-            VkRenderPassBeginInfo renderPassInfo{};
-            renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-            renderPassInfo.renderPass = m_RenderPass;
-            renderPassInfo.framebuffer = m_SwapChainFramebuffers[i];
-
-            renderPassInfo.renderArea.offset = { 0, 0 };
-            renderPassInfo.renderArea.extent = m_SwapChainExtent;
-
-            VkClearValue clearColor = { 0.0f, 0.0f, 0.0f, 1.0f };
-            renderPassInfo.clearValueCount = 1;
-            renderPassInfo.pClearValues = &clearColor;
-
-            vkCmdBeginRenderPass(m_CommandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-
-            this->m_RenderCallback(this, m_CommandBuffers[i]);
-
-            vkCmdEndRenderPass(m_CommandBuffers[i]);
-
-            if (vkEndCommandBuffer(m_CommandBuffers[i]) != VK_SUCCESS) {
-                throw std::runtime_error("failed to record command buffer!");
-            }
+            VX_CORE_ASSERT(false, "cannot acquire next image");
         }
+
+        VkSubmitInfo submitInfo{};
+        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+
+        VkSemaphore waitSemaphores[] = { m_ImageAvailableSemaphore };
+        VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+        submitInfo.waitSemaphoreCount = 1;
+        submitInfo.pWaitSemaphores = waitSemaphores;
+        submitInfo.pWaitDstStageMask = waitStages;
+        submitInfo.commandBufferCount = 1;
+        submitInfo.pCommandBuffers = &m_CommandBuffers[imageIndex];
+
+        VkSemaphore signalSemaphores[] = { m_RenderFinishedSemaphore };
+        submitInfo.signalSemaphoreCount = 1;
+        submitInfo.pSignalSemaphores = signalSemaphores;
+
+        if (vkQueueSubmit(m_GraphicsQueue, 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS)
+        {
+            VX_CORE_ASSERT(false, "vkQueueSubmit failed");
+        }
+
+        VkPresentInfoKHR presentInfo{};
+        presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+
+        presentInfo.waitSemaphoreCount = 1;
+        presentInfo.pWaitSemaphores = signalSemaphores;
+
+        VkSwapchainKHR swapChains[] = { m_SwapChain };
+        presentInfo.swapchainCount = 1;
+        presentInfo.pSwapchains = swapChains;
+        presentInfo.pImageIndices = &imageIndex;
+
+        presentInfo.pResults = nullptr; // Optional
+
+        vkQueuePresentKHR(m_GraphicsQueue, &presentInfo);
     }
 
     void VulkanContext::SwapBuffers()
@@ -84,14 +104,21 @@ namespace Vertex {
     }
     void VulkanContext::CleanUpContext()
     {
+        vkDestroyDescriptorPool(m_Device, m_DescriptorPool, nullptr);
+
+        vkDestroySemaphore(m_Device, m_RenderFinishedSemaphore, nullptr);
+        vkDestroySemaphore(m_Device, m_ImageAvailableSemaphore, nullptr);
+
         vkDestroyCommandPool(m_Device, m_CommandPool, nullptr);
-        for (auto framebuffer : m_SwapChainFramebuffers) {
+        for (auto framebuffer : m_SwapChainFramebuffers)
+        {
             vkDestroyFramebuffer(m_Device, framebuffer, nullptr);
         }
 
         vkDestroyRenderPass(m_Device, m_RenderPass, nullptr);
 
-        for (auto imageView : m_SwapChainImageViews) {
+        for (auto imageView : m_SwapChainImageViews)
+        {
             vkDestroyImageView(m_Device, imageView, nullptr);
         }
 
@@ -127,7 +154,7 @@ namespace Vertex {
 
         if (vkCreateInstance(&createInfo, nullptr, &m_VkInstance) != VK_SUCCESS)
         {
-            throw std::runtime_error("failed to create instance!");
+            VX_CORE_ASSERT(false, "vkCreateInstance failed");
         }
 
         uint32_t extensionCount = 0;
@@ -136,8 +163,6 @@ namespace Vertex {
         std::vector<VkExtensionProperties> extensions(extensionCount);
 
         vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
-
-        s_VkInstance = &m_VkInstance;
     }
 //    void VulkanContext::InitVulkanDebugger()
 //    {
@@ -158,10 +183,7 @@ namespace Vertex {
         m_PhysicalDevice = VK_NULL_HANDLE;
         uint32_t deviceCount = 0;
         vkEnumeratePhysicalDevices(m_VkInstance, &deviceCount, nullptr);
-        if (deviceCount == 0)
-        {
-            throw std::runtime_error("failed to find GPUs with Vulkan support!");
-        }
+        VX_CORE_ASSERT(deviceCount != 0, "no GPUs with Vulkan support");
         std::vector<VkPhysicalDevice> devices(deviceCount);
         vkEnumeratePhysicalDevices(m_VkInstance, &deviceCount, devices.data());
 
@@ -174,10 +196,7 @@ namespace Vertex {
             }
         }
 
-        if (m_PhysicalDevice == VK_NULL_HANDLE)
-        {
-            throw std::runtime_error("failed to find a suitable GPU!");
-        }
+        VX_CORE_ASSERT(m_PhysicalDevice != VK_NULL_HANDLE, "failed to find a suitable GPU!");
     }
 
     void VulkanContext::CreateLogicalDevice()
@@ -213,10 +232,11 @@ namespace Vertex {
 
         if (vkCreateDevice(m_PhysicalDevice, &createInfo, nullptr, &m_Device) != VK_SUCCESS)
         {
-            throw std::runtime_error("failed to create logical device!");
+            VX_CORE_ASSERT(false, "vkCreateDevice failed");
         }
 
-        vkGetDeviceQueue(m_Device, indices.presentFamily.value(), 0, &m_PresentationQueue);
+        vkGetDeviceQueue(m_Device, indices.graphicsFamily.value(), 0, &m_GraphicsQueue);
+        vkGetDeviceQueue(m_Device, indices.presentFamily.value(), 0, &m_PresentQueue);
     }
 
     VulkanContext::QueueFamilyIndices VulkanContext::FindQueueFamilies(VkPhysicalDevice device)
@@ -280,7 +300,7 @@ namespace Vertex {
     {
         if (glfwCreateWindowSurface(m_VkInstance, m_WindowHandle, nullptr, &m_Surface) != VK_SUCCESS)
         {
-            throw std::runtime_error("failed to create window surface!");
+            VX_CORE_ASSERT(false, "glfwCreateWindowSurface failed");
         }
     }
 
@@ -333,7 +353,7 @@ namespace Vertex {
 
         if (vkCreateSwapchainKHR(m_Device, &createInfo, nullptr, &m_SwapChain) != VK_SUCCESS)
         {
-            throw std::runtime_error("failed to create swap chain!");
+            VX_CORE_ASSERT(false, "vkCreateSwapchainKHR failed");
         }
 
         vkGetSwapchainImagesKHR(m_Device, m_SwapChain, &imageCount, nullptr);
@@ -370,7 +390,7 @@ namespace Vertex {
 
             if (vkCreateImageView(m_Device, &createInfo, nullptr, &m_SwapChainImageViews[i]) != VK_SUCCESS)
             {
-                throw std::runtime_error("failed to create image views!");
+                VX_CORE_ASSERT(false, "vkCreateImageView failed");
             }
         }
     }
@@ -396,7 +416,6 @@ namespace Vertex {
         subpass.colorAttachmentCount = 1;
         subpass.pColorAttachments = &colorAttachmentRef;
 
-
         VkRenderPassCreateInfo renderPassInfo{};
         renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
         renderPassInfo.attachmentCount = 1;
@@ -404,15 +423,30 @@ namespace Vertex {
         renderPassInfo.subpassCount = 1;
         renderPassInfo.pSubpasses = &subpass;
 
-        if (vkCreateRenderPass(m_Device, &renderPassInfo, nullptr, &m_RenderPass) != VK_SUCCESS) {
-            throw std::runtime_error("failed to create render pass!");
+        VkSubpassDependency dependency{};
+        dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+        dependency.dstSubpass = 0;
+
+        dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        dependency.srcAccessMask = 0;
+
+        dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+
+        renderPassInfo.dependencyCount = 1;
+        renderPassInfo.pDependencies = &dependency;
+
+        if (vkCreateRenderPass(m_Device, &renderPassInfo, nullptr, &m_RenderPass) != VK_SUCCESS)
+        {
+            VX_CORE_ASSERT(false, "vkCreateRenderPass failed");
         }
     }
 
     void VulkanContext::CreateFrameBuffers()
     {
         m_SwapChainFramebuffers.resize(m_SwapChainImageViews.size());
-        for (size_t i = 0; i < m_SwapChainImageViews.size(); i++) {
+        for (size_t i = 0; i < m_SwapChainImageViews.size(); i++)
+        {
             VkImageView attachments[] = {
                 m_SwapChainImageViews[i]
             };
@@ -426,13 +460,15 @@ namespace Vertex {
             framebufferInfo.height = m_SwapChainExtent.height;
             framebufferInfo.layers = 1;
 
-            if (vkCreateFramebuffer(m_Device, &framebufferInfo, nullptr, &m_SwapChainFramebuffers[i]) != VK_SUCCESS) {
-                throw std::runtime_error("failed to create framebuffer!");
+            if (vkCreateFramebuffer(m_Device, &framebufferInfo, nullptr, &m_SwapChainFramebuffers[i]) != VK_SUCCESS)
+            {
+                VX_CORE_ASSERT(false, "vkCreateFramebuffer failed");
             }
         }
     }
 
-    void VulkanContext::CreateCommandPool(){
+    void VulkanContext::CreateCommandPool()
+    {
         QueueFamilyIndices queueFamilyIndices = FindQueueFamilies(m_PhysicalDevice);
 
         VkCommandPoolCreateInfo poolInfo{};
@@ -440,8 +476,9 @@ namespace Vertex {
         poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
         poolInfo.flags = 0; // Optional
 
-        if (vkCreateCommandPool(m_Device, &poolInfo, nullptr, &m_CommandPool) != VK_SUCCESS) {
-            throw std::runtime_error("failed to create command pool!");
+        if (vkCreateCommandPool(m_Device, &poolInfo, nullptr, &m_CommandPool) != VK_SUCCESS)
+        {
+            VX_CORE_ASSERT(false, "vkCreateCommandPool failed");
         }
     }
 
@@ -453,22 +490,78 @@ namespace Vertex {
         allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
         allocInfo.commandPool = m_CommandPool;
         allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        allocInfo.commandBufferCount = (uint32_t) m_CommandBuffers.size();
+        allocInfo.commandBufferCount = (uint32_t)m_CommandBuffers.size();
 
-        for (size_t i = 0; i < m_CommandBuffers.size(); i++) {
+        if (vkAllocateCommandBuffers(m_Device, &allocInfo, m_CommandBuffers.data()) != VK_SUCCESS)
+        {
+            VX_CORE_ASSERT(false, "vkAllocateCommandBuffers failed");
+        }
+
+        for (size_t i = 0; i < m_CommandBuffers.size(); i++)
+        {
             VkCommandBufferBeginInfo beginInfo{};
             beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
             beginInfo.flags = 0; // Optional
             beginInfo.pInheritanceInfo = nullptr; // Optional
 
-            if (vkBeginCommandBuffer(m_CommandBuffers[i], &beginInfo) != VK_SUCCESS) {
-                throw std::runtime_error("failed to begin recording command buffer!");
+            if (vkBeginCommandBuffer(m_CommandBuffers[i], &beginInfo) != VK_SUCCESS)
+            {
+                VX_CORE_ASSERT(false, "vkBeginCommandBuffer failed");
+            }
+
+            VkRenderPassBeginInfo renderPassInfo{};
+            renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+            renderPassInfo.renderPass = m_RenderPass;
+            renderPassInfo.framebuffer = m_SwapChainFramebuffers[i];
+
+            renderPassInfo.renderArea.offset = { 0, 0 };
+            renderPassInfo.renderArea.extent = m_SwapChainExtent;
+
+            VkClearValue clearColor = { 0.0f, 0.0f, 0.0f, 1.0f };
+            renderPassInfo.clearValueCount = 1;
+            renderPassInfo.pClearValues = &clearColor;
+
+            vkCmdBeginRenderPass(m_CommandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+            vkCmdEndRenderPass(m_CommandBuffers[i]);
+
+            if (vkEndCommandBuffer(m_CommandBuffers[i]) != VK_SUCCESS)
+            {
+                VX_CORE_ASSERT(false, "vkEndCommandBuffer failed");
             }
         }
+    }
 
+    void VulkanContext::CreateSemaphores()
+    {
+        VkSemaphoreCreateInfo semaphoreInfo{};
+        semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 
-        if (vkAllocateCommandBuffers(m_Device, &allocInfo, m_CommandBuffers.data()) != VK_SUCCESS) {
-            throw std::runtime_error("failed to allocate command buffers!");
+        if (vkCreateSemaphore(m_Device, &semaphoreInfo, nullptr, &m_ImageAvailableSemaphore) != VK_SUCCESS ||
+            vkCreateSemaphore(m_Device, &semaphoreInfo, nullptr, &m_RenderFinishedSemaphore) != VK_SUCCESS)
+        {
+            VX_CORE_ASSERT(false, "vkCreateSemaphore failed");
+        }
+    }
+
+    void VulkanContext::CreateDescriptorPool()
+    {
+        VkDescriptorPoolSize poolSize{};
+        poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        poolSize.descriptorCount = static_cast<uint32_t>(m_SwapChainImages.size());
+
+        VkDescriptorPoolCreateInfo poolInfo{};
+        poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+        poolInfo.poolSizeCount = 1;
+        poolInfo.pPoolSizes = &poolSize;
+
+        poolInfo.maxSets = static_cast<uint32_t>(m_SwapChainImages.size());;
+
+//        ...
+
+        if (vkCreateDescriptorPool(m_Device, &poolInfo, nullptr, &m_DescriptorPool) != VK_SUCCESS)
+        {
+            VX_CORE_ASSERT(false, "vkCreateDescriptorPool failed");
         }
     }
 
@@ -551,14 +644,8 @@ namespace Vertex {
             return actualExtent;
         }
     }
-
-    // static functions
-    VkInstance VulkanContext::GetInstance()
+    std::shared_ptr<VulkanContext> VulkanContext::GetContext()
     {
-        return *s_VkInstance;
-    }
-    VulkanContext VulkanContext::GetContext()
-    {
-        return *s_Context;
+        return s_Context;
     }
 }

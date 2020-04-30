@@ -38,12 +38,22 @@ namespace Vertex {
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init("#version 410");
 #elif defined(VX_RENDER_API_VULKAN)
-//        ImGui_ImplGlfw_InitForVulkan(window, true);
-//        ImGui_ImplVulkan_InitInfo init_info {};
-//        init_info.Instance = VulkanContext::GetInstance();
-//        ImGui_ImplVulkan_Init(init_info, /***Put something here;
-//                                              I'm completely clueless about what it is
-//                                              but there should be something***/);
+        ImGui_ImplGlfw_InitForVulkan(window, true);
+        ImGui_ImplVulkan_InitInfo init_info {};
+        std::shared_ptr<VulkanContext> context = VulkanContext::GetContext();
+        init_info.Instance = context->GetInstance();
+        init_info.PhysicalDevice = context->GetPhysicalDevice();
+        init_info.Device = context->GetDevice();
+        init_info.Queue = context->GetQueue();
+        init_info.QueueFamily = VK_QUEUE_GRAPHICS_BIT;
+        init_info.PipelineCache = nullptr;
+        init_info.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
+        init_info.Allocator = nullptr;
+        init_info.CheckVkResultFn = nullptr;
+        init_info.DescriptorPool = context->GetDescriptorPool();
+        init_info.MinImageCount = context->GetSwapChainImages().size();
+        init_info.ImageCount = context->GetSwapChainImages().size();
+        ImGui_ImplVulkan_Init(&init_info, context->GetRenderPass());
 #endif
     }
 
@@ -52,7 +62,7 @@ namespace Vertex {
 #if defined(VX_RENDER_API_OPENGL)
         ImGui_ImplOpenGL3_Shutdown();
 #elif defined(VX_RENDER_API_VULKAN)
-//        ImGui_ImplVulkan_Shutdown(); // Since I'm clueless about how to initialize it, I'm gonna leave this commented out
+        ImGui_ImplVulkan_Shutdown();
 #endif
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
@@ -63,12 +73,10 @@ namespace Vertex {
 #if defined(VX_RENDER_API_OPENGL)
         ImGui_ImplOpenGL3_NewFrame();
 #elif defined(VX_RENDER_API_VULKAN)
-//        ImGui_ImplVulkan_NewFrame();
+        ImGui_ImplVulkan_NewFrame();
 #endif
-#if defined(VX_RENDER_API_OPENGL) // this is here because I have no clue how to start imgui for vulkan and it gives an error
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-#endif
     }
 
     void ImGuiLayer::End()
@@ -84,9 +92,8 @@ namespace Vertex {
 #if defined(VX_RENDER_API_OPENGL)
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 #elif defined(VX_RENDER_API_VULKAN)
-//		ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), /**Another thing I'm completely clueless about**/);
+		ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), VulkanContext::GetContext()->GetCurrentCommandBuffer());
 #endif
-#if defined(VX_RENDER_API_OPENGL)
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		{
 			GLFWwindow* backup_current_context = glfwGetCurrentContext();
@@ -94,7 +101,6 @@ namespace Vertex {
 			ImGui::RenderPlatformWindowsDefault();
 			glfwMakeContextCurrent(backup_current_context);
 		}
-#endif
 	}
 
     void ImGuiLayer::OnImguiRender()

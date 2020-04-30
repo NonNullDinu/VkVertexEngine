@@ -102,6 +102,8 @@ namespace Vertex {
 
     void Application::Run()
     {
+        m_Window->GetGraphicsContext().SetRenderCallback(VX_BIND_FUNC_0(Application::Render));
+
         while (m_Running)
         {
             // ------------- Temporary --------------
@@ -120,12 +122,7 @@ namespace Vertex {
             for (Layer* layer : m_LayerStack)
                 layer->OnUpdate();
 
-            m_ImGuiLayer->Begin();
-
-            for (Layer* layer : m_LayerStack)
-                layer->OnImguiRender();
-            
-            m_ImGuiLayer->End();
+            m_Window->GetGraphicsContext().Render();
 
             m_Window->OnUpdate();
         }
@@ -144,6 +141,15 @@ namespace Vertex {
     {
         m_Window->GetGraphicsContext().NotifyResize(event.GetWidth(), event.GetHeight());
         return true;
+    }
+
+    void Application::Render(){
+        m_ImGuiLayer->Begin();
+
+        for (Layer* layer : m_LayerStack)
+            layer->OnImguiRender();
+
+        m_ImGuiLayer->End();
     }
 
 }

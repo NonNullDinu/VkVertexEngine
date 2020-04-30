@@ -192,9 +192,10 @@ namespace Vertex {
 
         m_Window = glfwCreateWindow((int)m_Data.width, (int)m_Data.height, m_Data.title, nullptr, nullptr);
 #if defined(VX_RENDER_API_OPENGL)
-        m_Context = new OpenGLContext(m_Window);
+        m_Context.reset(new OpenGLContext(m_Window));
 #elif defined(VX_RENDER_API_VULKAN)
-        m_Context = new VulkanContext(m_Window);
+        { new VulkanContext(m_Window); } // create a instance so the static field Vertex::VulkanContext::s_Context is set
+        m_Context = VulkanContext::GetContext(); // get it and copy it to m_Context to prevent calling the destructor twice
 #endif
 
         glfwSetWindowUserPointer(m_Window, &m_Data);

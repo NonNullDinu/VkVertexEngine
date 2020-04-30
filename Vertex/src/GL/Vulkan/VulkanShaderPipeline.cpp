@@ -36,14 +36,14 @@ namespace Vertex {
         VkViewport viewport{};
         viewport.x = 0.0f;
         viewport.y = 0.0f;
-        viewport.width = (float)VulkanContext::GetContext().GetSwapChainExtent().width;
-        viewport.height = (float)VulkanContext::GetContext().GetSwapChainExtent().height;
+        viewport.width = (float)VulkanContext::GetContext()->GetSwapChainExtent().width;
+        viewport.height = (float)VulkanContext::GetContext()->GetSwapChainExtent().height;
         viewport.minDepth = 0.0f;
         viewport.maxDepth = 1.0f;
 
         VkRect2D scissor{};
         scissor.offset = { 0, 0 };
-        scissor.extent = VulkanContext::GetContext().GetSwapChainExtent();
+        scissor.extent = VulkanContext::GetContext()->GetSwapChainExtent();
 
         VkPipelineViewportStateCreateInfo viewportState{};
         viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
@@ -114,7 +114,7 @@ namespace Vertex {
         pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
 
         if (vkCreatePipelineLayout(VulkanContext::GetContext()
-            .GetDevice(), &pipelineLayoutInfo, nullptr, &m_PipelineLayout) != VK_SUCCESS)
+            ->GetDevice(), &pipelineLayoutInfo, nullptr, &m_PipelineLayout) != VK_SUCCESS)
         {
             throw std::runtime_error("failed to create pipeline layout!");
         }
@@ -134,14 +134,14 @@ namespace Vertex {
         pipelineInfo.pDynamicState = nullptr; // Optional
 
         pipelineInfo.layout = m_PipelineLayout;
-        pipelineInfo.renderPass = VulkanContext::GetContext().GetRenderPass();
+        pipelineInfo.renderPass = VulkanContext::GetContext()->GetRenderPass();
         pipelineInfo.subpass = 0;
 
         pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
         pipelineInfo.basePipelineIndex = -1; // Optional
 
         if (vkCreateGraphicsPipelines(VulkanContext::GetContext()
-            .GetDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_GraphicsPipeline) != VK_SUCCESS)
+            ->GetDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_GraphicsPipeline) != VK_SUCCESS)
         {
             throw std::runtime_error("failed to create graphics pipeline!");
         }
@@ -150,8 +150,8 @@ namespace Vertex {
 
     VulkanShaderPipeline::~VulkanShaderPipeline()
     {
-        vkDestroyPipeline(VulkanContext::GetContext().GetDevice(), m_GraphicsPipeline, nullptr);
-        vkDestroyPipelineLayout(VulkanContext::GetContext().GetDevice(), m_PipelineLayout, nullptr);
+        vkDestroyPipeline(VulkanContext::GetContext()->GetDevice(), m_GraphicsPipeline, nullptr);
+        vkDestroyPipelineLayout(VulkanContext::GetContext()->GetDevice(), m_PipelineLayout, nullptr);
     }
 
     void VulkanShaderPipeline::Bind() const

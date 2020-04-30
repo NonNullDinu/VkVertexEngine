@@ -7,6 +7,7 @@
 #include <map>
 #include <set>
 #include <any>
+#include <variant>
 #include <memory>
 #include <vector>
 #include <cassert>

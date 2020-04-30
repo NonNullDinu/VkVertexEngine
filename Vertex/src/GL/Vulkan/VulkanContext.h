@@ -31,19 +31,25 @@ namespace Vertex {
             std::vector<VkPresentModeKHR> presentModes;
         };
 
-        static VkInstance GetInstance();
-        static VulkanContext GetContext();
-
+        inline VkInstance GetInstance() { return m_VkInstance; }
         inline VkDevice GetDevice() { return m_Device; }
         inline VkExtent2D GetSwapChainExtent() { return m_SwapChainExtent; }
         inline VkRenderPass GetRenderPass() { return m_RenderPass; }
+        inline VkCommandBuffer GetCurrentCommandBuffer() { return m_CurrentCommandBuffer; }
+        inline VkPhysicalDevice GetPhysicalDevice() { return m_PhysicalDevice; }
+        inline VkQueue GetQueue() { return m_GraphicsQueue; }
+        inline VkDescriptorPool GetDescriptorPool() { return m_DescriptorPool; }
+        inline std::vector<VkImage> GetSwapChainImages() { return m_SwapChainImages; }
+
+        static std::shared_ptr<VulkanContext> GetContext();
      private:
         GLFWwindow* m_WindowHandle;
         VkInstance m_VkInstance;
         VkPhysicalDevice m_PhysicalDevice;
         VkDevice m_Device;
         VkSurfaceKHR m_Surface;
-        VkQueue m_PresentationQueue;
+        VkQueue m_GraphicsQueue;
+        VkQueue m_PresentQueue;
         VkDebugUtilsMessengerEXT m_DebugMessenger;
         VkSwapchainKHR m_SwapChain;
         std::vector<VkImage> m_SwapChainImages;
@@ -54,6 +60,11 @@ namespace Vertex {
         VkRenderPass m_RenderPass;
         VkCommandPool m_CommandPool;
         std::vector<VkCommandBuffer> m_CommandBuffers;
+        VkSemaphore m_ImageAvailableSemaphore;
+        VkSemaphore m_RenderFinishedSemaphore;
+        VkDescriptorPool m_DescriptorPool;
+
+        VkCommandBuffer m_CurrentCommandBuffer;
 
 
         void InitVulkan();
@@ -67,6 +78,8 @@ namespace Vertex {
         void CreateFrameBuffers();
         void CreateCommandPool();
         void CreateCommandBuffers();
+        void CreateSemaphores();
+        void CreateDescriptorPool();
 
         bool IsDeviceSuitable(VkPhysicalDevice device);
         bool CheckDeviceExtensionSupport(VkPhysicalDevice device);
@@ -77,8 +90,6 @@ namespace Vertex {
         VkSurfaceFormatKHR ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
         VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
         VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
-
-        static VkInstance* s_VkInstance;
-        static VulkanContext *s_Context;
+        static std::shared_ptr<VulkanContext> s_Context;
     };
 }
