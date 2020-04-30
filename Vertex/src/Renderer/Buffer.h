@@ -1,5 +1,9 @@
 #pragma once
 
+#include "Core/Core.h"
+
+#include "Renderer.h"
+
 namespace Vertex {
 
     class Buffer
@@ -38,3 +42,6 @@ namespace Vertex {
     };
 
 }
+
+#include "GL/OpenGL/OpenGLBuffer.h"
+// ... per rendering API

@@ -14,7 +14,7 @@ namespace Vertex {
         inline static float GetMouseX() { return s_Instance->GetMouseXImpl(); }
         inline static float GetMouseY() { return s_Instance->GetMouseYImpl(); }
 
-        inline static void Create(Input* input_impl_obj) { s_Instance = input_impl_obj; }
+        static void Init();
 
     protected:
         virtual bool IsKeyPressedImpl(int key) = 0;
@@ -29,3 +29,6 @@ namespace Vertex {
     };
 
 }
+
+#include "Platforms/Linux/LinuxInput.h"
+#include "Platforms/Windows/WindowsInput.h"

@@ -26,6 +26,8 @@ namespace Vertex {
         virtual bool ShouldClose() const = 0;
         
         virtual GraphicsContext& GetGraphicsContext() const = 0;
+
+        static Window* Create();
     };
 
     // utility class
@@ -47,3 +49,9 @@ namespace Vertex {
     };
 
 }
+
+#if defined(_WIN32)
+    #include "Platforms/Windows/WindowsWindow.h"
+#elif defined(__linux__)
+    #include "Platforms/Linux/LinuxWindow.h"
+#endif

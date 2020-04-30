@@ -2,6 +2,8 @@
 
 #include "Core/Core.h"
 
+#include "Renderer.h"
+
 namespace Vertex {
 
     class Shader
@@ -16,3 +18,6 @@ namespace Vertex {
     };
 
 }
+
+#include "GL/OpenGL/OpenGLShader.h"
+// ... per rendering API

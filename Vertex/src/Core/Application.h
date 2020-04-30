@@ -11,11 +11,10 @@ class ImGuiLayer; // <- forward declare it to be accessible from application
 
 #include "ImGui/ImGuiLayer.h"
 
-#include "Platforms/Linux/LinuxWindow.h"
-#include "Platforms/Windows/WindowsWindow.h"
+#include "Window.h"
 
-#include "GL/OpenGL/OpenGLShader.h"
-#include "GL/OpenGL/OpenGLBuffer.h"
+#include "Renderer/Buffer.h"
+#include "Renderer/Shader.h"
 
 // ------------- TODOS -------------
 /*

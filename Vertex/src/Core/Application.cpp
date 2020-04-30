@@ -9,24 +9,11 @@ namespace Vertex {
     {
         VX_CORE_ASSERT((!s_AppInstance), "Application cannot be instantiated twice!");
 
-#if defined(_WIN32)
-        Input::Create(new WindowsInput());
+        Input::Init();
 
-        m_Window.reset(new WindowsWindow());
-
-#elif defined(__linux__)
-        Input::Create(new LinuxInput());
-
-        m_Window.reset(new LinuxWindow());
-        
-#endif // _WIN32
+        m_Window.reset(Window::Create());
         
         m_Window->SetEventCallback(VX_BIND_FUNC_1(Application::OnEvent));
-
-        s_AppInstance = this;
-
-        ImGuiLayer* m_ImGuiLayer = new ImGuiLayer();
-        PushOverlay(m_ImGuiLayer);
 
         // --------------------------------------
         // ------------- Temporary --------------
@@ -42,12 +29,12 @@ namespace Vertex {
              0.0f,  0.5f, 0.0f
         };
 
+        uint32_t indices[3] = { 0, 1, 2 };
+
         m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-
-        uint32_t indices[3] = { 0, 1, 2 };
 
         m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices)));
 
@@ -82,6 +69,11 @@ namespace Vertex {
         m_Shader->Unbind();
 
         // --------------------------------------
+
+        ImGuiLayer* m_ImGuiLayer = new ImGuiLayer();
+        PushOverlay(m_ImGuiLayer);
+
+        s_AppInstance = this;
     }
 
     Application::~Application()
