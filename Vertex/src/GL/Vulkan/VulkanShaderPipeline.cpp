@@ -1,6 +1,7 @@
 #include "VulkanShaderPipeline.h"
 #include "VulkanShaderModule.h"
 #include "VulkanContext.h"
+#include "VulkanBufferBinding.h"
 
 namespace Vertex {
 
@@ -146,6 +147,8 @@ namespace Vertex {
             throw std::runtime_error("failed to create graphics pipeline!");
         }
 
+        // test for now
+        auto array = VulkanBufferBindings<VulkanBufferBinding<glm::vec3, 0>, VulkanBufferBinding<glm::vec3, 0> >::getAttributeDescriptions();
     }
 
     VulkanShaderPipeline::~VulkanShaderPipeline()
