@@ -13,15 +13,29 @@ file(GLOB_RECURSE VX_HEADERS
         src/Core/Layer/*.h
         src/Renderer/*.h
         src/ImGui/*.h
-        
+
         deps/glm/glm/*.hpp)
 if ($ENV{USE_VK})
     file(GLOB_RECURSE VX_GRAPHICS_SOURCES src/GL/Vulkan/*.cpp)
     file(GLOB_RECURSE VX_GRAPHICS_HEADERS src/GL/Vulkan/*.h)
-else ()
+
+    set(IMGUI_IMPL_HEADERS
+            deps/imgui/examples/imgui_impl_glfw.h
+            deps/imgui/examples/imgui_impl_vulkan.h)
+    set(IMGUI_IMPL_SOURCES
+            deps/imgui/examples/imgui_impl_glfw.cpp
+            deps/imgui/examples/imgui_impl_vulkan.cpp)
+else () # OpenGL
     file(GLOB_RECURSE VX_GRAPHICS_SOURCES src/GL/OpenGL/*.cpp)
     file(GLOB_RECURSE VX_GRAPHICS_HEADERS src/GL/OpenGL/*.h)
-endif()
+
+    set(IMGUI_IMPL_HEADERS
+            deps/imgui/examples/imgui_impl_glfw.h
+            deps/imgui/examples/imgui_impl_opengl3.h)
+    set(IMGUI_IMPL_SOURCES
+            deps/imgui/examples/imgui_impl_glfw.cpp
+            deps/imgui/examples/imgui_impl_opengl3.cpp)
+endif ()
 
 # GLAD
 add_subdirectory(deps/glad)
@@ -47,24 +61,32 @@ elseif (UNIX AND NOT APPLE) # e.g. pretty much linux
     file(GLOB_RECURSE VX_PLATFORM_SOURCES src/Platforms/Linux/*.cpp)
 
     # find OpenGL and GLFW to get the include paths to use and libraries to link with
-    find_package(OpenGL REQUIRED) # OpenGL
+    if ($ENV{USE_VK})
+        find_package(Vulkan REQUIRED) # Vulkan
+        set(GRAPHICS_LIB_INCLUDES ${Vulkan_INCLUDE_DIRS})
+        set(GRAPHICS_LIBS ${Vulkan_LIBRARIES})
+    else ()
+        find_package(OpenGL REQUIRED) # OpenGL
+        set(GRAPHICS_LIB_INCLUDES ${OPENGL_INCLUDE_DIR})
+        set(GRAPHICS_LIBS ${OPENGL_LIBRARIES})
+    endif ()
+
     find_package(glfw3 REQUIRED) # GLFW
     set(GLFW_LIBRARY glfw) # FindGLFW.cmake does not set this so we need to do it
 
     # same explanation as above, but for linux
-    set(PLATFORM_SPECIFIC_INCLUDES ${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS})
-    set(PLATFORM_SPECIFIC_LIBS ${OPENGL_LIBRARIES} ${GLFW_LIBRARY})
+    set(PLATFORM_SPECIFIC_INCLUDES ${GRAPHICS_LIB_INCLUDES} ${GLEW_INCLUDE_DIRS})
+    set(PLATFORM_SPECIFIC_LIBS ${GRAPHICS_LIBS} ${GLFW_LIBRARY})
 else ()
     message(FATAL_ERROR Unsupported platform)
 endif ()
 
 add_library(Vertex SHARED
-        ${VX_SOURCES}
-        deps/imgui/examples/imgui_impl_glfw.cpp
-        deps/imgui/examples/imgui_impl_opengl3.cpp
         ${VX_HEADERS}
-        deps/imgui/examples/imgui_impl_glfw.h
-        deps/imgui/examples/imgui_impl_opengl3.h
+        ${VX_SOURCES}
+
+        ${IMGUI_IMPL_HEADERS}
+        ${IMGUI_IMPL_SOURCES}
 
         ${VX_PLATFORM_HEADERS}
         ${VX_PLATFORM_SOURCES}
@@ -89,8 +111,6 @@ set(VX_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/include PARENT_SCOPE)
 
 target_precompile_headers(Vertex PUBLIC src/Core/vx_pch.h)
 
-target_compile_definitions(Vertex PRIVATE VX_BUILD_SHARED IMGUI_IMPL_OPENGL_LOADER_GLAD=1)
-
 if ($ENV{USE_VK})
     add_compile_definitions(VX_RENDER_API_VULKAN)
 else ()
@@ -98,10 +118,9 @@ else ()
     add_compile_definitions(VX_RENDER_API_OPENGL)
 endif ()
 
-
 if ($ENV{CLION_IDE})
     target_compile_options(Vertex PRIVATE -include Core/vx_pch.h)
-endif()
+endif ()
 
 install(TARGETS Vertex
         CONFIGURATIONS Debug
