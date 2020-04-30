@@ -111,14 +111,11 @@ set(VX_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/include PARENT_SCOPE)
 
 target_precompile_headers(Vertex PUBLIC src/Core/vx_pch.h)
 
-target_compile_definitions(Vertex PRIVATE VX_BUILD_SHARED IMGUI_IMPL_OPENGL_LOADER_GLAD=1)
-
-target_compile_definitions(Vertex PRIVATE VX_RENDER_API_OPENGL=1 VX_RENDER_API_VULKAN=2)
-
 if ($ENV{USE_VK})
-    target_compile_definitions(Vertex PRIVATE VX_RENDER_API=VX_RENDER_API_VULKAN)
+    add_compile_definitions(VX_RENDER_API_VULKAN)
 else ()
-    target_compile_definitions(Vertex PRIVATE VX_RENDER_API=VX_RENDER_API_OPENGL)
+    target_compile_definitions(Vertex PRIVATE VX_BUILD_SHARED IMGUI_IMPL_OPENGL_LOADER_GLAD=1)
+    add_compile_definitions(VX_RENDER_API_OPENGL)
 endif ()
 
 

@@ -34,10 +34,10 @@ namespace Vertex {
         Application& app = Application::Get();
 
         GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
-#if VX_RENDER_API == VX_RENDER_API_OPENGL
+#if defined(VX_RENDER_API_OPENGL)
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init("#version 410");
-#elif VX_RENDER_API == VX_RENDER_API_VULKAN
+#elif defined(VX_RENDER_API_VULKAN)
 //        ImGui_ImplGlfw_InitForVulkan(window, true);
 //        ImGui_ImplVulkan_InitInfo init_info {};
 //        init_info.Instance = VulkanContext::GetInstance();
@@ -49,9 +49,9 @@ namespace Vertex {
 
     void ImGuiLayer::OnDetach()
     {
-#if VX_RENDER_API == VX_RENDER_API_OPENGL
+#if defined(VX_RENDER_API_OPENGL)
         ImGui_ImplOpenGL3_Shutdown();
-#elif VX_RENDER_API == VX_RENDER_API_VULKAN
+#elif defined(VX_RENDER_API_VULKAN)
 //        ImGui_ImplVulkan_Shutdown(); // Since I'm clueless about how to initialize it, I'm gonna leave this commented out
 #endif
         ImGui_ImplGlfw_Shutdown();
@@ -60,12 +60,12 @@ namespace Vertex {
 
     void ImGuiLayer::Begin()
     {
-#if VX_RENDER_API == VX_RENDER_API_OPENGL
+#if defined(VX_RENDER_API_OPENGL)
         ImGui_ImplOpenGL3_NewFrame();
-#elif VX_RENDER_API_VULKAN == VX_RENDER_API_VULKAN
+#elif defined(VX_RENDER_API_VULKAN)
 //        ImGui_ImplVulkan_NewFrame();
 #endif
-#if VX_RENDER_API == VX_RENDER_API_OPENGL // this is here because I have no clue how to start imgui for vulkan and it gives an error
+#if defined(VX_RENDER_API_OPENGL) // this is here because I have no clue how to start imgui for vulkan and it gives an error
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 #endif
@@ -78,15 +78,15 @@ namespace Vertex {
 		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
 
 		// Rendering
-#if VX_RENDER_API == VX_RENDER_API_OPENGL
+#if defined(VX_RENDER_API_OPENGL)
 		ImGui::Render();
 #endif
-#if VX_RENDER_API == VX_RENDER_API_OPENGL
+#if defined(VX_RENDER_API_OPENGL)
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-#elif VX_RENDER_API == VX_RENDER_API_VULKAN
+#elif defined(VX_RENDER_API_VULKAN)
 //		ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), /**Another thing I'm completely clueless about**/);
 #endif
-#if VX_RENDER_API == VX_RENDER_API_OPENGL
+#if defined(VX_RENDER_API_OPENGL)
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		{
 			GLFWwindow* backup_current_context = glfwGetCurrentContext();

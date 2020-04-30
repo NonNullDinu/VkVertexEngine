@@ -185,15 +185,15 @@ namespace Vertex {
         }
 
         glfwSetErrorCallback(GLFWErrorCallback);
-#if VX_RENDER_API == VX_RENDER_API_VULKAN
+#if defined(VX_RENDER_API_VULKAN)
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // this is only temporary
 #endif
 
         m_Window = glfwCreateWindow((int)m_Data.width, (int)m_Data.height, m_Data.title, nullptr, nullptr);
-#if VX_RENDER_API == VX_RENDER_API_OPENGL
+#if defined(VX_RENDER_API_OPENGL)
         m_Context = new OpenGLContext(m_Window);
-#elif VX_RENDER_API == VX_RENDER_API_VULKAN
+#elif defined(VX_RENDER_API_VULKAN)
         m_Context = new VulkanContext(m_Window);
 #endif
 

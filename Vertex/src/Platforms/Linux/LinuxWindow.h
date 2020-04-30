@@ -7,9 +7,9 @@
 
 #include "Renderer/GraphicsContext.h"
 
-#if VX_RENDER_API == VX_RENDER_API_OPENGL
+#if defined(VX_RENDER_API_OPENGL)
 #include "GL/OpenGL/OpenGLContext.h"
-#elif VX_RENDER_API == VX_RENDER_API_VULKAN
+#elif defined(VX_RENDER_API_VULKAN)
 #include "GL/Vulkan/VulkanContext.h"
 #endif
 

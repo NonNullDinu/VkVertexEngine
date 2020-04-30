@@ -156,7 +156,7 @@ namespace Vertex {
 
     void VulkanShaderPipeline::Bind() const
     {
-
+        vkCmdBindPipeline(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_GraphicsPipeline);
     }
     void VulkanShaderPipeline::Unbind() const
     {

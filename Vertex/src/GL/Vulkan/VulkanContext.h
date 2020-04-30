@@ -8,6 +8,8 @@ namespace Vertex {
         VulkanContext(GLFWwindow* window);
         ~VulkanContext();
 
+        void Render() override;
+
         void SwapBuffers() override;
 
         void NotifyResize(int new_width, int new_height) override;
@@ -51,6 +53,7 @@ namespace Vertex {
         std::vector<VkFramebuffer> m_SwapChainFramebuffers;
         VkRenderPass m_RenderPass;
         VkCommandPool m_CommandPool;
+        std::vector<VkCommandBuffer> m_CommandBuffers;
 
 
         void InitVulkan();
@@ -62,6 +65,8 @@ namespace Vertex {
         void CreateImageViews();
         void CreateRenderPass();
         void CreateFrameBuffers();
+        void CreateCommandPool();
+        void CreateCommandBuffers();
 
         bool IsDeviceSuitable(VkPhysicalDevice device);
         bool CheckDeviceExtensionSupport(VkPhysicalDevice device);
