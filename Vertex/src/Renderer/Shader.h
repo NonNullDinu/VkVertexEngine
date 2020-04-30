@@ -2,8 +2,6 @@
 
 #include "Core/Core.h"
 
-#include "Renderer.h"
-
 namespace Vertex {
 
     class Shader

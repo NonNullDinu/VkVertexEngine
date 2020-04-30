@@ -4,13 +4,11 @@ namespace Vertex {
 
     Shader* Shader::Create(const char* vertex_src, const char* fragment_src)
     {
-        switch(Renderer::GetRenderAPI())
-        {
-            case RenderAPI::OpenGL : return new OpenGLShader(vertex_src, fragment_src);
-            case RenderAPI::Vulkan : return nullptr;
-        }
-
+#if defined(VX_RENDER_API_OPENGL)
+        return new OpenGLShader(vertex_src, fragment_src);
+#else
         return nullptr;
+#endif
     }
 
 }
