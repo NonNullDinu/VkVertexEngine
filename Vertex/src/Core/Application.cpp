@@ -70,10 +70,10 @@ namespace Vertex {
 
         // --------------------------------------
 
+        s_AppInstance = this;
+
         ImGuiLayer* m_ImGuiLayer = new ImGuiLayer();
         PushOverlay(m_ImGuiLayer);
-
-        s_AppInstance = this;
     }
 
     Application::~Application()
