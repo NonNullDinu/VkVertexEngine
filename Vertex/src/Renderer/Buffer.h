@@ -13,30 +13,27 @@ namespace Vertex {
     struct BufferElement
     {
         ShaderDataType type;
-        uint32_t offset;
-        uint32_t size;
+        size_t offset;
+        size_t size;
+        uint32_t component_count;
+        bool normalized;
 
-        BufferElement(ShaderDataType _type)
-            : type(_type), size(GetSizeOfShaderDataType(_type)), offset(0)
+        BufferElement(ShaderDataType _type, bool _normalized = false)
+            : type(_type), offset(0),
+              size(GetSizeOfShaderDataType(_type)),
+              component_count(GetComponentCountOfShaderDataType(_type)),
+              normalized(_normalized)
         {
         }
     };
-    
 
     class BufferLayout
     {
     public:
         BufferLayout(const std::initializer_list<BufferElement>& elements)
-            : m_Elements(elements)
+            : m_Elements(elements), m_Stride(0)
         {
-        }
-
-        inline const std::vector<BufferElement>& GetElements() { return m_Elements; }
-
-    private:
-        void CalculateOffsetsAndStride()
-        {
-            uint32_t offset = 0;
+            size_t offset = 0;
             for (auto& elem : m_Elements)
             {
                 elem.offset = offset;
@@ -45,10 +42,14 @@ namespace Vertex {
             }
         }
 
+        inline const size_t GetStride() { return m_Stride; }
+        inline const std::vector<BufferElement>& GetElements() { return m_Elements; }
+        
     private:
         std::vector<BufferElement> m_Elements;
-        uint32_t m_Stride = 0;
+        size_t m_Stride;
     };
+
 
     class Buffer
     {

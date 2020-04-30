@@ -13,8 +13,9 @@ namespace Vertex {
         Float, Float2, Float3, Float4
     };
 
-    // helper function
-    uint32_t GetSizeOfShaderDataType(ShaderDataType type);
+    // helper functions
+    size_t GetSizeOfShaderDataType(ShaderDataType type);
+    uint32_t GetComponentCountOfShaderDataType(ShaderDataType type);
 
     class Shader
     {
