@@ -28,12 +28,11 @@ namespace Vertex {
 
         uint32_t indices[3] = { 0, 1, 2 };
 
-        m_VertexArray.reset(VertexArray::Create());
-        m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
-        
         BufferLayout layout = { { ShaderDataType::Float3 }, { ShaderDataType::Float4 } };
-        m_VertexBuffer->SetLayout(layout);
 
+        m_VertexArray.reset(VertexArray::Create());
+        m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices), layout));
+    
         m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 
         m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices)));
@@ -50,11 +49,10 @@ namespace Vertex {
 
         uint32_t indices2[3] = { 0, 1, 2 };
 
-        m_VertexArray2.reset(VertexArray::Create());
-        m_VertexBuffer2.reset(VertexBuffer::Create(vertices2, sizeof(vertices2)));
-        
         BufferLayout layout2 = { { ShaderDataType::Float3 }, { ShaderDataType::Float4 } };
-        m_VertexBuffer2->SetLayout(layout2);
+
+        m_VertexArray2.reset(VertexArray::Create());
+        m_VertexBuffer2.reset(VertexBuffer::Create(vertices2, sizeof(vertices2), layout2));
 
         m_VertexArray2->AddVertexBuffer(m_VertexBuffer2);
 

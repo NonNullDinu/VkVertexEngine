@@ -77,10 +77,9 @@ namespace Vertex {
     public:
         virtual ~VertexBuffer() {}
 
-        virtual void SetLayout(const BufferLayout& layout) = 0;
         virtual const BufferLayout& GetLayout() const = 0;
 
-        static VertexBuffer* Create(float* vertices, size_t size);
+        static VertexBuffer* Create(float* vertices, size_t size, const BufferLayout& layout);
     };
 
     // ----------------------------------

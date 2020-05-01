@@ -2,10 +2,10 @@
 
 namespace Vertex {
 
-    VertexBuffer* VertexBuffer::Create(float* vertices, size_t size)
+    VertexBuffer* VertexBuffer::Create(float* vertices, size_t size, const BufferLayout& layout)
     {
 #if defined(VX_RENDER_API_OPENGL)
-        return new OpenGLVertexBuffer(vertices, size);
+        return new OpenGLVertexBuffer(vertices, size, layout);
 #else
         return nullptr;
 #endif

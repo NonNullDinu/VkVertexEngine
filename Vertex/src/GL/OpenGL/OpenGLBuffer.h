@@ -11,14 +11,13 @@ namespace Vertex {
     class OpenGLVertexBuffer : public VertexBuffer
     {
     public:
-        OpenGLVertexBuffer(float* vertices, size_t size);
+        OpenGLVertexBuffer(float* vertices, size_t size, const BufferLayout& layout);
         ~OpenGLVertexBuffer();
 
         void Bind() const override;
         void Unbind() const override;
 
-        inline void  SetLayout(const BufferLayout& layout) override { m_Layout = layout; }
-        inline const BufferLayout& GetLayout() const       override { return m_Layout; }
+        inline const BufferLayout& GetLayout() const override { return m_Layout; }
 
     private:
         uint32_t m_ID;
