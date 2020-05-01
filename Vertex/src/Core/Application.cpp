@@ -50,7 +50,7 @@ namespace Vertex {
              0.0f,  0.5f, 0.0f,  //  1.0f, 0.7f, 0.7f, 1.0f
         };
 
-        uint32_t indices[3] = { 0, 2, 4 };
+        uint32_t indices[3] = { 0, 1, 2 };
 
         m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 
@@ -60,9 +60,6 @@ namespace Vertex {
         for (auto& elem : layout.GetElements())
         {
             glEnableVertexAttribArray(index);
-
-            Logger::GetCoreLogger()->debug("\n\tindex {0}\n\tType {1}\n\tstride {2}\n\toffset {3}", 
-                        index, ShaderDataTypeToOpenGL(elem.type), layout.GetStride(), elem.offset);
 
             glVertexAttribPointer(index,
                 elem.component_count,
