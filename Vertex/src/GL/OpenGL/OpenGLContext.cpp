@@ -10,7 +10,7 @@ namespace Vertex {
         int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
         VX_CORE_ASSERT(status, "Could not initialize glad.");
 
-        Logger::GetCoreLogger()->info("OpenGL {0} {1} from {2}",
+        CoreLogger::Get()->debug("\nRenderer Info:\n\tRendering API: OpenGL {0}\n\tRenderer: {1}\n\tVendored by: {2}",
                                         glGetString(GL_VERSION),
                                         glGetString(GL_RENDERER),
                                         glGetString(GL_VENDOR));

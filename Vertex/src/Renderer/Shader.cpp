@@ -20,7 +20,7 @@ namespace Vertex {
             case ShaderDataType::Float4 : return 16;
         }
 
-        Logger::GetCoreLogger()->error("Unknown shader data type, cancelling...");
+        CoreLogger::Get()->error("Unknown shader data type, cancelling...");
         return 0;
     };
 
@@ -41,7 +41,7 @@ namespace Vertex {
             case ShaderDataType::Float4 : return 4;
         }
 
-        Logger::GetCoreLogger()->error("Unknown shader data type, cancelling...");
+        CoreLogger::Get()->error("Unknown shader data type, cancelling...");
         return 0;
     }
 

@@ -12,7 +12,7 @@
 
 #define VX_BIND_FUNC_1(x) std::bind(&x, this, std::placeholders::_1)
 
-#define VX_CORE_ASSERT(x, ...) { if (!(x)) { Logger::GetCoreLogger()->error(__VA_ARGS__); assert(false); } }
+#define VX_CORE_ASSERT(x, ...) { if (!(x)) { CoreLogger::Get()->error(__VA_ARGS__); assert(false); } }
 
 // Define a check for each platform
 #define VX_WINDOWING_GLFW

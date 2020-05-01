@@ -11,8 +11,6 @@ namespace Vertex {
 #else
         #error Unsupported platform
 #endif
-
-        return nullptr;
     }
 
 }
