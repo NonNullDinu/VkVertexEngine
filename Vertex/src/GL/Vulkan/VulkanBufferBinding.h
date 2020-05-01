@@ -28,7 +28,7 @@ namespace Vertex {
     template<typename ...args>
     struct VulkanBufferBindings {
         static std::array<VkVertexInputAttributeDescription, sizeof...(args)> getAttributeDescriptions() {
-            VX_CORE_STATIC_ASSERT(VulkanBufferBindingTest<args...>(), "not all args are of type VulkanBufferBinding");
+            VX_CORE_STATIC_ASSERT(VulkanBufferBindingTest<std::nullptr_t, args...>(), "not all args are of type VulkanBufferBinding");
             std::array<VkVertexInputAttributeDescription, sizeof...(args)> attributeDescriptions{};
 //            attributeDescriptions[0].binding = 0;
 //            attributeDescriptions[0].location = 0;
