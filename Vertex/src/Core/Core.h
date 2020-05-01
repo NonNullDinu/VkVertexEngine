@@ -13,8 +13,25 @@
 #define VX_BIND_FUNC_0(x) std::bind(&x, this)
 #define VX_BIND_FUNC_1(x) std::bind(&x, this, std::placeholders::_1)
 
+// Assertion defines
+
 #define VX_CORE_STATIC_ASSERT(x, ...) { static_assert(x, __VA_ARGS__); }
 #define VX_CORE_ASSERT(x, ...) { if (!(x)) { Logger::GetCoreLogger()->error(__VA_ARGS__); assert(false); } }
+
+// Template utility defines
+
+#define VX_TEMPLATE_ALL(test_name, predicate) template <typename T> \
+                                              constexpr bool test_name() { return true; } \
+                                              template <typename T, typename First, typename... Rest> \
+                                              constexpr bool test_name() \
+                                              { return predicate<First>::value && test_name<T, Rest...>(); }
+#define VX_TEMPLATE_ANY(test_name, predicate) template <typename T> \
+                                              constexpr bool test_name() { return false; } \
+                                              template <typename T, typename First, typename... Rest> \
+                                              constexpr bool test_name() \
+                                              { return predicate<First>::value || test_name<T, Rest...>(); }
+#define VX_TEMPLATE_TCALL(test_name, arg)     (test_name<std::nullptr_t, arg>())
+
 
 // Define a check for each platform
 #define VX_WINDOWING_GLFW
