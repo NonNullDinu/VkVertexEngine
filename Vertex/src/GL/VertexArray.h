@@ -20,5 +20,5 @@ namespace Vertex {
 
 }
 
-#include "GL/OpenGL/OpenGLVertexArray.h"
+#include "OpenGL/OpenGLVertexArray.h"
 // ... per rendering api

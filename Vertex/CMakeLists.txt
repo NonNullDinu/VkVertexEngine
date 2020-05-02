@@ -15,6 +15,10 @@ file(GLOB_RECURSE VX_HEADERS
         src/ImGui/*.h
 
         deps/glm/glm/*.hpp)
+
+file(GLOB VX_GL_SOURCES src/GL/*.cpp)
+file(GLOB VX_GL_HEADERS src/GL/*.h)
+        
 if ($ENV{USE_VK})
     file(GLOB_RECURSE VX_GRAPHICS_SOURCES src/GL/Vulkan/*.cpp)
     file(GLOB_RECURSE VX_GRAPHICS_HEADERS src/GL/Vulkan/*.h)
@@ -25,6 +29,16 @@ if ($ENV{USE_VK})
     set(IMGUI_IMPL_SOURCES
             deps/imgui/examples/imgui_impl_glfw.cpp
             deps/imgui/examples/imgui_impl_vulkan.cpp)
+elseif ($ENV{USE_DX11})
+    file(GLOB_RECURSE VX_GRAPHICS_SOURCES src/GL/DirectX11/*.cpp)
+    file(GLOB_RECURSE VX_GRAPHICS_HEADERS src/GL/DirectX11/*.h)
+    
+    set(IMGUI_IMPL_HEADERS
+            deps/imgui/examples/imgui_impl_glfw.h
+            deps/imgui/examples/imgui_impl_dx11.h)
+    set(IMGUI_IMPL_SOURCES
+            deps/imgui/examples/imgui_impl_glfw.cpp
+            deps/imgui/examples/imgui_impl_dx11.cpp)
 else () # OpenGL
     file(GLOB_RECURSE VX_GRAPHICS_SOURCES src/GL/OpenGL/*.cpp)
     file(GLOB_RECURSE VX_GRAPHICS_HEADERS src/GL/OpenGL/*.h)
@@ -85,6 +99,9 @@ add_library(Vertex SHARED
         ${VX_HEADERS}
         ${VX_SOURCES}
 
+        ${VX_GL_HEADERS}
+        ${VX_GL_SOURCES}
+
         ${IMGUI_IMPL_HEADERS}
         ${IMGUI_IMPL_SOURCES}
 
@@ -112,6 +129,8 @@ target_precompile_headers(Vertex PUBLIC src/Core/vx_pch.h)
 
 if ($ENV{USE_VK})
     add_compile_definitions(VX_RENDER_API_VULKAN)
+elseif($ENV{USE_DX11})
+    add_compile_definitions(VX_RENDER_API_DIRECTX11)
 else ()
     target_compile_definitions(Vertex PRIVATE VX_BUILD_SHARED IMGUI_IMPL_OPENGL_LOADER_GLAD=1)
     add_compile_definitions(VX_RENDER_API_OPENGL)

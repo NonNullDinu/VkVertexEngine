@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Renderer/GraphicsContext.h"
+#include "GL/GraphicsContext.h"
 
 namespace Vertex {
     class VulkanShaderPipeline;

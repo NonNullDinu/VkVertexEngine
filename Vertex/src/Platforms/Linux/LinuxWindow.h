@@ -5,15 +5,6 @@
 #include "Core/Input.h"
 #include "LinuxInput.h"
 
-#include "Renderer/GraphicsContext.h"
-
-#if defined(VX_RENDER_API_OPENGL)
-#include "GL/OpenGL/OpenGLContext.h"
-#elif defined(VX_RENDER_API_VULKAN)
-#include "GL/Vulkan/VulkanContext.h"
-#endif
-
-
 namespace Vertex {
 
     class LinuxWindow : public Window

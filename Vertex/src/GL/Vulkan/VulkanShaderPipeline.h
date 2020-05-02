@@ -1,8 +1,11 @@
 #pragma once
 
-#include <Renderer/Shader.h>
+#include "GL/Shader.h"
+
 namespace Vertex {
-    class VulkanShaderPipeline : public Shader {
+
+    class VulkanShaderPipeline : public Shader
+    {
     public:
         VulkanShaderPipeline(const std::vector<char> vertex_src, const std::vector<char> fragment_src);
         ~VulkanShaderPipeline();
@@ -16,4 +19,5 @@ namespace Vertex {
         VkPipeline m_GraphicsPipeline;
         VkCommandBuffer m_CommandBuffer;
     };
+    
 }

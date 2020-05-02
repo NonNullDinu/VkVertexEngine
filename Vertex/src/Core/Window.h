@@ -4,7 +4,7 @@
 
 #include "Core/Event/Event.h"
 
-#include "Renderer/GraphicsContext.h"
+#include "GL/GraphicsContext.h"
 
 namespace Vertex {
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Renderer/Buffer.h"
+#include "GL/Buffer.h"
 
 namespace Vertex {
 

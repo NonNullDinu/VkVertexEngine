@@ -2,7 +2,7 @@
 
 #include "Core/Core.h"
 
-#include "Renderer/Shader.h"
+#include "GL/Shader.h"
 
 #include "OpenGLUniform.h"
 

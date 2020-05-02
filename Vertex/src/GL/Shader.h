@@ -30,5 +30,5 @@ namespace Vertex {
 
 }
 
-#include "GL/OpenGL/OpenGLShader.h"
+#include "OpenGL/OpenGLShader.h"
 // ... per rendering API

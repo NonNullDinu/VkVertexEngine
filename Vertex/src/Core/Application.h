@@ -13,16 +13,9 @@ class ImGuiLayer; // <- forward declare it to be accessible from application
 
 #include "Window.h"
 
-#include "Renderer/Buffer.h"
-#include "Renderer/VertexArray.h"
-#include "Renderer/Shader.h"
-
-// ------------- TODOS -------------
-/*
-* Abstract Shader class
-* Abstract Window class properly
-*/
-// ---------------------------------
+#include "GL/Buffer.h"
+#include "GL/VertexArray.h"
+#include "GL/Shader.h"
 
 namespace Vertex {
 
