@@ -1,32 +1,50 @@
 #include "VulkanContext.h"
+#include "VulkanShaderPipeline.h"
 
 namespace Vertex {
-//    static VKAPI_ATTR VkBool32 VKAPI_CALL VulkanDebugCallback(
-//        VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
-//        VkDebugUtilsMessageTypeFlagsEXT messageType,
-//        const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
-//        void* pUserData) {
-//
-//        Logger::GetCoreLogger()->debug("validation layer: {}", pCallbackData->pMessage);
-//
-//        return VK_FALSE;
-//    }
+    static VKAPI_ATTR VkBool32 VKAPI_CALL VulkanDebugCallback(
+        VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+        VkDebugUtilsMessageTypeFlagsEXT messageType,
+        const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
+        void* pUserData)
+    {
 
-//    static void VulkanDestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator) {
-//        auto func = (PFN_vkDestroyDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
-//        if (func != nullptr) {
-//            func(instance, debugMessenger, pAllocator);
-//        }
-//    }
+        Logger::GetCoreLogger()->debug("validation layer: {}", pCallbackData->pMessage);
+
+        return VK_FALSE;
+    }
+
+    static void
+    VulkanDestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator)
+    {
+        auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
+        if (func != nullptr)
+        {
+            func(instance, debugMessenger, pAllocator);
+        }
+    }
+    constexpr int MAX_FRAMES_IN_FLIGHT = 2;
     static const std::vector<const char*> VulkanDeviceExtensions = {
         VK_KHR_SWAPCHAIN_EXTENSION_NAME
     };
+
+    const std::vector<const char*> validationLayers = {
+        "VK_LAYER_KHRONOS_validation"
+    };
+    constexpr bool EnableValidationLayers =
+#if VX_TARGET_DEBUG
+        true
+#else
+        false
+#endif
+    ;
 
     std::shared_ptr<VulkanContext> VulkanContext::s_Context;
     VulkanContext::VulkanContext(GLFWwindow* window)
         : m_WindowHandle(window)
     {
         InitVulkan();
+        InitVulkanDebugger();
         CreateSurface();
         PickPhysicalDevice();
         CreateLogicalDevice();
@@ -36,7 +54,7 @@ namespace Vertex {
         CreateFrameBuffers();
         CreateCommandPool();
         CreateCommandBuffers();
-        CreateSemaphores();
+        CreateSyncObjects();
         CreateDescriptorPool();
 
         s_Context.reset(this);
@@ -51,17 +69,26 @@ namespace Vertex {
 
     void VulkanContext::Render()
     {
+        vkWaitForFences(m_Device, 1, &m_InFlightFences[m_CurrentFrame], VK_TRUE, UINT64_MAX);
+        vkResetFences(m_Device, 1, &m_InFlightFences[m_CurrentFrame]);
+
         uint32_t imageIndex;
-        if (vkAcquireNextImageKHR(m_Device, m_SwapChain, UINT64_MAX, m_ImageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex)
+        if (vkAcquireNextImageKHR(m_Device, m_SwapChain, UINT64_MAX, m_ImageAvailableSemaphores[m_CurrentFrame], VK_NULL_HANDLE, &imageIndex)
             != VK_SUCCESS)
         {
             VX_CORE_ASSERT(false, "cannot acquire next image");
         }
 
+        if (m_ImagesInFlight[imageIndex] != VK_NULL_HANDLE)
+        {
+            vkWaitForFences(m_Device, 1, &m_ImagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
+        }
+        m_ImagesInFlight[imageIndex] = m_InFlightFences[m_CurrentFrame];
+
         VkSubmitInfo submitInfo{};
         submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-        VkSemaphore waitSemaphores[] = { m_ImageAvailableSemaphore };
+        VkSemaphore waitSemaphores[] = { m_ImageAvailableSemaphores[m_CurrentFrame] };
         VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
         submitInfo.waitSemaphoreCount = 1;
         submitInfo.pWaitSemaphores = waitSemaphores;
@@ -69,11 +96,13 @@ namespace Vertex {
         submitInfo.commandBufferCount = 1;
         submitInfo.pCommandBuffers = &m_CommandBuffers[imageIndex];
 
-        VkSemaphore signalSemaphores[] = { m_RenderFinishedSemaphore };
+        VkSemaphore signalSemaphores[] = { m_RenderFinishedSemaphores[m_CurrentFrame] };
         submitInfo.signalSemaphoreCount = 1;
         submitInfo.pSignalSemaphores = signalSemaphores;
 
-        if (vkQueueSubmit(m_GraphicsQueue, 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS)
+        vkResetFences(m_Device, 1, &m_InFlightFences[m_CurrentFrame]);
+
+        if (vkQueueSubmit(m_GraphicsQueue, 1, &submitInfo, m_InFlightFences[m_CurrentFrame]) != VK_SUCCESS)
         {
             VX_CORE_ASSERT(false, "vkQueueSubmit failed");
         }
@@ -91,7 +120,10 @@ namespace Vertex {
 
         presentInfo.pResults = nullptr; // Optional
 
-        vkQueuePresentKHR(m_GraphicsQueue, &presentInfo);
+        vkQueuePresentKHR(m_PresentQueue, &presentInfo);
+        vkQueueWaitIdle(m_PresentQueue);
+
+        m_CurrentFrame = (m_CurrentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
     }
 
     void VulkanContext::SwapBuffers()
@@ -102,27 +134,61 @@ namespace Vertex {
     {
 
     }
-    void VulkanContext::CleanUpContext()
+
+    void VulkanContext::CleanupSwapChain()
     {
-        vkDestroyDescriptorPool(m_Device, m_DescriptorPool, nullptr);
-
-        vkDestroySemaphore(m_Device, m_RenderFinishedSemaphore, nullptr);
-        vkDestroySemaphore(m_Device, m_ImageAvailableSemaphore, nullptr);
-
-        vkDestroyCommandPool(m_Device, m_CommandPool, nullptr);
-        for (auto framebuffer : m_SwapChainFramebuffers)
+        for (size_t i = 0; i < m_SwapChainFramebuffers.size(); i++)
         {
-            vkDestroyFramebuffer(m_Device, framebuffer, nullptr);
+            vkDestroyFramebuffer(m_Device, m_SwapChainFramebuffers[i], nullptr);
         }
 
+        vkFreeCommandBuffers(m_Device, m_CommandPool, static_cast<uint32_t>(m_CommandBuffers.size()), m_CommandBuffers
+            .data());
+
+        for (VulkanShaderPipeline& pipelinew : m_Pipelines)
+        {
+            pipelinew.CleanUp();
+        }
+
+        vkDestroyPipelineLayout(m_Device, m_PipelineLayout, nullptr);
         vkDestroyRenderPass(m_Device, m_RenderPass, nullptr);
 
-        for (auto imageView : m_SwapChainImageViews)
+        for (size_t i = 0; i < m_SwapChainImageViews.size(); i++)
         {
-            vkDestroyImageView(m_Device, imageView, nullptr);
+            vkDestroyImageView(m_Device, m_SwapChainImageViews[i], nullptr);
         }
 
         vkDestroySwapchainKHR(m_Device, m_SwapChain, nullptr);
+    }
+
+    void VulkanContext::RecreateSwapChain()
+    {
+        vkDeviceWaitIdle(m_Device);
+
+        CleanupSwapChain();
+
+        CreateSwapChain();
+        CreateImageViews();
+        CreateRenderPass();
+        CreateFrameBuffers();
+        CreateCommandBuffers();
+    }
+
+    void VulkanContext::CleanUpContext()
+    {
+        vkDeviceWaitIdle(m_Device);
+
+        CleanupSwapChain();
+
+        vkDestroyDescriptorPool(m_Device, m_DescriptorPool, nullptr);
+
+        for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
+        {
+            vkDestroySemaphore(m_Device, m_RenderFinishedSemaphores[i], nullptr);
+            vkDestroySemaphore(m_Device, m_ImageAvailableSemaphores[i], nullptr);
+            vkDestroyFence(m_Device, m_InFlightFences[i], nullptr);
+        }
+
         vkDestroyDevice(m_Device, nullptr);
 //        VulkanDestroyDebugUtilsMessengerEXT(m_VkInstance, m_DebugMessenger, nullptr);
         vkDestroySurfaceKHR(m_VkInstance, m_Surface, nullptr);
@@ -130,6 +196,14 @@ namespace Vertex {
     }
     void VulkanContext::InitVulkan()
     {
+        if constexpr (EnableValidationLayers)
+        {
+            if (!CheckValidationLayerSupport())
+            {
+                throw std::runtime_error("validation layers requested, but not available!");
+            }
+        }
+
         VkApplicationInfo appInfo{};
         appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
         appInfo.pApplicationName = "Vertex Engine";
@@ -150,7 +224,18 @@ namespace Vertex {
         createInfo.enabledExtensionCount = glfwExtensionCount;
         createInfo.ppEnabledExtensionNames = glfwExtensions;
 
-        createInfo.enabledLayerCount = 0;
+        VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo;
+        if constexpr (EnableValidationLayers) {
+            createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
+            createInfo.ppEnabledLayerNames = validationLayers.data();
+
+            PopulateDebugMessengerCreateInfo(debugCreateInfo);
+            createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*) &debugCreateInfo;
+        } else {
+            createInfo.enabledLayerCount = 0;
+
+            createInfo.pNext = nullptr;
+        }
 
         if (vkCreateInstance(&createInfo, nullptr, &m_VkInstance) != VK_SUCCESS)
         {
@@ -164,19 +249,25 @@ namespace Vertex {
 
         vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
     }
-//    void VulkanContext::InitVulkanDebugger()
-//    {
-//        VkDebugUtilsMessengerCreateInfoEXT createInfo{};
-//        createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-//        createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
-//        createInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
-//        createInfo.pfnUserCallback = VulkanDebugCallback;
-//        createInfo.pUserData = nullptr; // Optional
-//
-//        if (vkCreateDebugUtilsMessengerEXT(m_VkInstance, &createInfo, nullptr, &m_DebugMessenger) != VK_SUCCESS) {
-//            throw std::runtime_error("failed to set up debug messenger!");
-//        }
-//    }
+
+    void VulkanContext::PopulateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo) {
+        createInfo = {};
+        createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+        createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+        createInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+        createInfo.pfnUserCallback = VulkanDebugCallback;
+    }
+
+    void VulkanContext::InitVulkanDebugger()
+    {
+        VkDebugUtilsMessengerCreateInfoEXT createInfo;
+
+        PopulateDebugMessengerCreateInfo(createInfo);
+
+        if (vkCreateDebugUtilsMessengerEXT(m_VkInstance, &createInfo, nullptr, &m_DebugMessenger) != VK_SUCCESS) {
+            VX_CORE_ASSERT(false, "vkCreateDebugUtilsMessengerEXT failed");
+        }
+    }
 
     void VulkanContext::PickPhysicalDevice()
     {
@@ -364,6 +455,21 @@ namespace Vertex {
         m_SwapChainExtent = extent;
     }
 
+    void VulkanContext::CreateGraphicsPipelineLayout()
+    {
+        VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
+        pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+        pipelineLayoutInfo.setLayoutCount = 0; // Optional
+        pipelineLayoutInfo.pSetLayouts = nullptr; // Optional
+        pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
+        pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
+
+        if (vkCreatePipelineLayout(m_Device, &pipelineLayoutInfo, nullptr, &m_PipelineLayout) != VK_SUCCESS)
+        {
+            throw std::runtime_error("failed to create pipeline layout!");
+        }
+    }
+
     void VulkanContext::CreateImageViews()
     {
         m_SwapChainImageViews.resize(m_SwapChainImages.size());
@@ -532,15 +638,28 @@ namespace Vertex {
         }
     }
 
-    void VulkanContext::CreateSemaphores()
+    void VulkanContext::CreateSyncObjects()
     {
+        m_ImageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
+        m_RenderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
+        m_InFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
+        m_ImagesInFlight.resize(m_SwapChainImages.size(), VK_NULL_HANDLE);
+
         VkSemaphoreCreateInfo semaphoreInfo{};
         semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 
-        if (vkCreateSemaphore(m_Device, &semaphoreInfo, nullptr, &m_ImageAvailableSemaphore) != VK_SUCCESS ||
-            vkCreateSemaphore(m_Device, &semaphoreInfo, nullptr, &m_RenderFinishedSemaphore) != VK_SUCCESS)
+        VkFenceCreateInfo fenceInfo{};
+        fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+        fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+
+        for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
         {
-            VX_CORE_ASSERT(false, "vkCreateSemaphore failed");
+            if (vkCreateSemaphore(m_Device, &semaphoreInfo, nullptr, &m_ImageAvailableSemaphores[i]) != VK_SUCCESS ||
+                vkCreateSemaphore(m_Device, &semaphoreInfo, nullptr, &m_RenderFinishedSemaphores[i]) != VK_SUCCESS ||
+                vkCreateFence(m_Device, &fenceInfo, nullptr, &m_InFlightFences[i]) != VK_SUCCESS)
+            {
+                throw std::runtime_error("failed to create synchronization objects for a frame!");
+            }
         }
     }
 
@@ -599,6 +718,36 @@ namespace Vertex {
         return requiredExtensions.empty();
     }
 
+    bool VulkanContext::CheckValidationLayerSupport()
+    {
+        uint32_t layerCount;
+        vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
+
+        std::vector<VkLayerProperties> availableLayers(layerCount);
+        vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
+
+        for (const char* layerName : validationLayers)
+        {
+            bool layerFound = false;
+
+            for (const auto& layerProperties : availableLayers)
+            {
+                if (strcmp(layerName, layerProperties.layerName) == 0)
+                {
+                    layerFound = true;
+                    break;
+                }
+            }
+
+            if (!layerFound)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     VkSurfaceFormatKHR VulkanContext::ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats)
     {
         for (const auto& availableFormat : availableFormats)
@@ -647,5 +796,20 @@ namespace Vertex {
     std::shared_ptr<VulkanContext> VulkanContext::GetContext()
     {
         return s_Context;
+    }
+    std::vector<const char*> VulkanContext::GetRequiredExtensions()
+    {
+        uint32_t glfwExtensionCount = 0;
+        const char** glfwExtensions;
+        glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+
+        std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
+
+        if constexpr (EnableValidationLayers)
+        {
+            extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+        }
+
+        return extensions;
     }
 }

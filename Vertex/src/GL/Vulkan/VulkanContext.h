@@ -2,6 +2,7 @@
 #include <Renderer/GraphicsContext.h>
 
 namespace Vertex {
+    class VulkanShaderPipeline;
     class VulkanContext : public GraphicsContext
     {
     public:
@@ -40,11 +41,15 @@ namespace Vertex {
         inline VkQueue GetQueue() { return m_GraphicsQueue; }
         inline VkDescriptorPool GetDescriptorPool() { return m_DescriptorPool; }
         inline std::vector<VkImage> GetSwapChainImages() { return m_SwapChainImages; }
+        inline VkPipelineLayout GetPipelineLayout() { return m_PipelineLayout; }
 
         static std::shared_ptr<VulkanContext> GetContext();
      private:
         GLFWwindow* m_WindowHandle;
         VkInstance m_VkInstance;
+
+        VkDebugUtilsMessengerEXT debugMessenger;
+
         VkPhysicalDevice m_PhysicalDevice;
         VkDevice m_Device;
         VkSurfaceKHR m_Surface;
@@ -57,32 +62,45 @@ namespace Vertex {
         VkExtent2D m_SwapChainExtent;
         std::vector<VkImageView> m_SwapChainImageViews;
         std::vector<VkFramebuffer> m_SwapChainFramebuffers;
+
+        VkPipelineLayout m_PipelineLayout;
+        std::vector<std::reference_wrapper<VulkanShaderPipeline> > m_Pipelines;
+
         VkRenderPass m_RenderPass;
         VkCommandPool m_CommandPool;
         std::vector<VkCommandBuffer> m_CommandBuffers;
-        VkSemaphore m_ImageAvailableSemaphore;
-        VkSemaphore m_RenderFinishedSemaphore;
+        std::vector<VkSemaphore> m_ImageAvailableSemaphores;
+        std::vector<VkSemaphore> m_RenderFinishedSemaphores;
+        std::vector<VkFence> m_InFlightFences;
+        std::vector<VkFence> m_ImagesInFlight;
+        size_t m_CurrentFrame = 0;
+
         VkDescriptorPool m_DescriptorPool;
 
         VkCommandBuffer m_CurrentCommandBuffer;
 
 
         void InitVulkan();
-//        void InitVulkanDebugger();
+        void InitVulkanDebugger();
         void PickPhysicalDevice();
         void CreateLogicalDevice();
         void CreateSurface();
         void CreateSwapChain();
+        void CreateGraphicsPipelineLayout();
         void CreateImageViews();
         void CreateRenderPass();
         void CreateFrameBuffers();
         void CreateCommandPool();
         void CreateCommandBuffers();
-        void CreateSemaphores();
+        void CreateSyncObjects();
         void CreateDescriptorPool();
+
+        void CleanupSwapChain();
+        void RecreateSwapChain();
 
         bool IsDeviceSuitable(VkPhysicalDevice device);
         bool CheckDeviceExtensionSupport(VkPhysicalDevice device);
+        bool CheckValidationLayerSupport();
 
         SwapChainSupportDetails QuerySwapChainSupport(VkPhysicalDevice device);
         QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);
@@ -90,6 +108,9 @@ namespace Vertex {
         VkSurfaceFormatKHR ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
         VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
         VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
+        std::vector<const char*> GetRequiredExtensions();
+
         static std::shared_ptr<VulkanContext> s_Context;
+        void PopulateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
     };
 }
