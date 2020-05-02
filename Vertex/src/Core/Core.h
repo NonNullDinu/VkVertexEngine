@@ -18,7 +18,7 @@
 #define VX_BIND_FUNC_1(x) std::bind(&x, this, std::placeholders::_1)
 
 #define VX_CORE_STATIC_ASSERT(x, ...) { static_assert(x, __VA_ARGS__); }
-#define VX_CORE_ASSERT(x, ...) { if (!(x)) { Logger::GetCoreLogger()->error(__VA_ARGS__); assert(false); } }
+#define VX_CORE_ASSERT(x, ...) { if (!(x)) { CoreLogger::Get()->error(__VA_ARGS__); assert(false); } }
 
 // Template utility defines
 
