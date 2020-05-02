@@ -1,7 +1,9 @@
 #pragma once
-#include <Renderer/GraphicsContext.h>
+
+#include "Renderer/GraphicsContext.h"
 
 namespace Vertex {
+
     class VulkanContext : public GraphicsContext
     {
     public:
@@ -15,7 +17,7 @@ namespace Vertex {
         void NotifyResize(int new_width, int new_height) override;
 
         void CleanUpContext() override;
-
+        
         struct QueueFamilyIndices {
             std::optional<uint32_t> graphicsFamily;
             std::optional<uint32_t> presentFamily;
@@ -42,6 +44,7 @@ namespace Vertex {
         inline std::vector<VkImage> GetSwapChainImages() { return m_SwapChainImages; }
 
         static std::shared_ptr<VulkanContext> GetContext();
+        
      private:
         GLFWwindow* m_WindowHandle;
         VkInstance m_VkInstance;
@@ -92,4 +95,5 @@ namespace Vertex {
         VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
         static std::shared_ptr<VulkanContext> s_Context;
     };
+
 }

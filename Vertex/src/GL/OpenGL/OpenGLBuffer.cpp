@@ -6,7 +6,8 @@ namespace Vertex {
     // ---------- Vertex Buffer ----------
     // -----------------------------------
 
-    OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, size_t size) 
+    OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, size_t size, const BufferLayout& layout)
+        : m_Layout(layout) 
     {
         glCreateBuffers(1, &m_ID);
         Bind();

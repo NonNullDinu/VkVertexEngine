@@ -100,8 +100,7 @@ target_include_directories(Vertex
 
 # use the libs specified above in PLATFORM_SPECIFIC_LIBS and glad
 target_link_libraries(Vertex
-        PUBLIC ${PLATFORM_SPECIFIC_LIBS} glad imgui
-        )
+        PUBLIC ${PLATFORM_SPECIFIC_LIBS} glad imgui)
 
 set_target_properties(Vertex PROPERTIES POSITION_INDEPENDENT_CODE ON)
 set_target_properties(Vertex PROPERTIES PUBLIC_HEADER include/Vertex.h)
@@ -117,7 +116,6 @@ else ()
     target_compile_definitions(Vertex PRIVATE VX_BUILD_SHARED IMGUI_IMPL_OPENGL_LOADER_GLAD=1)
     add_compile_definitions(VX_RENDER_API_OPENGL)
 endif ()
-
 
 if ($ENV{CLION_IDE})
     target_compile_options(Vertex PRIVATE -include Core/vx_pch.h)

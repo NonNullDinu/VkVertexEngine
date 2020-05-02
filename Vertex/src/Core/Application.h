@@ -11,11 +11,11 @@ class ImGuiLayer; // <- forward declare it to be accessible from application
 
 #include "ImGui/ImGuiLayer.h"
 
-#include "Platforms/Linux/LinuxWindow.h"
-#include "Platforms/Windows/WindowsWindow.h"
+#include "Window.h"
 
-#include "GL/OpenGL/OpenGLShader.h"
-#include "GL/OpenGL/OpenGLBuffer.h"
+#include "Renderer/Buffer.h"
+#include "Renderer/VertexArray.h"
+#include "Renderer/Shader.h"
 
 // ------------- TODOS -------------
 /*
@@ -60,12 +60,15 @@ namespace Vertex {
 
         // ------------- Temporary --------------
 
-        unsigned int m_VertexArr;
+        std::shared_ptr<Shader> m_Shader;
 
-        std::unique_ptr<Shader> m_Shader;
+        std::shared_ptr<VertexArray> m_VertexArray;
+        std::shared_ptr<VertexBuffer> m_VertexBuffer;
+        std::shared_ptr<IndexBuffer> m_IndexBuffer;
 
-        std::unique_ptr<VertexBuffer> m_VertexBuffer;
-        std::unique_ptr<IndexBuffer> m_IndexBuffer;
+        std::shared_ptr<VertexArray> m_VertexArray2;
+        std::shared_ptr<VertexBuffer> m_VertexBuffer2;
+        std::shared_ptr<IndexBuffer> m_IndexBuffer2;
 
         // --------------------------------------
 

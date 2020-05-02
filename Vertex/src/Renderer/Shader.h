@@ -4,6 +4,19 @@
 
 namespace Vertex {
 
+    // Make definite shader types so the API is more consistent
+    enum class ShaderDataType
+    {
+        Bool,
+        Mat3, Mat4,
+        Int, Int2, Int3, Int4,
+        Float, Float2, Float3, Float4
+    };
+
+    // helper functions
+    size_t GetSizeOfShaderDataType(ShaderDataType type);
+    uint32_t GetComponentCountOfShaderDataType(ShaderDataType type);
+
     class Shader
     {
     public:
@@ -16,3 +29,6 @@ namespace Vertex {
     };
 
 }
+
+#include "GL/OpenGL/OpenGLShader.h"
+// ... per rendering API

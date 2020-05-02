@@ -128,6 +128,7 @@ namespace Vertex {
         vkDestroySurfaceKHR(m_VkInstance, m_Surface, nullptr);
         vkDestroyInstance(m_VkInstance, nullptr);
     }
+  
     void VulkanContext::InitVulkan()
     {
         VkApplicationInfo appInfo{};
@@ -648,4 +649,5 @@ namespace Vertex {
     {
         return s_Context;
     }
+    
 }

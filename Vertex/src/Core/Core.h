@@ -1,5 +1,9 @@
 #pragma once
 
+#ifndef NDEBUG
+    #define VX_CONFIGURATION_DEBUG
+#endif
+
 #if defined(_WIN32)
     #if defined(VX_BUILD_SHARED)
         #define VX_PUBLIC_API __declspec(dllexport)
@@ -12,8 +16,6 @@
 
 #define VX_BIND_FUNC_0(x) std::bind(&x, this)
 #define VX_BIND_FUNC_1(x) std::bind(&x, this, std::placeholders::_1)
-
-// Assertion defines
 
 #define VX_CORE_STATIC_ASSERT(x, ...) { static_assert(x, __VA_ARGS__); }
 #define VX_CORE_ASSERT(x, ...) { if (!(x)) { Logger::GetCoreLogger()->error(__VA_ARGS__); assert(false); } }
