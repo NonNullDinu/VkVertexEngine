@@ -171,7 +171,8 @@ namespace Vertex {
         return true;
     }
 
-    void Application::Render(){
+    void Application::Render()
+    {
         m_ImGuiLayer->Begin();
 
         for (Layer* layer : m_LayerStack)
