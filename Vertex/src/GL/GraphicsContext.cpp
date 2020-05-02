@@ -2,7 +2,7 @@
 
 namespace Vertex {
 
-    GraphicsContext* GraphicsContext::Create(GLWwindow* window_handle)
+    GraphicsContext* GraphicsContext::Create(GLFWwindow* window_handle)
     {
 #if defined(VX_RENDER_API_OPENGL)
         return new OpenGLContext(window_handle);
