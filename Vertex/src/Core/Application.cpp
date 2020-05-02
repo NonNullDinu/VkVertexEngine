@@ -29,7 +29,7 @@ namespace Vertex {
         uint32_t indices[3] = { 0, 1, 2 };
 
         BufferLayout layout = { { ShaderDataType::Float3 }, { ShaderDataType::Float4 } };
-
+          
         m_VertexArray.reset(VertexArray::Create());
         m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices), layout));
     
@@ -118,6 +118,8 @@ namespace Vertex {
 
     void Application::Run()
     {
+        m_Window->GetGraphicsContext().SetRenderCallback(VX_BIND_FUNC_0(Application::Render));
+
         while (m_Running)
         {
             // ------------- Temporary --------------
@@ -137,6 +139,7 @@ namespace Vertex {
 
             for (Layer* layer : m_LayerStack)
                 layer->OnUpdate();
+
 
             // --------------- ImGui ----------------
 
@@ -166,6 +169,15 @@ namespace Vertex {
     {
         m_Window->GetGraphicsContext().NotifyResize(event.GetWidth(), event.GetHeight());
         return true;
+    }
+
+    void Application::Render(){
+        m_ImGuiLayer->Begin();
+
+        for (Layer* layer : m_LayerStack)
+            layer->OnImguiRender();
+
+        m_ImGuiLayer->End();
     }
 
 }

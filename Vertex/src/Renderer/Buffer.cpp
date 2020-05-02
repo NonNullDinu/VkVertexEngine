@@ -7,7 +7,7 @@ namespace Vertex {
 #if defined(VX_RENDER_API_OPENGL)
         return new OpenGLVertexBuffer(vertices, size, layout);
 #else
-        return nullptr;
+        return nullptr; // for now
 #endif
     }
 
@@ -16,7 +16,7 @@ namespace Vertex {
 #if defined(VX_RENDER_API_OPENGL)
         return new OpenGLIndexBuffer(indices, size);
 #else
-        return nullptr;
+        return nullptr; // for now
 #endif
     }
 

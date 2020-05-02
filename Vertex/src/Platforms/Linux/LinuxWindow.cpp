@@ -185,14 +185,18 @@ namespace Vertex {
         }
 
         glfwSetErrorCallback(GLFWErrorCallback);
-#if VX_RENDER_API == VX_RENDER_API_VULKAN
+#if defined(VX_RENDER_API_VULKAN)
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // this is only temporary
 #endif
 
         m_Window = glfwCreateWindow((int)m_Data.width, (int)m_Data.height, m_Data.title, nullptr, nullptr);
-
-        m_Context = new OpenGLContext(m_Window);
+#if defined(VX_RENDER_API_OPENGL)
+        m_Context.reset(new OpenGLContext(m_Window));
+#elif defined(VX_RENDER_API_VULKAN)
+        { new VulkanContext(m_Window); } // create a instance so the static field Vertex::VulkanContext::s_Context is set
+        m_Context = VulkanContext::GetContext(); // get it and copy it to m_Context to prevent calling the destructor twice
+#endif
 
         glfwSetWindowUserPointer(m_Window, &m_Data);
 
