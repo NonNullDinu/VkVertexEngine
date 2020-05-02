@@ -25,6 +25,16 @@ if ($ENV{USE_VK})
     set(IMGUI_IMPL_SOURCES
             deps/imgui/examples/imgui_impl_glfw.cpp
             deps/imgui/examples/imgui_impl_vulkan.cpp)
+elseif ($ENV{USE_DX11})
+    file(GLOB_RECURSE VX_GRAPHICS_SOURCES src/GL/DirectX11/*.cpp)
+    file(GLOB_RECURSE VX_GRAPHICS_HEADERS src/GL/DirectX11/*.h)
+    
+    set(IMGUI_IMPL_HEADERS
+            deps/imgui/examples/imgui_impl_glfw.h
+            deps/imgui/examples/imgui_impl_dx11.h)
+    set(IMGUI_IMPL_SOURCES
+            deps/imgui/examples/imgui_impl_glfw.cpp
+            deps/imgui/examples/imgui_impl_dx11.cpp)
 else () # OpenGL
     file(GLOB_RECURSE VX_GRAPHICS_SOURCES src/GL/OpenGL/*.cpp)
     file(GLOB_RECURSE VX_GRAPHICS_HEADERS src/GL/OpenGL/*.h)
