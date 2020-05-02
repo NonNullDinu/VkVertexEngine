@@ -20,7 +20,7 @@ namespace Vertex {
 
         inline void SetRenderCallback(RenderFunc callback) { m_RenderCallback = callback; }
 
-        inline static GraphicsContext* Create();
+        inline static GraphicsContext* Create(GLWwindow* window_handle);
 
     protected:
         RenderFunc m_RenderCallback;

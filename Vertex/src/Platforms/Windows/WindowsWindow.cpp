@@ -188,7 +188,7 @@ namespace Vertex {
 
         m_Window = glfwCreateWindow((int)m_Data.width, (int)m_Data.height, m_Data.title, nullptr, nullptr);
 
-        m_Context = new OpenGLContext(m_Window);
+        m_Context.reset(GraphicsContext::Create(m_Window));
 
         glfwSetWindowUserPointer(m_Window, &m_Data);
 

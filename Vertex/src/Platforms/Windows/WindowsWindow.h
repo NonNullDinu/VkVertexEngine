@@ -36,7 +36,7 @@ namespace Vertex {
 
     private:
         GLFWwindow* m_Window;
-        GraphicsContext* m_Context;
+        std::shared_ptr<GraphicsContext> m_Context;
         WindowProperties m_Data;
 
     private:
