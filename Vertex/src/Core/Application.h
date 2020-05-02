@@ -9,7 +9,7 @@ class ImGuiLayer; // <- forward declare it to be accessible from application
 
 #include "Layer/LayerStack.h"
 
-// #include "ImGui/ImGuiLayer.h"
+#include "ImGui/ImGuiLayer.h"
 
 #include "Window.h"
 
