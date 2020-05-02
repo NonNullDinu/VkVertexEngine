@@ -1,6 +1,7 @@
 #pragma once
 
 namespace Vertex {
+
     class VulkanShaderModule{
     public:
         VulkanShaderModule(const std::vector<char> source, VkPipelineShaderStageCreateInfo shader_stage_info);
@@ -8,4 +9,5 @@ namespace Vertex {
     private:
         VkShaderModule m_InternalVkShaderModule;
     };
+    
 }

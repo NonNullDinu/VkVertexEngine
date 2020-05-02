@@ -98,5 +98,5 @@ namespace Vertex {
 
 }
 
-#include "GL/OpenGL/OpenGLBuffer.h"
+#include "OpenGL/OpenGLBuffer.h"
 // ... per rendering API

@@ -1,5 +1,7 @@
 #pragma once
+
 namespace Vertex {
+
     template<typename T, int location>
     struct VulkanBufferBinding
     {
@@ -33,4 +35,5 @@ namespace Vertex {
             return attributeDescriptions;
         }
     };
+    
 }

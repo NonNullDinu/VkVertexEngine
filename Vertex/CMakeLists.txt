@@ -15,6 +15,10 @@ file(GLOB_RECURSE VX_HEADERS
         src/ImGui/*.h
 
         deps/glm/glm/*.hpp)
+
+file(GLOB VX_GL_SOURCES src/GL/*.cpp)
+file(GLOB VX_GL_HEADERS src/GL/*.h)
+        
 if ($ENV{USE_VK})
     file(GLOB_RECURSE VX_GRAPHICS_SOURCES src/GL/Vulkan/*.cpp)
     file(GLOB_RECURSE VX_GRAPHICS_HEADERS src/GL/Vulkan/*.h)
@@ -94,6 +98,9 @@ endif ()
 add_library(Vertex SHARED
         ${VX_HEADERS}
         ${VX_SOURCES}
+
+        ${VX_GL_HEADERS}
+        ${VX_GL_SOURCES}
 
         ${IMGUI_IMPL_HEADERS}
         ${IMGUI_IMPL_SOURCES}

@@ -5,9 +5,6 @@
 #include "Core/Input.h"
 #include "WindowsInput.h"
 
-#include "Renderer/GraphicsContext.h"
-#include "GL/OpenGL/OpenGLContext.h"
-
 namespace Vertex {
 
     class WindowsWindow : public Window

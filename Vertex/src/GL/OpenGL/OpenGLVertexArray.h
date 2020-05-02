@@ -2,9 +2,9 @@
 
 #include "Core/Core.h"
 
-#include "Renderer/VertexArray.h"
+#include "GL/VertexArray.h"
 
-#include "Renderer/Shader.h"
+#include "GL/Shader.h"
 
 namespace Vertex {
 

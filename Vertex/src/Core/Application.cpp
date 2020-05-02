@@ -144,7 +144,6 @@ namespace Vertex {
             for (Layer* layer : m_LayerStack)
                 layer->OnUpdate();
 
-
             // --------------- ImGui ----------------
 
             m_ImGuiLayer->Begin();
