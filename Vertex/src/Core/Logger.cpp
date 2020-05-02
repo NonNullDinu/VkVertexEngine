@@ -8,13 +8,16 @@ namespace Vertex {
     void CoreLogger::Init()
     {
         s_Logger = spdlog::stdout_color_mt("VX_CORE");
-        s_Logger->set_level(vx_log_level::debug);
+        s_Logger->set_level(vx_log_level_debug);
     }
 
-    ClientLogger::ClientLogger(const char* name, const vx_log_level_type level)
+    ClientLogger ClientLogger::s_Instance;
+    std::shared_ptr<spdlog::logger> ClientLogger::s_Logger;
+
+    void ClientLogger::Init()
     {
-        m_Logger = spdlog::stdout_color_mt(name);
-        m_Logger->set_level(level);
+        s_Logger = spdlog::stdout_color_mt("VX_CLIENT");
+        s_Logger->set_level(vx_log_level_info);
     }
 
 }
