@@ -17,13 +17,6 @@ class ImGuiLayer; // <- forward declare it to be accessible from application
 #include "Renderer/VertexArray.h"
 #include "Renderer/Shader.h"
 
-// ------------- TODOS -------------
-/*
-* Abstract Shader class
-* Abstract Window class properly
-*/
-// ---------------------------------
-
 namespace Vertex {
 
     class VX_PUBLIC_API Application

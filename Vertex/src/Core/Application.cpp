@@ -20,6 +20,8 @@ namespace Vertex {
         // --------- Will be abstracted ---------
         // --------------------------------------
 
+#if defined(VX_RENDER_API_OPENGL)
+
         float vertices[21] = {
             -0.5f, -0.5f, 0.0f,   0.4f, 0.8f, 0.4f, 1.0f,
              0.5f, -0.5f, 0.0f,   0.4f, 0.8f, 0.4f, 1.0f,
@@ -93,6 +95,8 @@ namespace Vertex {
         // --------------------------------------
         // --------------------------------------
         // --------------------------------------
+
+#endif // VX_RENDER_API_OPENGL
 
         s_AppInstance = this;
 
