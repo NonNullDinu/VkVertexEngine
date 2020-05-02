@@ -2,6 +2,27 @@
 
 namespace Vertex {
 
+    GLenum ShaderDataTypeToOpenGL(ShaderDataType type)
+    {
+        switch(type)
+        {
+            case ShaderDataType::Bool   : return GL_BOOL;
+            case ShaderDataType::Mat3   : return GL_FLOAT;
+            case ShaderDataType::Mat4   : return GL_FLOAT;
+            case ShaderDataType::Int    : return GL_INT;
+            case ShaderDataType::Int2   : return GL_INT;
+            case ShaderDataType::Int3   : return GL_INT;
+            case ShaderDataType::Int4   : return GL_INT;
+            case ShaderDataType::Float  : return GL_FLOAT;
+            case ShaderDataType::Float2 : return GL_FLOAT;
+            case ShaderDataType::Float3 : return GL_FLOAT;
+            case ShaderDataType::Float4 : return GL_FLOAT;
+        }
+
+        CoreLogger::Get()->error("Unknown shader data type, cancelling...");
+        return 0;
+    }
+
     OpenGLShader::OpenGLShader(const char* vertex_src, const char* fragment_src) : m_UniformPack (&m_ID)
     {
         // from khronos.org
@@ -30,7 +51,7 @@ namespace Vertex {
             // We don't need the shader anymore.
             glDeleteShader(vertex_shader);
             
-            Logger::GetCoreLogger()->error("{0}", infoLog.data());
+            CoreLogger::Get()->error("{0}", infoLog.data());
             VX_CORE_ASSERT(false, "Vertex Shader compilation failed");
         }
 
@@ -59,7 +80,7 @@ namespace Vertex {
             // Either of them. Don't leak shaders.
             glDeleteShader(vertex_shader);
             
-            Logger::GetCoreLogger()->error("{0}", infoLog.data());
+            CoreLogger::Get()->error("{0}", infoLog.data());
             VX_CORE_ASSERT(false, "Fragment Shader compilation failed");
         }
 
@@ -93,7 +114,7 @@ namespace Vertex {
             glDeleteShader(vertex_shader);
             glDeleteShader(fragment_shader);
 
-            Logger::GetCoreLogger()->error("{0}", infoLog.data());
+            CoreLogger::Get()->error("{0}", infoLog.data());
             VX_CORE_ASSERT(false, "Shader linking failed");
         }
 

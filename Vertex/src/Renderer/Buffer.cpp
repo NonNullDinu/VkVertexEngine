@@ -1,17 +1,13 @@
 #include "Buffer.h"
 
-#if defined(VX_RENDER_API_OPENGL)
-#include "GL/OpenGL/OpenGLBuffer.h"
-#endif
-
 namespace Vertex {
 
-    VertexBuffer* VertexBuffer::Create(float* vertices, size_t size)
+    VertexBuffer* VertexBuffer::Create(float* vertices, size_t size, const BufferLayout& layout)
     {
 #if defined(VX_RENDER_API_OPENGL)
-        return new OpenGLVertexBuffer(vertices, size);
-#elif defined(VX_RENDER_API_VULKAN)
-        return nullptr;//for now
+        return new OpenGLVertexBuffer(vertices, size, layout);
+#else
+        return nullptr; // for now
 #endif
     }
 
@@ -19,8 +15,8 @@ namespace Vertex {
     {
 #if defined(VX_RENDER_API_OPENGL)
         return new OpenGLIndexBuffer(indices, size);
-#elif defined(VX_RENDER_API_VULKAN)
-        return nullptr;//for now
+#else
+        return nullptr; // for now
 #endif
     }
 

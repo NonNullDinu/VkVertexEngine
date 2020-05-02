@@ -31,3 +31,5 @@
 #include "Core/EntryPoint.h"
 // -------------------------------------
 #include "Core/Application.h"
+
+#include "Core/Logger.h"

@@ -1,5 +1,6 @@
 #include "VulkanContext.h"
 #include "VulkanShaderPipeline.h"
+#include "VulkanExtensions.h"
 
 namespace Vertex {
     static VKAPI_ATTR VkBool32 VKAPI_CALL VulkanDebugCallback(
@@ -9,7 +10,7 @@ namespace Vertex {
         void* pUserData)
     {
 
-        Logger::GetCoreLogger()->debug("validation layer: {}", pCallbackData->pMessage);
+        CoreLogger::Get()->debug("validation layer: {}", pCallbackData->pMessage);
 
         return VK_FALSE;
     }
@@ -44,6 +45,7 @@ namespace Vertex {
         : m_WindowHandle(window)
     {
         InitVulkan();
+        LoadVkExtensions(m_VkInstance);
         InitVulkanDebugger();
         CreateSurface();
         PickPhysicalDevice();
@@ -58,12 +60,12 @@ namespace Vertex {
         CreateDescriptorPool();
 
         s_Context.reset(this);
-        Logger::GetCoreLogger()->info("Created the Vulkan Context");
+        CoreLogger::Get()->info("Created the Vulkan Context");
     }
 
     VulkanContext::~VulkanContext()
     {
-        Logger::GetCoreLogger()->info("Cleaning up the Vulkan Context");
+        CoreLogger::Get()->info("Cleaning up the Vulkan Context");
         CleanUpContext();
     }
 
@@ -190,10 +192,12 @@ namespace Vertex {
         }
 
         vkDestroyDevice(m_Device, nullptr);
-//        VulkanDestroyDebugUtilsMessengerEXT(m_VkInstance, m_DebugMessenger, nullptr);
+        VulkanDestroyDebugUtilsMessengerEXT(m_VkInstance, m_DebugMessenger, nullptr);
         vkDestroySurfaceKHR(m_VkInstance, m_Surface, nullptr);
+        UnloadVkExtensions(m_VkInstance);
         vkDestroyInstance(m_VkInstance, nullptr);
     }
+  
     void VulkanContext::InitVulkan()
     {
         if constexpr (EnableValidationLayers)
@@ -797,6 +801,7 @@ namespace Vertex {
     {
         return s_Context;
     }
+
     std::vector<const char*> VulkanContext::GetRequiredExtensions()
     {
         uint32_t glfwExtensionCount = 0;

@@ -100,8 +100,7 @@ target_include_directories(Vertex
 
 # use the libs specified above in PLATFORM_SPECIFIC_LIBS and glad
 target_link_libraries(Vertex
-        PUBLIC ${PLATFORM_SPECIFIC_LIBS} glad imgui
-        )
+        PUBLIC ${PLATFORM_SPECIFIC_LIBS} glad imgui)
 
 set_target_properties(Vertex PROPERTIES POSITION_INDEPENDENT_CODE ON)
 set_target_properties(Vertex PROPERTIES PUBLIC_HEADER include/Vertex.h)

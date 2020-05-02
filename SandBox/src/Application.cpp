@@ -6,6 +6,7 @@ public:
 	TestLayer(const char* name = "TestLayer")
 		: Layer(name)
 	{
+		Vertex::ClientLogger::Info("Initialized test layer");
 	}
 
 	void OnUpdate() override

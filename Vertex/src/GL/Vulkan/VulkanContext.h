@@ -1,8 +1,10 @@
 #pragma once
-#include <Renderer/GraphicsContext.h>
+
+#include "Renderer/GraphicsContext.h"
 
 namespace Vertex {
     class VulkanShaderPipeline;
+
     class VulkanContext : public GraphicsContext
     {
     public:
@@ -44,6 +46,7 @@ namespace Vertex {
         inline VkPipelineLayout GetPipelineLayout() { return m_PipelineLayout; }
 
         static std::shared_ptr<VulkanContext> GetContext();
+        
      private:
         GLFWwindow* m_WindowHandle;
         VkInstance m_VkInstance;
@@ -113,4 +116,5 @@ namespace Vertex {
         static std::shared_ptr<VulkanContext> s_Context;
         void PopulateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
     };
+
 }

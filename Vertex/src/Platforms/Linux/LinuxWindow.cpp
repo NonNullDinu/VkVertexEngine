@@ -10,7 +10,7 @@ namespace Vertex {
     
     static void GLFWErrorCallback(int error, const char* description)
     {
-        Logger::GetCoreLogger()->error("GLFW error {0} : {1}", error, description);
+        CoreLogger::Get()->error("GLFW error {0} : {1}", error, description);
     }
 
     namespace GLFWInputCallbacks
@@ -40,7 +40,7 @@ namespace Vertex {
 
             if (properties == nullptr)
             {
-                Logger::GetCoreLogger()->error("Null window properties");
+                CoreLogger::Get()->error("Null window properties");
                 return;
             }
 
@@ -80,7 +80,7 @@ namespace Vertex {
 
             if (properties == nullptr)
             {
-                Logger::GetCoreLogger()->error("Null window properties");
+                CoreLogger::Get()->error("Null window properties");
                 return;
             }
 
@@ -102,7 +102,7 @@ namespace Vertex {
 
             if (properties == nullptr)
             {
-                Logger::GetCoreLogger()->error("Null window properties");
+                CoreLogger::Get()->error("Null window properties");
                 return;
             }
 
@@ -116,7 +116,7 @@ namespace Vertex {
 
             if (properties == nullptr)
             {
-                Logger::GetCoreLogger()->error("Null window properties");
+                CoreLogger::Get()->error("Null window properties");
                 return;
             }
 
@@ -129,7 +129,7 @@ namespace Vertex {
 
             if (properties == nullptr)
             {
-                Logger::GetCoreLogger()->error("Null window properties");
+                CoreLogger::Get()->error("Null window properties");
                 return;
             }
 
@@ -150,7 +150,7 @@ namespace Vertex {
 
             if (properties == nullptr)
             {
-                Logger::GetCoreLogger()->error("Null window properties");
+                CoreLogger::Get()->error("Null window properties");
                 return;
             }
             
@@ -172,14 +172,14 @@ namespace Vertex {
     LinuxWindow::LinuxWindow(WindowProperties properties)
         : m_Data(properties)
     {
-        Logger::GetCoreLogger()->info("Creating window {0}", m_Data.title);
+        CoreLogger::Get()->info("Creating window {0}...", m_Data.title);
 
         if (!s_GLFW_Initialized)
         {
             int success = glfwInit();
 
             if (!success)
-                Logger::GetCoreLogger()->error("Could not initialize GLFW");
+                CoreLogger::Get()->error("Could not initialize GLFW");
 
             s_GLFW_Initialized = true;
         }
@@ -221,8 +221,6 @@ namespace Vertex {
 
     void LinuxWindow::ShutDown()
     {
-#if VX_RENDER_API == VX_RENDER_API_VULKAN
-#endif
         glfwDestroyWindow(m_Window); // we may want to shutdown before the window's scope is over
     }
 
