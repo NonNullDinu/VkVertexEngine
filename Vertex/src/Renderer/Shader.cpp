@@ -50,8 +50,8 @@ namespace Vertex {
     {
 #if defined(VX_RENDER_API_OPENGL)
         return new OpenGLShader(vertex_src, fragment_src);
-#else
-        return nullptr;
+#else 
+         return nullptr; // for now
 #endif
     }
 

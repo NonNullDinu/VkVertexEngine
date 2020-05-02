@@ -34,21 +34,47 @@ namespace Vertex {
         Application& app = Application::Get();
 
         GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
-
+#if defined(VX_RENDER_API_OPENGL)
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init("#version 410");
+#elif defined(VX_RENDER_API_VULKAN)
+        ImGui_ImplGlfw_InitForVulkan(window, true);
+        ImGui_ImplVulkan_InitInfo init_info {};
+        std::shared_ptr<VulkanContext> context = VulkanContext::GetContext();
+        init_info.Instance = context->GetInstance();
+        init_info.PhysicalDevice = context->GetPhysicalDevice();
+        init_info.Device = context->GetDevice();
+        init_info.Queue = context->GetQueue();
+        init_info.QueueFamily = VK_QUEUE_GRAPHICS_BIT;
+        init_info.PipelineCache = nullptr;
+        init_info.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
+        init_info.Allocator = nullptr;
+        init_info.CheckVkResultFn = nullptr;
+        init_info.DescriptorPool = context->GetDescriptorPool();
+        init_info.MinImageCount = context->GetSwapChainImages().size();
+        init_info.ImageCount = context->GetSwapChainImages().size();
+        ImGui_ImplVulkan_Init(&init_info, context->GetRenderPass());
+#endif
     }
 
     void ImGuiLayer::OnDetach()
     {
+#if defined(VX_RENDER_API_OPENGL)
         ImGui_ImplOpenGL3_Shutdown();
+#elif defined(VX_RENDER_API_VULKAN)
+        ImGui_ImplVulkan_Shutdown();
+#endif
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
     }
 
     void ImGuiLayer::Begin()
     {
+#if defined(VX_RENDER_API_OPENGL)
         ImGui_ImplOpenGL3_NewFrame();
+#elif defined(VX_RENDER_API_VULKAN)
+        ImGui_ImplVulkan_NewFrame();
+#endif
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
     }
@@ -60,9 +86,14 @@ namespace Vertex {
 		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
 
 		// Rendering
+#if defined(VX_RENDER_API_OPENGL)
 		ImGui::Render();
+#endif
+#if defined(VX_RENDER_API_OPENGL)
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
+#elif defined(VX_RENDER_API_VULKAN)
+		ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), VulkanContext::GetContext()->GetCurrentCommandBuffer());
+#endif
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		{
 			GLFWwindow* backup_current_context = glfwGetCurrentContext();
