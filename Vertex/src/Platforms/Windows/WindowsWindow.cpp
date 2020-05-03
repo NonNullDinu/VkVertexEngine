@@ -186,6 +186,10 @@ namespace Vertex {
 
         glfwSetErrorCallback(GLFWErrorCallback);
 
+#if defined(VX_RENDER_API_DIRECTX12)
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+#endif
+
         m_Window = glfwCreateWindow((int)m_Data.width, (int)m_Data.height, m_Data.title, nullptr, nullptr);
 
         m_Context.reset(GraphicsContext::Create(m_Window));

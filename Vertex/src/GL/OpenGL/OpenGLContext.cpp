@@ -34,8 +34,4 @@ namespace Vertex {
         m_NeedViewportUpdate = true;
     }
 
-    void OpenGLContext::CleanUpContext()
-    {
-        
-    }
 }

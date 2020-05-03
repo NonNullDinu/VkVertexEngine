@@ -168,12 +168,14 @@ namespace Vertex {
 
     void Application::Render()
     {
+#ifndef VX_RENDER_API_DIRECTX12
         m_ImGuiLayer->Begin();
 
         for (Layer* layer : m_LayerStack)
             layer->OnImguiRender();
 
         m_ImGuiLayer->End();
+#endif
     }
 
     // Application specific event callbacks

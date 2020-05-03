@@ -68,6 +68,9 @@ if (WIN32)
         find_package(Vulkan REQUIRED) # Vulkan
         set(GRAPHICS_LIB_INCLUDES ${Vulkan_INCLUDE_DIRS})
         set(GRAPHICS_LIBS ${Vulkan_LIBRARIES})
+    elseif ($ENV{USE_DX12})
+        set(GRAPHICS_LIB_INCLUDES deps/d3dx12)
+        set(GRAPHICS_LIBS d3d12 dxgi dxguid)
     else ()
         find_package(OpenGL REQUIRED) # OpenGL
         set(GRAPHICS_LIB_INCLUDES ${OPENGL_INCLUDE_DIR} deps/glad/include)

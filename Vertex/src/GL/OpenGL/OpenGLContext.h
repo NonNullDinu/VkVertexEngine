@@ -17,12 +17,13 @@ namespace Vertex {
 
         void NotifyResize(int new_width, int new_height) override;
 
-        void CleanUpContext() override;
+        void CleanUpContext() override {}
 
     private:
         GLFWwindow* m_WindowHandle;
 
         int m_CurrentWidth, m_CurrentHeight;
+        
         bool m_NeedViewportUpdate;
     };
 
