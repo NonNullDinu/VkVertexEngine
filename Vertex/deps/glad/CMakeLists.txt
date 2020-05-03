@@ -4,7 +4,9 @@ project(glad)
 
 add_library(glad STATIC src/glad.c)
 
-target_link_libraries(glad PRIVATE dl)
+if(UNIX)
+    target_link_libraries(glad PRIVATE dl)
+endif()
 
 set_target_properties(glad PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
