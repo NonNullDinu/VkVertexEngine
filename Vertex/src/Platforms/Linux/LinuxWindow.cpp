@@ -222,7 +222,7 @@ namespace Vertex {
     void LinuxWindow::ShutDown()
     {
 #if VX_RENDER_API == VX_RENDER_API_VULKAN
-#endif
+#endif // ?
         glfwDestroyWindow(m_Window); // we may want to shutdown before the window's scope is over
     }
 
@@ -230,6 +230,19 @@ namespace Vertex {
     {
         glfwPollEvents();
         m_Context->SwapBuffers();
+    }
+
+    void LinuxWindow::OnEvent(Event& event)
+    {
+        EventHandler handler(event);
+        handler.Dispatch<EventTypes::WindowResize, WindowResizeEvent>(VX_BIND_FUNC_1(LinuxWindow::OnWindowResizeEvent));
+    }
+
+    // event callbacks
+    bool LinuxWindow::OnWindowResizeEvent(WindowResizeEvent& event)
+    {
+        m_Context->NotifyResize(event.GetWidth(), event.GetHeight());
+        return false; // <- for now
     }
 
 }

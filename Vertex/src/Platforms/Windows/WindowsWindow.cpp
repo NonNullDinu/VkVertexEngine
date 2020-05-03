@@ -222,4 +222,17 @@ namespace Vertex {
         m_Context->SwapBuffers();
     }
 
+    void WindowsWindow::OnEvent(Event& event)
+    {
+        EventHandler handler(event);
+        handler.Dispatch<EventTypes::WindowResize, WindowResizeEvent>(VX_BIND_FUNC_1(WindowsWindow::OnWindowResizeEvent));
+    }
+
+    // event callbacks
+    bool WindowsWindow::OnWindowResizeEvent(WindowResizeEvent& event)
+    {
+        m_Context->NotifyResize(event.GetWidth(), event.GetHeight());
+        return false; // <- for now
+    }
+
 }
