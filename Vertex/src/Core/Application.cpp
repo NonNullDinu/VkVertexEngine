@@ -128,7 +128,7 @@ namespace Vertex {
         while (m_Running)
         {
             // ------------- Temporary --------------
-#ifdef VX_RENDER_API_OPENGL
+#if defined(VX_RENDER_API_OPENGL)
             glClearColor(0.1f, 0.1f, 0.12f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
