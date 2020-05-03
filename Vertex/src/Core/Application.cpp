@@ -100,7 +100,7 @@ namespace Vertex {
 
         s_AppInstance = this;
 
-        ImGuiLayer* m_ImGuiLayer = new ImGuiLayer();
+        m_ImGuiLayer = new ImGuiLayer();
         PushOverlay(m_ImGuiLayer);
     }
 
@@ -127,7 +127,7 @@ namespace Vertex {
         while (m_Running)
         {
             // ------------- Temporary --------------
-
+#ifdef VX_RENDER_API_OPENGL
             glClearColor(0.1f, 0.1f, 0.12f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
@@ -138,7 +138,7 @@ namespace Vertex {
 
             m_VertexArray2->Bind();
             glDrawElements(GL_TRIANGLES, m_IndexBuffer2->GetCount(), GL_UNSIGNED_INT, nullptr);
-
+#endif
             // --------------------------------------
 
             for (Layer* layer : m_LayerStack)

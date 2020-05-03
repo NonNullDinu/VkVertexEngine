@@ -136,12 +136,6 @@ else ()
     add_compile_definitions(VX_RENDER_API_OPENGL)
 endif ()
 
-if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-    target_compile_definitions(Vertex PRIVATE VX_TARGET_DEBUG=1)
-else ()
-    target_compile_definitions(Vertex PRIVATE VX_TARGET_DEBUG=0)
-endif()
-
 
 if ($ENV{CLION_IDE})
     target_compile_options(Vertex PRIVATE -include Core/vx_pch.h)

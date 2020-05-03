@@ -15,15 +15,6 @@ namespace Vertex {
         return VK_FALSE;
     }
 
-    static void
-    VulkanDestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator)
-    {
-        auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
-        if (func != nullptr)
-        {
-            func(instance, debugMessenger, pAllocator);
-        }
-    }
     constexpr int MAX_FRAMES_IN_FLIGHT = 2;
     static const std::vector<const char*> VulkanDeviceExtensions = {
         VK_KHR_SWAPCHAIN_EXTENSION_NAME
@@ -33,10 +24,10 @@ namespace Vertex {
         "VK_LAYER_KHRONOS_validation"
     };
     constexpr bool EnableValidationLayers =
-#if VX_TARGET_DEBUG
+#ifdef VX_CONFIGURATION_DEBUG
         true
 #else
-        false
+    false
 #endif
     ;
 
@@ -46,7 +37,10 @@ namespace Vertex {
     {
         InitVulkan();
         LoadVkExtensions(m_VkInstance);
-        InitVulkanDebugger();
+        if constexpr (EnableValidationLayers)
+        {
+            InitVulkanDebugger();
+        }
         CreateSurface();
         PickPhysicalDevice();
         CreateLogicalDevice();
@@ -192,12 +186,15 @@ namespace Vertex {
         }
 
         vkDestroyDevice(m_Device, nullptr);
-        VulkanDestroyDebugUtilsMessengerEXT(m_VkInstance, m_DebugMessenger, nullptr);
+        if constexpr (EnableValidationLayers)
+        {
+            vkDestroyDebugUtilsMessengerEXT(m_VkInstance, m_DebugMessenger, nullptr);
+        }
         vkDestroySurfaceKHR(m_VkInstance, m_Surface, nullptr);
         UnloadVkExtensions(m_VkInstance);
         vkDestroyInstance(m_VkInstance, nullptr);
     }
-  
+
     void VulkanContext::InitVulkan()
     {
         if constexpr (EnableValidationLayers)
@@ -214,7 +211,7 @@ namespace Vertex {
         appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
         appInfo.pEngineName = "Vertex Engine";
         appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-        appInfo.apiVersion = VK_API_VERSION_1_0;
+        appInfo.apiVersion = VK_API_VERSION_1_2;
 
         VkInstanceCreateInfo createInfo{};
         createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
@@ -223,19 +220,21 @@ namespace Vertex {
         uint32_t glfwExtensionCount = 0;
         const char** glfwExtensions;
 
-        glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-
-        createInfo.enabledExtensionCount = glfwExtensionCount;
-        createInfo.ppEnabledExtensionNames = glfwExtensions;
+        auto req_extensions = GetRequiredExtensions();
+        createInfo.enabledExtensionCount = static_cast<uint32_t>(req_extensions.size());
+        createInfo.ppEnabledExtensionNames = req_extensions.data();
 
         VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo;
-        if constexpr (EnableValidationLayers) {
+        if constexpr (EnableValidationLayers)
+        {
             createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
             createInfo.ppEnabledLayerNames = validationLayers.data();
 
             PopulateDebugMessengerCreateInfo(debugCreateInfo);
-            createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*) &debugCreateInfo;
-        } else {
+            createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*)&debugCreateInfo;
+        }
+        else
+        {
             createInfo.enabledLayerCount = 0;
 
             createInfo.pNext = nullptr;
@@ -254,11 +253,16 @@ namespace Vertex {
         vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
     }
 
-    void VulkanContext::PopulateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo) {
+    void VulkanContext::PopulateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo)
+    {
         createInfo = {};
         createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-        createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
-        createInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+        createInfo.messageSeverity =
+            VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT
+            | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+        createInfo.messageType =
+            VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT
+            | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
         createInfo.pfnUserCallback = VulkanDebugCallback;
     }
 
@@ -268,7 +272,8 @@ namespace Vertex {
 
         PopulateDebugMessengerCreateInfo(createInfo);
 
-        if (vkCreateDebugUtilsMessengerEXT(m_VkInstance, &createInfo, nullptr, &m_DebugMessenger) != VK_SUCCESS) {
+        if (vkCreateDebugUtilsMessengerEXT(m_VkInstance, &createInfo, nullptr, &m_DebugMessenger) != VK_SUCCESS)
+        {
             VX_CORE_ASSERT(false, "vkCreateDebugUtilsMessengerEXT failed");
         }
     }
@@ -669,21 +674,28 @@ namespace Vertex {
 
     void VulkanContext::CreateDescriptorPool()
     {
-        VkDescriptorPoolSize poolSize{};
-        poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        poolSize.descriptorCount = static_cast<uint32_t>(m_SwapChainImages.size());
-
-        VkDescriptorPoolCreateInfo poolInfo{};
-        poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-        poolInfo.poolSizeCount = 1;
-        poolInfo.pPoolSizes = &poolSize;
-
-        poolInfo.maxSets = static_cast<uint32_t>(m_SwapChainImages.size());;
-
-//        ...
-
-        if (vkCreateDescriptorPool(m_Device, &poolInfo, nullptr, &m_DescriptorPool) != VK_SUCCESS)
+        std::vector<VkDescriptorPoolSize> pool_sizes =
         {
+            { VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },
+            { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000 },
+            { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000 },
+            { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1000 },
+            { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1000 },
+            { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1000 },
+            { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000 },
+            { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1000 },
+            { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1000 },
+            { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000 },
+            { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000 }
+        };
+        VkDescriptorPoolCreateInfo pool_info = {};
+        pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+        pool_info.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+        pool_info.maxSets = 1000 * pool_sizes.size();
+        pool_info.poolSizeCount = (uint32_t)pool_sizes.size();
+        pool_info.pPoolSizes = pool_sizes.data();
+
+        if(vkCreateDescriptorPool(m_Device, &pool_info, nullptr, &m_DescriptorPool) != VK_SUCCESS){
             VX_CORE_ASSERT(false, "vkCreateDescriptorPool failed");
         }
     }
@@ -813,6 +825,7 @@ namespace Vertex {
         if constexpr (EnableValidationLayers)
         {
             extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+            extensions.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
         }
 
         return extensions;

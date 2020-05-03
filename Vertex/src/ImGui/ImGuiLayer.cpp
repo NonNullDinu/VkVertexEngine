@@ -19,7 +19,8 @@ namespace Vertex {
     {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        ImGuiIO& io = ImGui::GetIO();
+        (void)io;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
@@ -39,21 +40,28 @@ namespace Vertex {
         ImGui_ImplOpenGL3_Init("#version 410");
 #elif defined(VX_RENDER_API_VULKAN)
         ImGui_ImplGlfw_InitForVulkan(window, true);
-        ImGui_ImplVulkan_InitInfo init_info {};
+        ImGui_ImplVulkan_InitInfo init_info = {};
         std::shared_ptr<VulkanContext> context = VulkanContext::GetContext();
         init_info.Instance = context->GetInstance();
         init_info.PhysicalDevice = context->GetPhysicalDevice();
         init_info.Device = context->GetDevice();
+        init_info.QueueFamily = context->GetQueueFamily();
         init_info.Queue = context->GetQueue();
-        init_info.QueueFamily = VK_QUEUE_GRAPHICS_BIT;
-        init_info.PipelineCache = nullptr;
-        init_info.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
-        init_info.Allocator = nullptr;
-        init_info.CheckVkResultFn = nullptr;
+        init_info.PipelineCache = VK_NULL_HANDLE;
         init_info.DescriptorPool = context->GetDescriptorPool();
+        init_info.Allocator = nullptr;
         init_info.MinImageCount = context->GetSwapChainImages().size();
         init_info.ImageCount = context->GetSwapChainImages().size();
+        init_info.CheckVkResultFn = [](VkResult result) -> void
+        {
+            if (result != VK_SUCCESS)
+            {
+                CoreLogger::Get()->error("Something went wrong in dear imgui");
+            }
+        };
         ImGui_ImplVulkan_Init(&init_info, context->GetRenderPass());
+
+        io.Fonts->AddFontDefault();
 #endif
     }
 
@@ -74,41 +82,40 @@ namespace Vertex {
         ImGui_ImplOpenGL3_NewFrame();
 #elif defined(VX_RENDER_API_VULKAN)
         ImGui_ImplVulkan_NewFrame();
+        ImGui_ImplVulkan_CreateFontsTexture(VulkanContext::GetContext()->GetCurrentCommandBuffer());
 #endif
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
     }
 
     void ImGuiLayer::End()
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		Application& app = Application::Get();
-		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
+    {
+        ImGuiIO& io = ImGui::GetIO();
+        Application& app = Application::Get();
+        io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
 
-		// Rendering
+        // Rendering
+        ImGui::Render();
 #if defined(VX_RENDER_API_OPENGL)
-		ImGui::Render();
-#endif
-#if defined(VX_RENDER_API_OPENGL)
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 #elif defined(VX_RENDER_API_VULKAN)
-		ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), VulkanContext::GetContext()->GetCurrentCommandBuffer());
+        ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), VulkanContext::GetContext()->GetCurrentCommandBuffer());
 #endif
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-		{
-			GLFWwindow* backup_current_context = glfwGetCurrentContext();
-			ImGui::UpdatePlatformWindows();
-			ImGui::RenderPlatformWindowsDefault();
-			glfwMakeContextCurrent(backup_current_context);
-		}
-	}
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            GLFWwindow* backup_current_context = glfwGetCurrentContext();
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+            glfwMakeContextCurrent(backup_current_context);
+        }
+    }
 
     void ImGuiLayer::OnImguiRender()
     {
-        // bool show = true;
-        // ShowDockSpace(&show);
-        // ImGui::Begin("Test win");
-        // ImGui::End();
+        bool show = true;
+        ShowDockSpace(&show);
+        ImGui::Begin("Test win");
+        ImGui::End();
     }
 }
 
@@ -130,7 +137,8 @@ void ShowDockSpace(bool* p_open)
         ImGui::SetNextWindowViewport(viewport->ID);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-        window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+        window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
+                        | ImGuiWindowFlags_NoMove;
         window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
     }
 

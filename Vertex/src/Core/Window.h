@@ -11,6 +11,7 @@ namespace Vertex {
     class Window
     {
     public:
+        virtual ~Window() = default;
         virtual void OnUpdate() = 0;
 
         virtual unsigned int GetWidth() const = 0;

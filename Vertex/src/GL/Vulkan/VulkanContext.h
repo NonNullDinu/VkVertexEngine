@@ -44,6 +44,7 @@ namespace Vertex {
         inline VkDescriptorPool GetDescriptorPool() { return m_DescriptorPool; }
         inline std::vector<VkImage> GetSwapChainImages() { return m_SwapChainImages; }
         inline VkPipelineLayout GetPipelineLayout() { return m_PipelineLayout; }
+        inline uint32_t GetQueueFamily() {return FindQueueFamilies(m_PhysicalDevice).graphicsFamily.value();}
 
         static std::shared_ptr<VulkanContext> GetContext();
         
