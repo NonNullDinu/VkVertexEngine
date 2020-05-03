@@ -201,7 +201,7 @@ namespace Vertex {
         {
             if (!CheckValidationLayerSupport())
             {
-                throw std::runtime_error("validation layers requested, but not available!");
+                VX_CORE_ASSERT(false, "validation layers requested, but not available");
             }
         }
 
@@ -475,7 +475,7 @@ namespace Vertex {
 
         if (vkCreatePipelineLayout(m_Device, &pipelineLayoutInfo, nullptr, &m_PipelineLayout) != VK_SUCCESS)
         {
-            throw std::runtime_error("failed to create pipeline layout!");
+            VX_CORE_ASSERT(false, "vkCreatePipelineLayout failed");
         }
     }
 
@@ -667,7 +667,7 @@ namespace Vertex {
                 vkCreateSemaphore(m_Device, &semaphoreInfo, nullptr, &m_RenderFinishedSemaphores[i]) != VK_SUCCESS ||
                 vkCreateFence(m_Device, &fenceInfo, nullptr, &m_InFlightFences[i]) != VK_SUCCESS)
             {
-                throw std::runtime_error("failed to create synchronization objects for a frame!");
+                VX_CORE_ASSERT(false, "failed to create synchronization objects for a frame");
             }
         }
     }

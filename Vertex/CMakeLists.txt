@@ -63,14 +63,25 @@ if (WIN32)
     file(GLOB_RECURSE VX_PLATFORM_HEADERS src/Platforms/Windows/*.h)
     file(GLOB_RECURSE VX_PLATFORM_SOURCES src/Platforms/Windows/*.cpp)
 
+    # add opengl/vulkan
+    if ($ENV{USE_VK})
+        find_package(Vulkan REQUIRED) # Vulkan
+        set(GRAPHICS_LIB_INCLUDES ${Vulkan_INCLUDE_DIRS})
+        set(GRAPHICS_LIBS ${Vulkan_LIBRARIES})
+    else ()
+        find_package(OpenGL REQUIRED) # OpenGL
+        set(GRAPHICS_LIB_INCLUDES ${OPENGL_INCLUDE_DIR} deps/glad/include)
+        set(GRAPHICS_LIBS ${OPENGL_LIBRARIES})
+    endif ()
+
     # Add glfw
     add_subdirectory(deps/glfw)
 
     # The include paths specific to building Vertex on windows to be used for target_include_directory
-    set(PLATFORM_SPECIFIC_INCLUDES deps/glad/include deps/glfw/include ${GLFW_INCLUDE_DIRS})
+    set(PLATFORM_SPECIFIC_INCLUDES ${GRAPHICS_LIB_INCLUDES} deps/glfw/include ${GLFW_INCLUDE_DIRS})
 
     # The libraries specific to building on windows
-    set(PLATFORM_SPECIFIC_LIBS glfw)
+    set(PLATFORM_SPECIFIC_LIBS ${GRAPHICS_LIBS} glfw)
 elseif (UNIX AND NOT APPLE) # e.g. pretty much linux
     # same explanation as above, but for linux
     file(GLOB_RECURSE VX_PLATFORM_HEADERS src/Platforms/Linux/*.h)
