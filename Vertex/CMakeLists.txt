@@ -97,7 +97,7 @@ else ()
     message(FATAL_ERROR Unsupported platform)
 endif ()
 
-add_library(Vertex SHARED
+add_library(Vertex STATIC
         ${VX_HEADERS}
         ${VX_SOURCES}
 
@@ -113,12 +113,11 @@ add_library(Vertex SHARED
         ${VX_GRAPHICS_HEADERS}
         ${VX_GRAPHICS_SOURCES})
 
-## Fails for some reason
-# if ($ENV{VX_RELEASE})
-#     set_property(TARGET Vertex PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded")
-# else ()
-#     set_property(TARGET Vertex PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreadedDebug")
-# endif ()
+if ($ENV{VX_RELEASE})
+    set_property(TARGET Vertex PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded")
+else ()
+    set_property(TARGET Vertex PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreadedDebug")
+endif ()
 
 # add the paths in PLATFORM_SPECIFIC_INCLUDES to Vertex's include directories
 target_include_directories(Vertex
