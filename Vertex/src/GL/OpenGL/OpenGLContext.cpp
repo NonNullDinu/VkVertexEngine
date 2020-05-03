@@ -35,5 +35,7 @@ namespace Vertex {
     }
 
     void OpenGLContext::CleanUpContext()
-    {}
+    {
+        
+    }
 }

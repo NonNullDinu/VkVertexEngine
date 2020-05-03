@@ -12,6 +12,7 @@ namespace Vertex {
         OpenGLContext(GLFWwindow* window);
 
         void Render() override {}
+        
         void SwapBuffers() override;
 
         void NotifyResize(int new_width, int new_height) override;

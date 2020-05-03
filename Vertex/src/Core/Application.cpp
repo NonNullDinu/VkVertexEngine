@@ -100,8 +100,10 @@ namespace Vertex {
 
         s_AppInstance = this;
 
+#ifndef VX_RENDER_API_DIRECTX12
         m_ImGuiLayer = new ImGuiLayer();
         PushOverlay(m_ImGuiLayer);
+#endif
     }
 
     Application::~Application()
@@ -147,12 +149,14 @@ namespace Vertex {
 
             // --------------- ImGui ----------------
 
+#ifndef VX_RENDER_API_DIRECTX12
             m_ImGuiLayer->Begin();
 
             for (Layer* layer : m_LayerStack)
                 layer->OnImguiRender();
             
             m_ImGuiLayer->End();
+#endif
 
             // --------------------------------------
 

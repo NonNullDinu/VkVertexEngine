@@ -14,6 +14,8 @@ file(GLOB_RECURSE VX_HEADERS
         src/Renderer/*.h
         src/ImGui/*.h
 
+        deps/d3dx12/d3dx12.h
+
         deps/glm/glm/*.hpp)
 
 file(GLOB VX_GL_SOURCES src/GL/*.cpp)
@@ -29,16 +31,16 @@ if ($ENV{USE_VK})
     set(IMGUI_IMPL_SOURCES
             deps/imgui/examples/imgui_impl_glfw.cpp
             deps/imgui/examples/imgui_impl_vulkan.cpp)
-elseif ($ENV{USE_DX11})
-    file(GLOB_RECURSE VX_GRAPHICS_SOURCES src/GL/DirectX11/*.cpp)
-    file(GLOB_RECURSE VX_GRAPHICS_HEADERS src/GL/DirectX11/*.h)
+elseif ($ENV{USE_DX12})
+    file(GLOB_RECURSE VX_GRAPHICS_SOURCES src/GL/DirectX12/*.cpp)
+    file(GLOB_RECURSE VX_GRAPHICS_HEADERS src/GL/DirectX12/*.h)
 
     set(IMGUI_IMPL_HEADERS
             deps/imgui/examples/imgui_impl_glfw.h
-            deps/imgui/examples/imgui_impl_dx11.h)
+            deps/imgui/examples/imgui_impl_dx12.h)
     set(IMGUI_IMPL_SOURCES
             deps/imgui/examples/imgui_impl_glfw.cpp
-            deps/imgui/examples/imgui_impl_dx11.cpp)
+            deps/imgui/examples/imgui_impl_dx12.cpp)
 else () # OpenGL
     file(GLOB_RECURSE VX_GRAPHICS_SOURCES src/GL/OpenGL/*.cpp)
     file(GLOB_RECURSE VX_GRAPHICS_HEADERS src/GL/OpenGL/*.h)
@@ -136,8 +138,8 @@ target_precompile_headers(Vertex PUBLIC src/Core/vx_pch.h)
 
 if ($ENV{USE_VK})
     add_compile_definitions(VX_RENDER_API_VULKAN)
-elseif ($ENV{USE_DX11})
-    add_compile_definitions(VX_RENDER_API_DIRECTX11)
+elseif ($ENV{USE_DX12})
+    add_compile_definitions(VX_RENDER_API_DIRECTX12)
 else ()
     target_compile_definitions(Vertex PRIVATE VX_BUILD_SHARED IMGUI_IMPL_OPENGL_LOADER_GLAD=1)
     add_compile_definitions(VX_RENDER_API_OPENGL)
