@@ -6,6 +6,8 @@ namespace Vertex {
     {
 #if defined(VX_RENDER_API_OPENGL)
         return new OpenGLContext(window_handle);
+#else
+        return nullptr;
 #endif
     }
 
