@@ -2,6 +2,8 @@
 
 #ifndef NDEBUG
     #define VX_CONFIGURATION_DEBUG
+#else
+    #define VX_CONFIGURATION_RELEASE
 #endif
 
 #if defined(_WIN32)

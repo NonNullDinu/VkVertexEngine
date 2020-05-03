@@ -14,6 +14,7 @@ namespace Vertex {
         ~WindowsWindow();
 
         void OnUpdate() override;
+        void OnEvent(Event& event) override;
 
         unsigned int GetWidth() const override { return m_Data.width; }
         unsigned int GetHeight() const override { return m_Data.height; }
@@ -36,11 +37,14 @@ namespace Vertex {
 
     private:
         GLFWwindow* m_Window;
-        GraphicsContext* m_Context;
+        std::shared_ptr<GraphicsContext> m_Context;
         WindowProperties m_Data;
 
     private:
         void ShutDown();
+        
+        // event callbacks
+        bool OnWindowResizeEvent(WindowResizeEvent& event);
     };
 
 }

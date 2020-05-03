@@ -18,7 +18,7 @@ file(GLOB_RECURSE VX_HEADERS
 
 file(GLOB VX_GL_SOURCES src/GL/*.cpp)
 file(GLOB VX_GL_HEADERS src/GL/*.h)
-        
+
 if ($ENV{USE_VK})
     file(GLOB_RECURSE VX_GRAPHICS_SOURCES src/GL/Vulkan/*.cpp)
     file(GLOB_RECURSE VX_GRAPHICS_HEADERS src/GL/Vulkan/*.h)
@@ -32,7 +32,7 @@ if ($ENV{USE_VK})
 elseif ($ENV{USE_DX11})
     file(GLOB_RECURSE VX_GRAPHICS_SOURCES src/GL/DirectX11/*.cpp)
     file(GLOB_RECURSE VX_GRAPHICS_HEADERS src/GL/DirectX11/*.h)
-    
+
     set(IMGUI_IMPL_HEADERS
             deps/imgui/examples/imgui_impl_glfw.h
             deps/imgui/examples/imgui_impl_dx11.h)
@@ -111,6 +111,13 @@ add_library(Vertex SHARED
         ${VX_GRAPHICS_HEADERS}
         ${VX_GRAPHICS_SOURCES})
 
+## Fails for some reason
+# if ($ENV{VX_RELEASE})
+#     set_property(TARGET Vertex PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded")
+# else ()
+#     set_property(TARGET Vertex PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreadedDebug")
+# endif ()
+
 # add the paths in PLATFORM_SPECIFIC_INCLUDES to Vertex's include directories
 target_include_directories(Vertex
         PUBLIC src deps/spdlog/include deps/imgui deps/glm ${PLATFORM_SPECIFIC_INCLUDES})
@@ -129,13 +136,16 @@ target_precompile_headers(Vertex PUBLIC src/Core/vx_pch.h)
 
 if ($ENV{USE_VK})
     add_compile_definitions(VX_RENDER_API_VULKAN)
-elseif($ENV{USE_DX11})
+elseif ($ENV{USE_DX11})
     add_compile_definitions(VX_RENDER_API_DIRECTX11)
 else ()
     target_compile_definitions(Vertex PRIVATE VX_BUILD_SHARED IMGUI_IMPL_OPENGL_LOADER_GLAD=1)
     add_compile_definitions(VX_RENDER_API_OPENGL)
 endif ()
 
+if ($ENV{VX_RELEASE})
+    add_compile_definitions(NDEBUG)
+endif ()
 
 if ($ENV{CLION_IDE})
     target_compile_options(Vertex PRIVATE -include Core/vx_pch.h)

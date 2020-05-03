@@ -188,7 +188,7 @@ namespace Vertex {
 
         m_Window = glfwCreateWindow((int)m_Data.width, (int)m_Data.height, m_Data.title, nullptr, nullptr);
 
-        m_Context = new OpenGLContext(m_Window);
+        m_Context.reset(GraphicsContext::Create(m_Window));
 
         glfwSetWindowUserPointer(m_Window, &m_Data);
 
@@ -220,6 +220,19 @@ namespace Vertex {
     {
         glfwPollEvents();
         m_Context->SwapBuffers();
+    }
+
+    void WindowsWindow::OnEvent(Event& event)
+    {
+        EventHandler handler(event);
+        handler.Dispatch<EventTypes::WindowResize, WindowResizeEvent>(VX_BIND_FUNC_1(WindowsWindow::OnWindowResizeEvent));
+    }
+
+    // event callbacks
+    bool WindowsWindow::OnWindowResizeEvent(WindowResizeEvent& event)
+    {
+        m_Context->NotifyResize(event.GetWidth(), event.GetHeight());
+        return false; // <- for now
     }
 
 }

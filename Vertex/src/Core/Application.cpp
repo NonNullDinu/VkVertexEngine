@@ -112,7 +112,8 @@ namespace Vertex {
     {
         EventHandler handler(event);
         handler.Dispatch<EventTypes::WindowClose, WindowCloseEvent>(VX_BIND_FUNC_1(Application::OnWindowCloseEvent));
-        handler.Dispatch<EventTypes::WindowResize, WindowResizeEvent>(VX_BIND_FUNC_1(Application::OnWindowResizeEvent));
+
+        m_Window->OnEvent(event);
 
         for (std::vector<Layer*>::iterator it = m_LayerStack.end(); it != m_LayerStack.begin();)
         {
@@ -161,19 +162,6 @@ namespace Vertex {
         return;
     }
 
-    // Application specific event callbacks
-    bool Application::OnWindowCloseEvent(Event& event)
-    {
-        m_Running = false;
-        return true;
-    }
-
-    bool Application::OnWindowResizeEvent(WindowResizeEvent& event)
-    {
-        m_Window->GetGraphicsContext().NotifyResize(event.GetWidth(), event.GetHeight());
-        return true;
-    }
-
     void Application::Render()
     {
         m_ImGuiLayer->Begin();
@@ -182,6 +170,13 @@ namespace Vertex {
             layer->OnImguiRender();
 
         m_ImGuiLayer->End();
+    }
+
+    // Application specific event callbacks
+    bool Application::OnWindowCloseEvent(Event& event)
+    {
+        m_Running = false;
+        return true;
     }
 
 }
