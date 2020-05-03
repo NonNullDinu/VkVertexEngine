@@ -12,13 +12,9 @@
     #else
         #define VX_PUBLIC_API __declspec(dllimport)
     #endif // VX_BUILD_SHARED
-#elif defined(__GNUC__)
-    #if defined(VX_BUILD_SHARED)
-        #define VX_PUBLIC_API __attribute__((visibility("default")))
-    #else
-        #define VX_PUBLIC_API extern
-    #endif // VX_BUILD_SHARED
-#endif // _MSC_VER/__GNUC__
+#else
+    #define VX_PUBLIC_API
+#endif // _MSC_VER
 
 #define VX_BIND_FUNC_0(x) std::bind(&x, this)
 #define VX_BIND_FUNC_1(x) std::bind(&x, this, std::placeholders::_1)
