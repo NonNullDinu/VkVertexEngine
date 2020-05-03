@@ -11,7 +11,7 @@ namespace Vertex {
     public:
         OpenGLContext(GLFWwindow* window);
 
-        void Render() override {}
+        void Render() override { m_RenderCallback(this); }
         
         void SwapBuffers() override;
 

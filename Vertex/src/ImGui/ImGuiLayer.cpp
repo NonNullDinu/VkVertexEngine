@@ -40,19 +40,6 @@ namespace Vertex {
         ImGui_ImplOpenGL3_Init("#version 410");
 #elif defined(VX_RENDER_API_VULKAN)
         std::shared_ptr<VulkanContext> context = VulkanContext::GetContext();
-//        const VkFormat requestSurfaceImageFormat[] = { VK_FORMAT_B8G8R8A8_UNORM, VK_FORMAT_R8G8B8A8_UNORM, VK_FORMAT_B8G8R8_UNORM, VK_FORMAT_R8G8B8_UNORM };
-//        const VkColorSpaceKHR requestSurfaceColorSpace = VK_COLORSPACE_SRGB_NONLINEAR_KHR;
-//        wd->SurfaceFormat = ImGui_ImplVulkanH_SelectSurfaceFormat(context->GetPhysicalDevice(), context->GetSurface(), requestSurfaceImageFormat, (size_t)IM_ARRAYSIZE(requestSurfaceImageFormat), requestSurfaceColorSpace);
-//
-//        // Select Present Mode
-//        VkPresentModeKHR present_modes[] = { VK_PRESENT_MODE_FIFO_KHR };
-//        wd->PresentMode = ImGui_ImplVulkanH_SelectPresentMode(g_PhysicalDevice, wd->Surface, &present_modes[0], IM_ARRAYSIZE(present_modes));
-//        //printf("[vulkan] Selected PresentMode = %d\n", wd->PresentMode);
-//
-//        // Create SwapChain, RenderPass, Framebuffer, etc.
-//        IM_ASSERT(g_MinImageCount >= 2);
-//        ImGui_ImplVulkanH_CreateWindow(g_Instance, g_PhysicalDevice, g_Device, wd, g_QueueFamily, g_Allocator, width, height, g_MinImageCount);
-
         ImGui_ImplGlfw_InitForVulkan(window, true);
         ImGui_ImplVulkan_InitInfo init_info = {};
         init_info.Instance = context->GetInstance();
@@ -74,7 +61,24 @@ namespace Vertex {
         };
         ImGui_ImplVulkan_Init(&init_info, context->GetRenderPass());
 
-        io.Fonts->AddFontDefault();
+        VkCommandBuffer command_buffer = VulkanContext::GetContext()->GetLoadCommandBuffer();
+
+        VkCommandBufferBeginInfo begin_info = {};
+        begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        begin_info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        vkBeginCommandBuffer(command_buffer, &begin_info);
+
+        ImGui_ImplVulkan_CreateFontsTexture(command_buffer);
+
+        VkSubmitInfo end_info = {};
+        end_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        end_info.commandBufferCount = 1;
+        end_info.pCommandBuffers = &command_buffer;
+        vkEndCommandBuffer(command_buffer);
+        vkQueueSubmit(VulkanContext::GetContext()->GetQueue(), 1, &end_info, VK_NULL_HANDLE);
+
+        vkDeviceWaitIdle(VulkanContext::GetContext()->GetDevice());
+        ImGui_ImplVulkan_DestroyFontUploadObjects();
 #endif
     }
 
@@ -95,7 +99,6 @@ namespace Vertex {
         ImGui_ImplOpenGL3_NewFrame();
 #elif defined(VX_RENDER_API_VULKAN)
         ImGui_ImplVulkan_NewFrame();
-        ImGui_ImplVulkan_CreateFontsTexture(VulkanContext::GetContext()->GetCurrentCommandBuffer());
 #endif
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
