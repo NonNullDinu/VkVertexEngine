@@ -1,6 +1,7 @@
 # Vertex Engine
 
-[![build](https://github.com/VertexEngine/VertexEngine/workflows/build/badge.svg)](#)
+[![build-opengl](https://github.com/VertexEngine/VertexEngine/workflows/build-opengl/badge.svg)](#)
+[![build-vulkan](https://github.com/VertexEngine/VertexEngine/workflows/build-vulkan/badge.svg)](#)
 [![License](https://img.shields.io/github/license/VertexEngine/VertexEngine?color=blue)](https://github.com/VertexEngine/VertexEngine/blob/master/LICENSE)
 
 A powerful and modern C++ based game engine, currently in early development.
