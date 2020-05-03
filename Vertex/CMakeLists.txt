@@ -124,12 +124,6 @@ add_library(Vertex STATIC
         ${VX_GRAPHICS_HEADERS}
         ${VX_GRAPHICS_SOURCES})
 
-if ($ENV{VX_RELEASE})
-    set_property(TARGET Vertex PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded")
-else ()
-    set_property(TARGET Vertex PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreadedDebug")
-endif ()
-
 # add the paths in PLATFORM_SPECIFIC_INCLUDES to Vertex's include directories
 target_include_directories(Vertex
         PUBLIC src deps/spdlog/include deps/imgui deps/glm ${PLATFORM_SPECIFIC_INCLUDES})

@@ -13,12 +13,6 @@ add_executable(SandBox
         ${SANDBOX_HEADERS}
         )
 
-if ($ENV{VX_RELEASE})
-    set_property(TARGET SandBox PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded")
-else ()
-    set_property(TARGET SandBox PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreadedDebug")
-endif ()
-
 # Add the VX_INCLUDE_DIRECTORIES exported from /Vertex/CMakeLists.txt to SandBox's include directories
 target_include_directories(SandBox PRIVATE ${VX_INCLUDE_DIRECTORIES})
 
