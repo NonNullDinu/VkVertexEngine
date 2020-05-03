@@ -3,18 +3,18 @@ cmake_minimum_required(VERSION 3.16)
 project(Vertex CXX)
 
 file(GLOB_RECURSE VX_SOURCES
-        src/Core/*.cpp
-        src/Core/Layer/*.cpp
-        src/Renderer/*.cpp
-        src/ImGui/*.cpp)
+    src/Core/*.cpp
+    src/Core/Layer/*.cpp
+    src/Renderer/*.cpp
+    src/ImGui/*.cpp)
 
 file(GLOB_RECURSE VX_HEADERS
-        src/Core/*.h
-        src/Core/Layer/*.h
-        src/Renderer/*.h
-        src/ImGui/*.h
+    src/Core/*.h
+    src/Core/Layer/*.h
+    src/Renderer/*.h
+    src/ImGui/*.h
 
-        deps/glm/glm/*.hpp)
+    deps/glm/glm/*.hpp)
 
 file(GLOB VX_GL_SOURCES src/GL/*.cpp)
 file(GLOB VX_GL_HEADERS src/GL/*.h)
@@ -24,31 +24,31 @@ if ($ENV{USE_VK})
     file(GLOB_RECURSE VX_GRAPHICS_HEADERS src/GL/Vulkan/*.h)
 
     set(IMGUI_IMPL_HEADERS
-            deps/imgui/examples/imgui_impl_glfw.h
-            deps/imgui/examples/imgui_impl_vulkan.h)
+        deps/imgui/examples/imgui_impl_glfw.h
+        deps/imgui/examples/imgui_impl_vulkan.h)
     set(IMGUI_IMPL_SOURCES
-            deps/imgui/examples/imgui_impl_glfw.cpp
-            deps/imgui/examples/imgui_impl_vulkan.cpp)
+        deps/imgui/examples/imgui_impl_glfw.cpp
+        deps/imgui/examples/imgui_impl_vulkan.cpp)
 elseif ($ENV{USE_DX11})
     file(GLOB_RECURSE VX_GRAPHICS_SOURCES src/GL/DirectX11/*.cpp)
     file(GLOB_RECURSE VX_GRAPHICS_HEADERS src/GL/DirectX11/*.h)
     
     set(IMGUI_IMPL_HEADERS
-            deps/imgui/examples/imgui_impl_glfw.h
-            deps/imgui/examples/imgui_impl_dx11.h)
+        deps/imgui/examples/imgui_impl_glfw.h
+        deps/imgui/examples/imgui_impl_dx11.h)
     set(IMGUI_IMPL_SOURCES
-            deps/imgui/examples/imgui_impl_glfw.cpp
-            deps/imgui/examples/imgui_impl_dx11.cpp)
+        deps/imgui/examples/imgui_impl_glfw.cpp
+        deps/imgui/examples/imgui_impl_dx11.cpp)
 else () # OpenGL
     file(GLOB_RECURSE VX_GRAPHICS_SOURCES src/GL/OpenGL/*.cpp)
     file(GLOB_RECURSE VX_GRAPHICS_HEADERS src/GL/OpenGL/*.h)
 
     set(IMGUI_IMPL_HEADERS
-            deps/imgui/examples/imgui_impl_glfw.h
-            deps/imgui/examples/imgui_impl_opengl3.h)
+        deps/imgui/examples/imgui_impl_glfw.h
+        deps/imgui/examples/imgui_impl_opengl3.h)
     set(IMGUI_IMPL_SOURCES
-            deps/imgui/examples/imgui_impl_glfw.cpp
-            deps/imgui/examples/imgui_impl_opengl3.cpp)
+        deps/imgui/examples/imgui_impl_glfw.cpp
+        deps/imgui/examples/imgui_impl_opengl3.cpp)
 endif ()
 
 # GLAD
@@ -96,28 +96,30 @@ else ()
 endif ()
 
 add_library(Vertex SHARED
-        ${VX_HEADERS}
-        ${VX_SOURCES}
+    ${VX_HEADERS}
+    ${VX_SOURCES}
 
-        ${VX_GL_HEADERS}
-        ${VX_GL_SOURCES}
+    ${VX_GL_HEADERS}
+    ${VX_GL_SOURCES}
 
-        ${IMGUI_IMPL_HEADERS}
-        ${IMGUI_IMPL_SOURCES}
+    ${IMGUI_IMPL_HEADERS}
+    ${IMGUI_IMPL_SOURCES}
 
-        ${VX_PLATFORM_HEADERS}
-        ${VX_PLATFORM_SOURCES}
+    ${VX_PLATFORM_HEADERS}
+    ${VX_PLATFORM_SOURCES}
 
-        ${VX_GRAPHICS_HEADERS}
-        ${VX_GRAPHICS_SOURCES})
+    ${VX_GRAPHICS_HEADERS}
+    ${VX_GRAPHICS_SOURCES})
+
+set_property(TARGET foo PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded")
 
 # add the paths in PLATFORM_SPECIFIC_INCLUDES to Vertex's include directories
 target_include_directories(Vertex
-        PUBLIC src deps/spdlog/include deps/imgui deps/glm ${PLATFORM_SPECIFIC_INCLUDES})
+    PUBLIC src deps/spdlog/include deps/imgui deps/glm ${PLATFORM_SPECIFIC_INCLUDES})
 
 # use the libs specified above in PLATFORM_SPECIFIC_LIBS and glad
 target_link_libraries(Vertex
-        PUBLIC ${PLATFORM_SPECIFIC_LIBS} glad imgui)
+    PUBLIC ${PLATFORM_SPECIFIC_LIBS} glad imgui)
 
 set_target_properties(Vertex PROPERTIES POSITION_INDEPENDENT_CODE ON)
 set_target_properties(Vertex PROPERTIES PUBLIC_HEADER include/Vertex.h)
@@ -136,14 +138,18 @@ else ()
     add_compile_definitions(VX_RENDER_API_OPENGL)
 endif ()
 
+if ($ENV{VX_RELEASE})
+    add_compile_definitions(NDEBUG)
+endif ()
+
 if ($ENV{CLION_IDE})
     target_compile_options(Vertex PRIVATE -include Core/vx_pch.h)
 endif ()
 
 install(TARGETS Vertex
-        CONFIGURATIONS Debug
-        LIBRARY DESTINATION Debug/bin)
+    CONFIGURATIONS Debug
+    LIBRARY DESTINATION Debug/bin)
 
 install(TARGETS Vertex
-        CONFIGURATIONS Release
-        LIBRARY DESTINATION Release/bin)
+    CONFIGURATIONS Release
+    LIBRARY DESTINATION Release/bin)
