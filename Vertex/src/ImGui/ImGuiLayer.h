@@ -37,6 +37,10 @@ namespace Vertex {
         void End();
 
     private:
+//#if defined(VX_RENDER_API_VULKAN)
+//        ImGui_ImplVulkanH_Window wd;
+//#endif
+
         float m_Time;
     };
 
