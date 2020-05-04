@@ -45,15 +45,15 @@ namespace Vertex {
         inline std::vector<VkImage> GetSwapChainImages() { return m_SwapChainImages; }
         inline VkPipelineLayout GetPipelineLayout() { return m_PipelineLayout; }
         inline uint32_t GetQueueFamily() { return FindQueueFamilies(m_PhysicalDevice).graphicsFamily.value(); }
-        inline VkSurfaceKHR GetSurface() { return this->m_Surface; }
+        inline VkSurfaceKHR GetSurface() { return m_Surface; }
+        inline VkCommandPool GetCommandPool() { return m_CommandPool; }
+        inline VkCommandBuffer GetLoadCommandBuffer() { return m_LoadCommandBuffer; }
 
         static std::shared_ptr<VulkanContext> GetContext();
         
      private:
         GLFWwindow* m_WindowHandle;
         VkInstance m_VkInstance;
-
-        VkDebugUtilsMessengerEXT debugMessenger;
 
         VkPhysicalDevice m_PhysicalDevice;
         VkDevice m_Device;
@@ -73,6 +73,7 @@ namespace Vertex {
 
         VkRenderPass m_RenderPass;
         VkCommandPool m_CommandPool;
+        VkCommandBuffer m_LoadCommandBuffer;
         std::vector<VkCommandBuffer> m_CommandBuffers;
         std::vector<VkSemaphore> m_ImageAvailableSemaphores;
         std::vector<VkSemaphore> m_RenderFinishedSemaphores;
