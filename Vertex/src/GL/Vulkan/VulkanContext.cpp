@@ -23,11 +23,10 @@ namespace Vertex {
     const std::vector<const char*> validationLayers = {
         "VK_LAYER_KHRONOS_validation"
     };
-    constexpr bool EnableValidationLayers =
 #ifdef VX_CONFIGURATION_DEBUG
-        true
+    constexpr bool EnableValidationLayers = true;
 #else
-    false
+    constexpr bool EnableValidationLayers = false;
 #endif
     ;
 
@@ -121,6 +120,8 @@ namespace Vertex {
         renderPassInfo.pClearValues = &clearColor;
 
         vkCmdBeginRenderPass(m_CommandBuffers[m_CurrentFrame], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+        m_CurrentCommandBuffer = m_CommandBuffers[m_CurrentFrame];
 
         CoreLogger::Get()->info("Before render callback");
         m_RenderCallback(this);
@@ -624,7 +625,7 @@ namespace Vertex {
         VkCommandPoolCreateInfo poolInfo{};
         poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
         poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
-        poolInfo.flags = 0; // Optional
+        poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT; // Optional
 
         if (vkCreateCommandPool(m_Device, &poolInfo, nullptr, &m_CommandPool) != VK_SUCCESS)
         {

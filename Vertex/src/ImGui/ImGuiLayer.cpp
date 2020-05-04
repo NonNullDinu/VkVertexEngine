@@ -109,7 +109,6 @@ namespace Vertex {
         ImGuiIO& io = ImGui::GetIO();
         Application& app = Application::Get();
         io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
-
         // Rendering
         ImGui::Render();
 #if defined(VX_RENDER_API_OPENGL)
