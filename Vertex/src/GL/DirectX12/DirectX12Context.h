@@ -41,18 +41,16 @@ namespace Vertex {
     public:
         DirectX12Context(GLFWwindow* window);
 
-        void Render() override {}
+        void Render() override;
 
         void SwapBuffers() override {}
 
-        void NotifyResize(int new_width, int new_height) override {}
+        void NotifyResize(int new_width, int new_height) override;
 
         void CleanUpContext() override {}
 
     private:
         HWND m_WindowHandle;
-
-        static const uint16_t m_NumBackBuffers = 3;
 
         /*
         The m_UseWarp variable controls whether to use a software rasterizer
@@ -65,23 +63,67 @@ namespace Vertex {
         */
         bool m_UseWARP;
 
+        /*
+        Store previous window dimensions if the screen is maximized
+        */
         RECT m_WindowRect;
  
         // DirectX 12 Objects
         Microsoft::WRL::ComPtr<ID3D12Device2> m_Device;
         Microsoft::WRL::ComPtr<ID3D12CommandQueue> m_CommandQueue;
         Microsoft::WRL::ComPtr<IDXGISwapChain4> m_SwapChain;
-        Microsoft::WRL::ComPtr<ID3D12Resource> m_BackBuffers[m_NumBackBuffers];
+        Microsoft::WRL::ComPtr<ID3D12Resource> m_BackBuffers[VX_NUM_BACK_BUFFERS];
         Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> m_CommandList;
-        Microsoft::WRL::ComPtr<ID3D12CommandAllocator> m_CommandAllocators[m_NumBackBuffers];
+        Microsoft::WRL::ComPtr<ID3D12CommandAllocator> m_CommandAllocators[VX_NUM_BACK_BUFFERS];
         Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> m_RTVDescriptorHeap;
 
-        uint32_t m_RTVDescriptorSize;
+        uint32_t m_RTVDescriptorSize; // Render Target View
         uint16_t m_CurrentBackBufferIndex;
+
+        // Synchronization objects
+        Microsoft::WRL::ComPtr<ID3D12Fence> m_Fence;
+        uint64_t m_FenceValue = 0;
+        uint64_t m_FrameFenceValues[VX_NUM_BACK_BUFFERS] = {};
+        HANDLE m_FenceEvent;
+
+        bool m_VSync = true;
+        bool m_TearingSupported = false;
+        bool m_Fullscreen = false; // tracks the fullscreen state of the window
 
         int m_CurrentWidth, m_CurrentHeight;
 
         bool m_NeedViewportUpdate;
+
+    private:
+        void EnableDebugLayer();
+
+        static void CheckTearingSupport(); // for variable refresh rates
+
+        Microsoft::WRL::ComPtr<IDXGIAdapter4> GetAdapter();
+
+        Microsoft::WRL::ComPtr<ID3D12Device2> CreateDevice(Microsoft::WRL::ComPtr<IDXGIAdapter4> adapter);
+
+        Microsoft::WRL::ComPtr<ID3D12CommandQueue> CreateCommandQueue(D3D12_COMMAND_LIST_TYPE type);
+
+        Microsoft::WRL::ComPtr<IDXGISwapChain4> CreateSwapChain(uint32_t width, uint32_t height, uint32_t bufferCount);
+
+        Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE type, uint32_t numDescriptors);
+
+        void UpdateRenderTargetViews();
+
+        Microsoft::WRL::ComPtr<ID3D12CommandAllocator> CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE type);
+
+        Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> CreateCommandList(Microsoft::WRL::ComPtr<ID3D12CommandAllocator> commandAllocator, D3D12_COMMAND_LIST_TYPE type);
+
+        Microsoft::WRL::ComPtr<ID3D12Fence> CreateFence();
+
+        HANDLE CreateEventHandle();
+
+        uint64_t Signal();
+
+        void WaitForFenceValue(uint64_t frameFenceValue, std::chrono::milliseconds duration = std::chrono::milliseconds::max());
+
+        void Flush();
     };
 
 }

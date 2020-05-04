@@ -28,6 +28,8 @@
                                               { return predicate<First>::value || test_name<T, Rest...>(); }
 #define VX_TEMPLATE_TCALL(test_name, arg)     (test_name<std::nullptr_t, arg>())
 
+#define VX_NUM_BACK_BUFFERS 3 // for now
+#define VX_IS_VSYNC true // for now
 
 // Define a check for each platform
 #define VX_WINDOWING_GLFW
