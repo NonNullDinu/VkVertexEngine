@@ -141,6 +141,10 @@ namespace Vertex {
 
             m_VertexArray2->Bind();
             glDrawElements(GL_TRIANGLES, m_IndexBuffer2->GetCount(), GL_UNSIGNED_INT, nullptr);
+
+#elif defined(VX_RENDER_API_DIRECTX12)
+            m_Window->GetGraphicsContext().Render();
+
 #endif
             // --------------------------------------
 

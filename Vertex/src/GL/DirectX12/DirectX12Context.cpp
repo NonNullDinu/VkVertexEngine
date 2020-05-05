@@ -2,7 +2,7 @@
 
 namespace Vertex {
 
-    static bool s_DirectXInitialized = false;
+    static bool s_DirectX12Initialized = false;
 
     static void ThrowIfFailed(HRESULT hr)
     {
@@ -14,7 +14,50 @@ namespace Vertex {
         : m_WindowHandle(glfwGetWin32Window(window)),
           m_UseWARP(false)
     {
-        
+        CoreLogger::Debug("Initializing DirectX...");
+
+        EnableDebugLayer();
+
+        Microsoft::WRL::ComPtr<IDXGIAdapter4> dxgiAdapter4 = GetAdapter();
+
+        CoreLogger::Debug("Got adapter");
+
+        m_Device = CreateDevice(dxgiAdapter4);
+
+        CoreLogger::Debug("Created DirectX device");
+
+        m_CommandQueue = CreateCommandQueue(D3D12_COMMAND_LIST_TYPE_DIRECT);
+
+        CoreLogger::Debug("Created command queue");
+
+        m_SwapChain = CreateSwapChain(m_CurrentWidth, m_CurrentHeight, VX_NUM_BACK_BUFFERS);
+
+        CoreLogger::Debug("Created swap chain");
+
+        m_CurrentBackBufferIndex = m_SwapChain->GetCurrentBackBufferIndex();
+
+        m_RTVDescriptorHeap = CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, VX_NUM_BACK_BUFFERS);
+        m_RTVDescriptorSize = m_Device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+
+        UpdateRenderTargetViews();
+
+        for (int i = 0; i < VX_NUM_BACK_BUFFERS; ++i)
+            m_CommandAllocators[i] = CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT);
+
+        m_CommandList = CreateCommandList(m_CommandAllocators[m_CurrentBackBufferIndex], D3D12_COMMAND_LIST_TYPE_DIRECT);
+
+        m_Fence = CreateFence();
+        m_FenceEvent = CreateEventHandle();
+
+        s_DirectX12Initialized = true;
+
+        CoreLogger::Debug("Initialized DirectX");
+    }
+
+    DirectX12Context::~DirectX12Context()
+    {
+        Flush(m_FenceValue);
+        ::CloseHandle(m_FenceEvent);
     }
 
     void DirectX12Context::NotifyResize(int new_width, int new_height)
@@ -64,8 +107,8 @@ namespace Vertex {
 
             m_CommandQueue->ExecuteCommandLists(_countof(commandLists), commandLists);
 
-            uint32_t syncInterval = g_VSync ? 1 : 0;
-            uint32_t presentFlags = g_TearingSupported && !g_VSync ? DXGI_PRESENT_ALLOW_TEARING : 0;
+            uint32_t syncInterval = m_VSync ? 1 : 0;
+            uint32_t presentFlags = m_TearingSupported && !m_VSync ? DXGI_PRESENT_ALLOW_TEARING : 0;
 
             ThrowIfFailed(m_SwapChain->Present(syncInterval, presentFlags));
             
@@ -73,7 +116,7 @@ namespace Vertex {
 
             m_CurrentBackBufferIndex = m_SwapChain->GetCurrentBackBufferIndex();
  
-            WaitForFenceValue(g_FrameFenceValues[g_CurrentBackBufferIndex]);
+            WaitForFenceValue(m_FrameFenceValues[m_CurrentBackBufferIndex]);
         }
     }
 
@@ -161,10 +204,15 @@ namespace Vertex {
 
     Microsoft::WRL::ComPtr<ID3D12Device2> DirectX12Context::CreateDevice(Microsoft::WRL::ComPtr<IDXGIAdapter4> adapter)
     {
+        CoreLogger::Debug("Creating device...");
+
         Microsoft::WRL::ComPtr<ID3D12Device2> d3d12Device2;
         ThrowIfFailed(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&d3d12Device2)));
 
+        CoreLogger::Debug("Created device");
+
 #if defined(VX_CONFIGURATION_DEBUG)
+
         Microsoft::WRL::ComPtr<ID3D12InfoQueue> pInfoQueue;
         if (SUCCEEDED(d3d12Device2.As(&pInfoQueue)))
         {
@@ -223,7 +271,7 @@ namespace Vertex {
         Microsoft::WRL::ComPtr<IDXGIFactory4> dxgiFactory4;
         uint32_t createFactoryFlags = 0;
 
-#if defined(_DEBUG)
+#if defined(VX_CONFIGURATION_DEBUG)
         createFactoryFlags = DXGI_CREATE_FACTORY_DEBUG;
 #endif
  
@@ -285,7 +333,7 @@ namespace Vertex {
             ComPtr<ID3D12Resource> backBuffer;
             ThrowIfFailed(m_SwapChain->GetBuffer(i, IID_PPV_ARGS(&backBuffer)));
     
-            m_SwapChain->CreateRenderTargetView(backBuffer.Get(), nullptr, rtvHandle);
+            m_Device->CreateRenderTargetView(backBuffer.Get(), nullptr, rtvHandle);
     
             m_BackBuffers[i] = backBuffer;
     
@@ -338,7 +386,7 @@ namespace Vertex {
         return fenceValueForSignal;
     }
 
-    void DirectX12Context::WaitForFenceValue(uint64_t fenceValue
+    void DirectX12Context::WaitForFenceValue(uint64_t fenceValue,
         std::chrono::milliseconds duration /* = std::chrono::milliseconds::max() */)
     {
         if (m_Fence->GetCompletedValue() < fenceValue)
@@ -348,9 +396,9 @@ namespace Vertex {
         }
     }
 
-    void DirectX12Context::Flush()
+    void DirectX12Context::Flush(uint64_t& fenceValue)
     {
-        uint64_t fenceValueForSignal = Signal();
+        uint64_t fenceValueForSignal = Signal(fenceValue);
         WaitForFenceValue(fenceValueForSignal);
     }
 

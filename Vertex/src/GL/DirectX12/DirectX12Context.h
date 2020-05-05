@@ -40,6 +40,7 @@ namespace Vertex {
     {
     public:
         DirectX12Context(GLFWwindow* window);
+        ~DirectX12Context();
 
         void Render() override;
 
@@ -90,14 +91,15 @@ namespace Vertex {
         bool m_TearingSupported = false;
         bool m_Fullscreen = false; // tracks the fullscreen state of the window
 
-        int m_CurrentWidth, m_CurrentHeight;
+        int m_CurrentWidth = 1024;
+        int m_CurrentHeight = 576;
 
         bool m_NeedViewportUpdate;
 
     private:
         void EnableDebugLayer();
 
-        static void CheckTearingSupport(); // for variable refresh rates
+        static bool CheckTearingSupport(); // for variable refresh rates
 
         Microsoft::WRL::ComPtr<IDXGIAdapter4> GetAdapter();
 
@@ -119,11 +121,11 @@ namespace Vertex {
 
         HANDLE CreateEventHandle();
 
-        uint64_t Signal();
+        uint64_t Signal(uint64_t& fenceValue);
 
         void WaitForFenceValue(uint64_t frameFenceValue, std::chrono::milliseconds duration = std::chrono::milliseconds::max());
 
-        void Flush();
+        void Flush(uint64_t& fenceValue);
     };
 
 }
