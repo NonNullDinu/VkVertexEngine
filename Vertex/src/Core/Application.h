@@ -9,9 +9,7 @@ class ImGuiLayer; // <- forward declare it to be accessible from application
 
 #include "Layer/LayerStack.h"
 
-#ifndef VX_RENDER_API_DIRECTX12
-    #include "ImGui/ImGuiLayer.h"
-#endif
+#include "ImGui/ImGuiLayer.h"
 
 #include "Window.h"
 

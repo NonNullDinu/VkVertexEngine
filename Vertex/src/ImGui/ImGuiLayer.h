@@ -36,6 +36,8 @@ namespace Vertex {
         void Begin();
         void End();
 
+        static void ShowDockSpace(bool* p_open);
+
     private:
         float m_Time;
     };

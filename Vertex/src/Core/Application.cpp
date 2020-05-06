@@ -100,10 +100,8 @@ namespace Vertex {
 
         s_AppInstance = this;
 
-#ifndef VX_RENDER_API_DIRECTX12
         m_ImGuiLayer = new ImGuiLayer();
         PushOverlay(m_ImGuiLayer);
-#endif
     }
 
     Application::~Application()
@@ -130,6 +128,7 @@ namespace Vertex {
         while (m_Running)
         {
             // ------------- Temporary --------------
+
 #if defined(VX_RENDER_API_OPENGL)
             glClearColor(0.1f, 0.1f, 0.12f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
@@ -141,11 +140,8 @@ namespace Vertex {
 
             m_VertexArray2->Bind();
             glDrawElements(GL_TRIANGLES, m_IndexBuffer2->GetCount(), GL_UNSIGNED_INT, nullptr);
-
-#elif defined(VX_RENDER_API_DIRECTX12)
-            m_Window->GetGraphicsContext().Render();
-
 #endif
+
             // --------------------------------------
 
             for (Layer* layer : m_LayerStack)
@@ -153,13 +149,11 @@ namespace Vertex {
 
             // --------------- ImGui ----------------
 
-#ifndef VX_RENDER_API_DIRECTX12
             m_ImGuiLayer->Begin();
 
             for (Layer* layer : m_LayerStack)
                 layer->OnImguiRender();
             m_Window->GetGraphicsContext().Render();
-#endif
 
             // --------------------------------------
 
@@ -171,9 +165,7 @@ namespace Vertex {
 
     void Application::Render()
     {
-#ifndef VX_RENDER_API_DIRECTX12
         m_ImGuiLayer->End();
-#endif
     }
 
     // Application specific event callbacks
