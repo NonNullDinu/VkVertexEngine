@@ -31,16 +31,16 @@ if ($ENV{USE_VK})
     set(IMGUI_IMPL_SOURCES
             deps/imgui/examples/imgui_impl_glfw.cpp
             deps/imgui/examples/imgui_impl_vulkan.cpp)
-elseif ($ENV{USE_DX12})
-    file(GLOB_RECURSE VX_GRAPHICS_SOURCES src/GL/DirectX12/*.cpp)
-    file(GLOB_RECURSE VX_GRAPHICS_HEADERS src/GL/DirectX12/*.h)
-
-    set(IMGUI_IMPL_HEADERS
-            deps/imgui/examples/imgui_impl_glfw.h
-            deps/imgui/examples/imgui_impl_dx12.h)
-    set(IMGUI_IMPL_SOURCES
-            deps/imgui/examples/imgui_impl_glfw.cpp
-            deps/imgui/examples/imgui_impl_dx12.cpp)
+# elseif ($ENV{USE_DX12})
+#     file(GLOB_RECURSE VX_GRAPHICS_SOURCES src/GL/DirectX12/*.cpp)
+#     file(GLOB_RECURSE VX_GRAPHICS_HEADERS src/GL/DirectX12/*.h)
+# 
+#     set(IMGUI_IMPL_HEADERS
+#             deps/imgui/examples/imgui_impl_glfw.h
+#             deps/imgui/examples/imgui_impl_dx12.h)
+#     set(IMGUI_IMPL_SOURCES
+#             deps/imgui/examples/imgui_impl_glfw.cpp
+#             deps/imgui/examples/imgui_impl_dx12.cpp)
 else () # OpenGL
     file(GLOB_RECURSE VX_GRAPHICS_SOURCES src/GL/OpenGL/*.cpp)
     file(GLOB_RECURSE VX_GRAPHICS_HEADERS src/GL/OpenGL/*.h)
@@ -68,9 +68,9 @@ if (WIN32)
         find_package(Vulkan REQUIRED) # Vulkan
         set(GRAPHICS_LIB_INCLUDES ${Vulkan_INCLUDE_DIRS})
         set(GRAPHICS_LIBS ${Vulkan_LIBRARIES})
-    elseif ($ENV{USE_DX12})
-        set(GRAPHICS_LIB_INCLUDES deps/d3dx12)
-        set(GRAPHICS_LIBS d3d12 dxgi dxguid)
+    # elseif ($ENV{USE_DX12})
+    #     set(GRAPHICS_LIB_INCLUDES deps/d3dx12)
+    #     set(GRAPHICS_LIBS d3d12 dxgi dxguid)
     else ()
         find_package(OpenGL REQUIRED) # OpenGL
         set(GRAPHICS_LIB_INCLUDES ${OPENGL_INCLUDE_DIR} deps/glad/include)
@@ -145,8 +145,8 @@ target_precompile_headers(Vertex PUBLIC src/Core/vx_pch.h)
 
 if ($ENV{USE_VK})
     add_compile_definitions(VX_RENDER_API_VULKAN)
-elseif ($ENV{USE_DX12})
-    add_compile_definitions(VX_RENDER_API_DIRECTX12)
+# elseif ($ENV{USE_DX12})
+#     add_compile_definitions(VX_RENDER_API_DIRECTX12)
 else ()
     target_compile_definitions(Vertex PRIVATE VX_BUILD_SHARED IMGUI_IMPL_OPENGL_LOADER_GLAD=1)
     add_compile_definitions(VX_RENDER_API_OPENGL)

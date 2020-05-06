@@ -6,8 +6,8 @@ namespace Vertex {
 
     static void ThrowIfFailed(HRESULT hr)
     {
-        if (FAILED(hr))
-            throw std::exception();
+        // if (FAILED(hr))
+            // throw std::exception();
     }
 
     DirectX12Context::DirectX12Context(GLFWwindow* window)
@@ -207,7 +207,7 @@ namespace Vertex {
         CoreLogger::Debug("Creating device...");
 
         Microsoft::WRL::ComPtr<ID3D12Device2> d3d12Device2;
-        ThrowIfFailed(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&d3d12Device2)));
+        D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&d3d12Device2));
 
         CoreLogger::Debug("Created device");
 
