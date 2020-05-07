@@ -9,7 +9,7 @@
 namespace Vertex {
 
     // utility function
-    GLenum ShaderDataTypeToOpenGL(ShaderDataType type);
+    extern constexpr GLenum ShaderDataTypeToOpenGL(ShaderDataType type);
 
     class OpenGLShader : public Shader
     {

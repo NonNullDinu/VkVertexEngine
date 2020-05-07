@@ -1,5 +1,14 @@
 #include "GraphicsContext.h"
 
+#if defined(VX_RENDER_API_OPENGL)
+    #include "OpenGL/OpenGLContext.h"
+#elif defined(VX_RENDER_API_VULKAN)
+    #include "Vulkan/VulkanContext.h"
+#elif defined(VX_RENDER_API_DIRECTX12)
+    #include "DirectX12/DirectX12Context.h"
+#endif
+// ... per rendering API
+
 namespace Vertex {
 
     GraphicsContext* GraphicsContext::Create(GLFWwindow* window_handle)

@@ -1,5 +1,7 @@
 #include "OpenGLVertexArray.h"
 
+#include "OpenGLShader.h"
+
 namespace Vertex {
 
     OpenGLVertexArray::OpenGLVertexArray()

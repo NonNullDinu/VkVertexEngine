@@ -1,6 +1,8 @@
 #include "GraphicsAPI.h"
 
-#include "OpenGL/OpenGLGraphicsAPI.h"
+#if defined(VX_RENDER_API_OPENGL)
+    #include "OpenGL/OpenGLGraphicsAPI.h"
+#endif
 
 namespace Vertex {
 
