@@ -130,16 +130,18 @@ namespace Vertex {
             // ------------- Temporary --------------
 
 #if defined(VX_RENDER_API_OPENGL)
-            glClearColor(0.1f, 0.1f, 0.12f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT);
+
+            Renderer::Clear({0.1f, 0.1f, 0.12f, 1.0f});
 
             m_Shader->Bind();
 
-            m_VertexArray->Bind();
-            glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+            Renderer::BeginScene();
 
-            m_VertexArray2->Bind();
-            glDrawElements(GL_TRIANGLES, m_IndexBuffer2->GetCount(), GL_UNSIGNED_INT, nullptr);
+            Renderer::Submit(m_VertexArray);
+            Renderer::Submit(m_VertexArray2);
+
+            Renderer::EndScene();
+            
 #endif
 
             // --------------------------------------
