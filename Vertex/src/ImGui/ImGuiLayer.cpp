@@ -2,6 +2,10 @@
 
 #include "Core/Event/Event.h"
 
+#if defined(VX_RENDER_API_VULKAN)
+    #include "GL/Vulkan/VulkanContext.h"
+#endif
+
 namespace Vertex {
 
     ImGuiLayer::ImGuiLayer()
