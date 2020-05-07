@@ -5,6 +5,10 @@
 #include "Core/Input.h"
 #include "LinuxInput.h"
 
+#if defined(VX_RENDER_API_VULKAN)
+    #include "GL/Vulkan/VulkanContext.h"
+#endif
+
 namespace Vertex {
 
     class LinuxWindow : public Window
@@ -33,7 +37,7 @@ namespace Vertex {
 
         inline bool ShouldClose() const override { return glfwWindowShouldClose(m_Window); }
 
-        inline GraphicsContext &GetGraphicsContext() const override { return *m_Context; }
+        inline GraphicsContext& GetGraphicsContext() const override { return *m_Context; }
 
     private:
         GLFWwindow* m_Window;
