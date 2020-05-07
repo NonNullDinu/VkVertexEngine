@@ -131,7 +131,7 @@ namespace Vertex {
 
 #if defined(VX_RENDER_API_OPENGL)
 
-            Renderer::Clear({0.1f, 0.1f, 0.12f, 1.0f});
+            Renderer::Clear({0.1f, 0.1f, 0.1f, 1.0f});
 
             m_Shader->Bind();
 
@@ -141,7 +141,7 @@ namespace Vertex {
             Renderer::Submit(m_VertexArray2);
 
             Renderer::EndScene();
-            
+
 #endif
 
             // --------------------------------------

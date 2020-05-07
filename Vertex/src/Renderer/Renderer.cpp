@@ -23,7 +23,7 @@ namespace Vertex {
 #if defined(VX_RENDER_API_OPENGL)
         return RenderAPI::OpenGL;
 #elif defined(VX_RENDER_API_VULKAN)
-        return RednderAPI::Vulkan;
+        return RenderAPI::Vulkan;
 #else
         return nullptr;
 #endif
