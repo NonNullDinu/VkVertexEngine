@@ -8,7 +8,7 @@
 namespace Vertex {
 
     // helper functions
-    constexpr size_t GetSizeOfShaderDataType(ShaderDataType type)
+    const size_t GetSizeOfShaderDataType(ShaderDataType type)
     {
         switch(type)
         {
@@ -29,7 +29,7 @@ namespace Vertex {
         return 0;
     };
 
-    constexpr uint32_t GetComponentCountOfShaderDataType(ShaderDataType type)
+    const uint32_t GetComponentCountOfShaderDataType(ShaderDataType type)
     {
         switch(type)
         {

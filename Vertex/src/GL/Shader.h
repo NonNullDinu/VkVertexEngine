@@ -14,8 +14,8 @@ namespace Vertex {
     };
 
     // helper functions
-    extern constexpr size_t GetSizeOfShaderDataType(ShaderDataType type);
-    extern constexpr uint32_t GetComponentCountOfShaderDataType(ShaderDataType type);
+    const size_t GetSizeOfShaderDataType(ShaderDataType type);
+    const uint32_t GetComponentCountOfShaderDataType(ShaderDataType type);
 
     class Shader
     {

@@ -2,7 +2,7 @@
 
 namespace Vertex {
 
-    constexpr GLenum ShaderDataTypeToOpenGL(ShaderDataType type)
+    const GLenum ShaderDataTypeToOpenGL(ShaderDataType type)
     {
         switch(type)
         {
