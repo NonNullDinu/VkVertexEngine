@@ -4,7 +4,8 @@
 
 #include "Shader.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     // -----------------------------------
     // ---------- Buffer Layout ----------
@@ -97,8 +98,3 @@ namespace Vertex {
     };
 
 }
-
-#if defined(VX_RENDER_API_OPENGL)
-    #include "OpenGL/OpenGLBuffer.h"
-#endif
-// ... per rendering API

@@ -2,7 +2,9 @@
 #include "VulkanShaderPipeline.h"
 #include "VulkanExtensions.h"
 
-namespace Vertex {
+namespace Vertex
+{
+    
     static VKAPI_ATTR VkBool32 VKAPI_CALL VulkanDebugCallback(
         VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
         VkDebugUtilsMessageTypeFlagsEXT messageType,
@@ -851,4 +853,5 @@ namespace Vertex {
 
         return extensions;
     }
+
 }

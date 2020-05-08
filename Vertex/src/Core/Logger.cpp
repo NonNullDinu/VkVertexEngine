@@ -1,6 +1,7 @@
 #include "Logger.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     CoreLogger CoreLogger::s_Instance;
     std::shared_ptr<spdlog::logger> CoreLogger::s_Logger;

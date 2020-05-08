@@ -3,7 +3,8 @@
 #include "VulkanContext.h"
 #include "VulkanBufferBinding.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     VulkanShaderPipeline::VulkanShaderPipeline(const std::vector<char> vertex_src, const std::vector<char> fragment_src)
     {
@@ -155,4 +156,5 @@ namespace Vertex {
     {
         vkDestroyPipeline(VulkanContext::GetContext()->GetDevice(), m_GraphicsPipeline, nullptr);
     }
+    
 }

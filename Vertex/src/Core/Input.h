@@ -2,9 +2,10 @@
 
 #include "Core/Core.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
-    class Input
+    class VX_PUBLIC_API Input
     {
     public:
         inline static bool IsKeyPressed(int key) { return s_Instance->IsKeyPressedImpl(key); }

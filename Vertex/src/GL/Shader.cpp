@@ -1,9 +1,15 @@
 #include "Shader.h"
 
-namespace Vertex {
+#if defined(VX_RENDER_API_OPENGL)
+    #include "OpenGL/OpenGLShader.h"
+#endif
+// ... per rendering API
+
+namespace Vertex
+{
 
     // helper functions
-    size_t GetSizeOfShaderDataType(ShaderDataType type)
+    const size_t GetSizeOfShaderDataType(ShaderDataType type)
     {
         switch(type)
         {
@@ -24,7 +30,7 @@ namespace Vertex {
         return 0;
     };
 
-    uint32_t GetComponentCountOfShaderDataType(ShaderDataType type)
+    const uint32_t GetComponentCountOfShaderDataType(ShaderDataType type)
     {
         switch(type)
         {

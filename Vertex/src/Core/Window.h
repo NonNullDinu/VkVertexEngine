@@ -6,7 +6,8 @@
 
 #include "GL/GraphicsContext.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     class Window
     {

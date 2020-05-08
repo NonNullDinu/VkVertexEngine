@@ -1,7 +1,8 @@
 #include "VulkanShaderModule.h"
 #include "VulkanContext.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     VulkanShaderModule::VulkanShaderModule(const std::vector<char> source, VkPipelineShaderStageCreateInfo shader_stage_info)
     {
@@ -18,4 +19,5 @@ namespace Vertex {
 
         vkDestroyShaderModule(VulkanContext::GetContext()->GetDevice(), m_InternalVkShaderModule, nullptr);
     }
+    
 }

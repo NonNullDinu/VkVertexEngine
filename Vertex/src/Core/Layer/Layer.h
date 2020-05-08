@@ -3,7 +3,8 @@
 #include "Core/Core.h"
 #include "Core/Event/Event.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     class VX_PUBLIC_API Layer
     {

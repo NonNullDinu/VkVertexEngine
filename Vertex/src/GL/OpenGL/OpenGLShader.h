@@ -6,10 +6,11 @@
 
 #include "OpenGLUniform.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     // utility function
-    GLenum ShaderDataTypeToOpenGL(ShaderDataType type);
+    const GLenum ShaderDataTypeToOpenGL(ShaderDataType type);
 
     class OpenGLShader : public Shader
     {

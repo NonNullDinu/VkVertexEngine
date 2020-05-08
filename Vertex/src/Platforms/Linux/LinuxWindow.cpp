@@ -4,7 +4,8 @@
 #include "Core/Event/KeyEvent.h"
 #include "Core/Event/MouseEvent.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     static bool s_GLFW_Initialized = false;
     

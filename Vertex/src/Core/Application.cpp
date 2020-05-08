@@ -1,6 +1,7 @@
 #include "Application.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     Application* Application::s_AppInstance = nullptr;
 
@@ -8,8 +9,6 @@ namespace Vertex {
         : m_Running(true)
     {
         VX_CORE_ASSERT((!s_AppInstance), "Application cannot be instantiated twice!");
-
-        Input::Init();
 
         m_Window.reset(Window::Create());
         
@@ -100,10 +99,8 @@ namespace Vertex {
 
         s_AppInstance = this;
 
-#ifndef VX_RENDER_API_DIRECTX12
         m_ImGuiLayer = new ImGuiLayer();
         PushOverlay(m_ImGuiLayer);
-#endif
     }
 
     Application::~Application()
@@ -130,18 +127,22 @@ namespace Vertex {
         while (m_Running)
         {
             // ------------- Temporary --------------
+
 #if defined(VX_RENDER_API_OPENGL)
-            glClearColor(0.1f, 0.1f, 0.12f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT);
+
+            Renderer::Clear({0.1f, 0.1f, 0.1f, 1.0f});
 
             m_Shader->Bind();
 
-            m_VertexArray->Bind();
-            glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+            Renderer::BeginScene();
 
-            m_VertexArray2->Bind();
-            glDrawElements(GL_TRIANGLES, m_IndexBuffer2->GetCount(), GL_UNSIGNED_INT, nullptr);
+            Renderer::Submit(m_VertexArray);
+            Renderer::Submit(m_VertexArray2);
+
+            Renderer::EndScene();
+
 #endif
+
             // --------------------------------------
 
             for (Layer* layer : m_LayerStack)
@@ -149,13 +150,11 @@ namespace Vertex {
 
             // --------------- ImGui ----------------
 
-#ifndef VX_RENDER_API_DIRECTX12
             m_ImGuiLayer->Begin();
 
             for (Layer* layer : m_LayerStack)
                 layer->OnImguiRender();
             m_Window->GetGraphicsContext().Render();
-#endif
 
             // --------------------------------------
 
@@ -167,9 +166,7 @@ namespace Vertex {
 
     void Application::Render()
     {
-#ifndef VX_RENDER_API_DIRECTX12
         m_ImGuiLayer->End();
-#endif
     }
 
     // Application specific event callbacks

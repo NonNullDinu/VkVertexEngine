@@ -1,8 +1,9 @@
 #include "OpenGLShader.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
-    GLenum ShaderDataTypeToOpenGL(ShaderDataType type)
+    const GLenum ShaderDataTypeToOpenGL(ShaderDataType type)
     {
         switch(type)
         {

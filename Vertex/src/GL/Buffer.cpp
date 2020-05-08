@@ -1,6 +1,12 @@
 #include "Buffer.h"
 
-namespace Vertex {
+#if defined(VX_RENDER_API_OPENGL)
+    #include "OpenGL/OpenGLBuffer.h"
+#endif
+// ... per rendering API
+
+namespace Vertex
+{
 
     VertexBuffer* VertexBuffer::Create(float* vertices, size_t size, const BufferLayout& layout)
     {

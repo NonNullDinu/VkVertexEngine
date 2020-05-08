@@ -20,7 +20,8 @@
 #include "Core/Event/MouseEvent.h"
 #include "Core/Event/WindowEvent.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     class ImGuiLayer : public Layer
     {
@@ -35,6 +36,8 @@ namespace Vertex {
 
         void Begin();
         void End();
+
+        static void ShowDockSpace(bool* p_open);
 
     private:
         float m_Time;

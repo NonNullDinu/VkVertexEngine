@@ -2,7 +2,8 @@
 
 #include "GL/Shader.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     class VulkanShaderPipeline : public Shader
     {

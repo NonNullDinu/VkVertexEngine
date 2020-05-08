@@ -1,6 +1,7 @@
 #pragma once
 
-namespace Vertex {
+namespace Vertex
+{
 
     class VulkanShaderModule{
     public:

@@ -13,7 +13,8 @@
 #define vx_log_level_error spdlog::level::err
 #define vx_log_level_critical spdlog::level::critical
 
-namespace Vertex {
+namespace Vertex
+{
 
     class CoreLogger
     {

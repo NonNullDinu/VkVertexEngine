@@ -1,6 +1,7 @@
 #include "Window.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     Window* Window::Create()
     {

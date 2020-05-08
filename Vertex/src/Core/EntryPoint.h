@@ -2,7 +2,8 @@
 
 #include "Application.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     extern Application* CreateApplication();
 
