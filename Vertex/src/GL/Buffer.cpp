@@ -5,7 +5,8 @@
 #endif
 // ... per rendering API
 
-namespace Vertex {
+namespace Vertex
+{
 
     VertexBuffer* VertexBuffer::Create(float* vertices, size_t size, const BufferLayout& layout)
     {

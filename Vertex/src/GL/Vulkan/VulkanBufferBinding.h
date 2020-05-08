@@ -1,6 +1,7 @@
 #pragma once
 
-namespace Vertex {
+namespace Vertex
+{
 
     template<typename T, int location>
     struct VulkanBufferBinding

@@ -4,7 +4,8 @@
 
 #include "spdlog/fmt/fmt.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     enum class EventTypes
     {

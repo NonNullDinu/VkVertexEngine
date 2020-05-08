@@ -4,7 +4,8 @@
 
 #include "Layer.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     class LayerStack
     {

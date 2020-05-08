@@ -1,6 +1,7 @@
 #include "WindowsInput.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     bool WindowsInput::IsKeyPressedImpl(int key)
     {

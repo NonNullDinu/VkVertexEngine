@@ -1,8 +1,10 @@
 #pragma once
 
-#include <variant>
+#include "Core/Core.h"
 
-namespace Vertex {
+namespace Vertex
+{
+
     typedef std::variant<float, double, glm::vec2, glm::vec3, glm::vec4, glm::mat4> OpenGLUniformValue;
 
     class OpenGLUniform

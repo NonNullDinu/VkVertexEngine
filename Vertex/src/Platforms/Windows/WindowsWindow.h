@@ -5,7 +5,8 @@
 #include "Core/Input.h"
 #include "WindowsInput.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     class WindowsWindow : public Window
     {

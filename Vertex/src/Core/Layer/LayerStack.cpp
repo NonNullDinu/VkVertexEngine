@@ -1,6 +1,7 @@
 #include "LayerStack.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     LayerStack::LayerStack()
     {

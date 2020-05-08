@@ -1,18 +1,14 @@
 #include "Input.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
-    Input* Input::s_Instance = nullptr;
-
-    void Input::Init()
-    {
 #if defined(_WIN32)
-        s_Instance = new WindowsInput();
+    Input* Input::s_Instance = new WindowsInput();
 #elif defined(__linux__)
-        s_Instance = new LinuxInput();
+    Input* Input::s_Instance = new LinuxInput();
 #else
-        #error Unsupported platform
+    #error Unsupported platform
 #endif
-    }
 
 }

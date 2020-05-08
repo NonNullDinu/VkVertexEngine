@@ -6,7 +6,8 @@
     #include "GL/Vulkan/VulkanContext.h"
 #endif
 
-namespace Vertex {
+namespace Vertex
+{
 
     ImGuiLayer::ImGuiLayer()
         : Layer("ImGuiLayer")

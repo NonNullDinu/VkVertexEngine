@@ -2,7 +2,8 @@
 
 #include "GL/Buffer.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     // -----------------------------------
     // ---------- Vertex Buffer ----------

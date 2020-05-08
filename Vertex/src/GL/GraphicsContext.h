@@ -2,7 +2,8 @@
 
 #include "Core/Core.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     class GraphicsContext
     {

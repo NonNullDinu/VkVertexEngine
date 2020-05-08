@@ -9,7 +9,8 @@
 #endif
 // ... per rendering API
 
-namespace Vertex {
+namespace Vertex
+{
 
     GraphicsContext* GraphicsContext::Create(GLFWwindow* window_handle)
     {

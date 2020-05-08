@@ -1,6 +1,7 @@
 #include "LinuxInput.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     bool LinuxInput::IsKeyPressedImpl(int key)
     {

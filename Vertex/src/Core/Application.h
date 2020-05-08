@@ -19,7 +19,8 @@ class ImGuiLayer; // <- forward declare it to be accessible from application
 
 #include "Renderer/Renderer.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     class VX_PUBLIC_API Application
 	{

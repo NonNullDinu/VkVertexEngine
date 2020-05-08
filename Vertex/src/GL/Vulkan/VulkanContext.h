@@ -2,7 +2,9 @@
 
 #include "GL/GraphicsContext.h"
 
-namespace Vertex {
+namespace Vertex
+{
+    
     class VulkanShaderPipeline;
 
     class VulkanContext : public GraphicsContext

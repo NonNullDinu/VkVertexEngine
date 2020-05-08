@@ -6,7 +6,8 @@
 
 #include "GL/Shader.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     class OpenGLVertexArray : public VertexArray
     {

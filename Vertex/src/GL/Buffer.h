@@ -4,7 +4,8 @@
 
 #include "Shader.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     // -----------------------------------
     // ---------- Buffer Layout ----------

@@ -5,7 +5,8 @@
 #endif
 // ... per rendering api
 
-namespace Vertex {
+namespace Vertex
+{
 
     VertexArray* VertexArray::Create()
     {

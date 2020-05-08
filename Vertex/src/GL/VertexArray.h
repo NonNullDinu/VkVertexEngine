@@ -2,7 +2,8 @@
 
 #include "Buffer.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     class VertexArray
     {

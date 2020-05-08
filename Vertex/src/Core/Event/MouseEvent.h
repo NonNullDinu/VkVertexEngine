@@ -2,7 +2,8 @@
 
 #include "Event.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     class MouseEvent : public Event
     {

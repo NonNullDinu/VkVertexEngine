@@ -20,7 +20,8 @@
 #include "Core/Event/MouseEvent.h"
 #include "Core/Event/WindowEvent.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     class ImGuiLayer : public Layer
     {

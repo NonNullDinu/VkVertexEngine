@@ -1,6 +1,7 @@
 #include "Layer.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     Layer::Layer(const char* name)
         : m_Name(name)

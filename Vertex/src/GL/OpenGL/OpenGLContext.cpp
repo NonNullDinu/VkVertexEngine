@@ -1,6 +1,7 @@
 #include "OpenGLContext.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     OpenGLContext::OpenGLContext(GLFWwindow* window)
         : m_WindowHandle(window)

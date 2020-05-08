@@ -4,7 +4,8 @@
 
 #include "Core/Application.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     class WindowsInput : public Input
     {

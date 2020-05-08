@@ -2,7 +2,8 @@
 
 #include "Core/Core.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     // Make definite shader types so the API is more consistent
     enum class ShaderDataType

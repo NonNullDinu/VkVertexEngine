@@ -4,7 +4,8 @@
     #include "OpenGL/OpenGLGraphicsAPI.h"
 #endif
 
-namespace Vertex {
+namespace Vertex
+{
 
     GraphicsAPI* GraphicsAPI::Create()
     {

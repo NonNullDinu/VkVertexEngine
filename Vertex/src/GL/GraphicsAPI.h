@@ -4,7 +4,8 @@
 
 #include "GL/VertexArray.h"
 
-namespace Vertex {
+namespace Vertex
+{
     
     class GraphicsAPI
     {

@@ -9,7 +9,8 @@
     #include "GL/Vulkan/VulkanContext.h"
 #endif
 
-namespace Vertex {
+namespace Vertex
+{
 
     class LinuxWindow : public Window
     {

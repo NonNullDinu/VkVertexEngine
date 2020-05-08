@@ -5,7 +5,8 @@
 #endif
 // ... per rendering API
 
-namespace Vertex {
+namespace Vertex
+{
 
     // helper functions
     const size_t GetSizeOfShaderDataType(ShaderDataType type)

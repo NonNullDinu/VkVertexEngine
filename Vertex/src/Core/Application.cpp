@@ -1,6 +1,7 @@
 #include "Application.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     Application* Application::s_AppInstance = nullptr;
 
@@ -8,8 +9,6 @@ namespace Vertex {
         : m_Running(true)
     {
         VX_CORE_ASSERT((!s_AppInstance), "Application cannot be instantiated twice!");
-
-        Input::Init();
 
         m_Window.reset(Window::Create());
         

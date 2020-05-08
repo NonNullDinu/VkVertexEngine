@@ -2,7 +2,8 @@
 
 #include "GL/GraphicsAPI.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     class OpenGLGraphicsAPI : public GraphicsAPI
     {

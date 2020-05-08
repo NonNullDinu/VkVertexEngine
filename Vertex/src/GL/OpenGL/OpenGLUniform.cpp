@@ -1,6 +1,7 @@
 #include "OpenGLUniform.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     OpenGLUniform::OpenGLUniform(int location, const char* uniform_name)
         : m_Location(location), m_UniformName(uniform_name)

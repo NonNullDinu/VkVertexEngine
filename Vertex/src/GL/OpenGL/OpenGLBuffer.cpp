@@ -1,6 +1,7 @@
 #include "OpenGLBuffer.h"
 
-namespace Vertex {
+namespace Vertex
+{
 
     // -----------------------------------
     // ---------- Vertex Buffer ----------

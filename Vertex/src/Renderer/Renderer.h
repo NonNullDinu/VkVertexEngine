@@ -6,9 +6,8 @@
 
 #include "GL/VertexArray.h"
 
-#include <glm/glm.hpp>
-
-namespace Vertex {
+namespace Vertex
+{
 
     enum class RenderAPI
     {

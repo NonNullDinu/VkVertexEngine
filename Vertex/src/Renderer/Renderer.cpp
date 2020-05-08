@@ -1,6 +1,7 @@
 #include "Renderer.h"
 
-namespace Vertex {
+namespace Vertex
+{
     
     GraphicsAPI* Renderer::s_GraphicsAPI = GraphicsAPI::Create();
 
