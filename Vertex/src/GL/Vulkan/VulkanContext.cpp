@@ -15,7 +15,7 @@ namespace Vertex {
         return VK_FALSE;
     }
 
-    constexpr int MAX_FRAMES_IN_FLIGHT = 2;
+    constexpr int MAX_FRAMES_IN_FLIGHT = 4;
     static const std::vector<const char*> VulkanDeviceExtensions = {
         VK_KHR_SWAPCHAIN_EXTENSION_NAME
     };
@@ -102,7 +102,7 @@ namespace Vertex {
         beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT; // Optional
         beginInfo.pInheritanceInfo = nullptr; // Optional
 
-        if (vkBeginCommandBuffer(m_CommandBuffers[m_CurrentFrame], &beginInfo) != VK_SUCCESS)
+        if (vkBeginCommandBuffer(m_CommandBuffers[imageIndex], &beginInfo) != VK_SUCCESS)
         {
             VX_CORE_ASSERT(false, "vkBeginCommandBuffer failed");
         }
@@ -110,7 +110,7 @@ namespace Vertex {
         VkRenderPassBeginInfo renderPassInfo{};
         renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
         renderPassInfo.renderPass = m_RenderPass;
-        renderPassInfo.framebuffer = m_SwapChainFramebuffers[m_CurrentFrame];
+        renderPassInfo.framebuffer = m_SwapChainFramebuffers[imageIndex];
 
         renderPassInfo.renderArea.offset = { 0, 0 };
         renderPassInfo.renderArea.extent = m_SwapChainExtent;
@@ -119,22 +119,20 @@ namespace Vertex {
         renderPassInfo.clearValueCount = 1;
         renderPassInfo.pClearValues = &clearColor;
 
-        vkCmdBeginRenderPass(m_CommandBuffers[m_CurrentFrame], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+        vkCmdBeginRenderPass(m_CommandBuffers[imageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
-        m_CurrentCommandBuffer = m_CommandBuffers[m_CurrentFrame];
+        m_CurrentCommandBuffer = m_CommandBuffers[imageIndex];
 
-        CoreLogger::Get()->info("Before render callback");
         m_RenderCallback(this);
-        CoreLogger::Get()->info("After render callback");
 
-        vkCmdEndRenderPass(m_CommandBuffers[m_CurrentFrame]);
+        vkCmdEndRenderPass(m_CommandBuffers[imageIndex]);
 
-        if (vkEndCommandBuffer(m_CommandBuffers[m_CurrentFrame]) != VK_SUCCESS)
+        if (vkEndCommandBuffer(m_CommandBuffers[imageIndex]) != VK_SUCCESS)
         {
             VX_CORE_ASSERT(false, "vkEndCommandBuffer failed");
         }
 
-        if (vkQueueSubmit(m_GraphicsQueue, 1, &submitInfo, m_InFlightFences[m_CurrentFrame]) != VK_SUCCESS)
+        if (vkQueueSubmit(m_GraphicsQueue, 1, &submitInfo, m_ImagesInFlight[imageIndex]) != VK_SUCCESS)
         {
             VX_CORE_ASSERT(false, "vkQueueSubmit failed");
         }
@@ -152,7 +150,10 @@ namespace Vertex {
 
         presentInfo.pResults = nullptr; // Optional
 
-        vkQueuePresentKHR(m_PresentQueue, &presentInfo);
+        if (vkQueuePresentKHR(m_PresentQueue, &presentInfo) != VK_SUCCESS)
+        {
+            VX_CORE_ASSERT(false, "vkQueuePresentKHR failed");
+        }
         vkQueueWaitIdle(m_PresentQueue);
 
         m_CurrentFrame = (m_CurrentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
@@ -169,6 +170,8 @@ namespace Vertex {
 
     void VulkanContext::CleanupSwapChain()
     {
+        vkDeviceWaitIdle(m_Device);
+
         for (size_t i = 0; i < m_SwapChainFramebuffers.size(); i++)
         {
             vkDestroyFramebuffer(m_Device, m_SwapChainFramebuffers[i], nullptr);

@@ -118,10 +118,14 @@ namespace Vertex {
 #endif
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
         {
+#ifdef VX_RENDER_API_OPENGL
             GLFWwindow* backup_current_context = glfwGetCurrentContext();
+#endif
             ImGui::UpdatePlatformWindows();
             ImGui::RenderPlatformWindowsDefault();
+#ifdef VX_RENDER_API_OPENGL
             glfwMakeContextCurrent(backup_current_context);
+#endif
         }
     }
 
