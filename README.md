@@ -16,13 +16,13 @@ This README file is split into multiple sections:
 Well, this project is mainly for learning purposes. Also, I want to make a powerful, flexible and lightweight game engine, since I haven't really found any game engine's that I like...
 
 ## Supported platforms and rendering APIs
-| Platform | Rendering API                       |
-|----------|-------------------------------------|
-| Windows  | OpenGL 4.5+ , Vulkan (early stages) |
-| Linux    | OpenGL 4.5+ , Vulkan (early stages) |
+| Platform | Rendering API                      |
+|----------|------------------------------------|
+| Windows  | OpenGL 4.5+                        |
+| Linux    | OpenGL 4.5+, Vulkan (early stages) |
 
 ## Support
-You can join the official Vertex Engine [Discord Server](https://discord.gg/hA5kHnK), to ask for help or make a feature request. You can also contact me on [Twitter](https://twitter.com/42_mix).
+You can join the official Vertex Engine [Discord Server](https://discord.gg/hA5kHnK), to ask for help or make a feature request.
 
 ## Build
 Pre-made build scripts are provided for Windows and Linux in the `scripts` directory. The build scripts **must be run from within that directory.**
@@ -32,7 +32,7 @@ Pre-made build scripts are provided for Windows and Linux in the `scripts` direc
 * 3D Rendering
 * Visual editor
 * Support for mac, mobile, and consoles
-* Support for Vulkan, DirectX12, and Metal
+* Support for Vulkan, and Metal
 
 ## Contributing
 Please read [CONTRIBUTING](https://github.com/VertexEngine/VertexEngine/blob/master/.github/CONTRIBUTING.md) before opening a Pull Request.

@@ -11,7 +11,7 @@ It is important for a healthy code base to have a consistent style through all i
 ### Code formatting
 * Indents are 4 spaces, and not tabs.
 
-* Refs `&` and pointers `*` must be attached to the typename or the variable name if the typename is not applicable. For example:
+* References `&` and pointers `*` must be attached to the typename or the variable name if the typename is not applicable. For example:
 
 ```cpp
 const char* foo;
@@ -51,6 +51,15 @@ namespace Foo
 * Macros must be indented.
 
 * Use `#pragma once` instead of include guards.
+
+### Patterns
+* Header files must have the `.h` extension.
+
+* File names must be in `PascalCase`.
+
+* Include only necessary headers.
+
+* Include common header files in `Vertex/src/Core/vx_pch.h`.
 
 ## Code of conduct
 See [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md).
