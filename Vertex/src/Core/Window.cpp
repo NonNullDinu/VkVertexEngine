@@ -1,7 +1,12 @@
 #include "Window.h"
 
-namespace Vertex
-{
+#if defined(_WIN32)
+#include "Platforms/Windows/WindowsWindow.h"
+#elif defined(__linux__)
+#include "Platforms/Linux/LinuxWindow.h"
+#endif
+
+namespace Vertex {
 
     Window* Window::Create()
     {
@@ -10,7 +15,7 @@ namespace Vertex
 #elif defined(__linux__)
         return new LinuxWindow();
 #else
-        #error Unsupported platform
+#error Unsupported platform
 #endif
     }
 

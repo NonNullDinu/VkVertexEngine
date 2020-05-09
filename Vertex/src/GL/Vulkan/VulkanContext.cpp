@@ -2,9 +2,8 @@
 #include "VulkanShaderPipeline.h"
 #include "VulkanExtensions.h"
 
-namespace Vertex
-{
-    
+namespace Vertex {
+
     static VKAPI_ATTR VkBool32 VKAPI_CALL VulkanDebugCallback(
         VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
         VkDebugUtilsMessageTypeFlagsEXT messageType,
@@ -48,6 +47,7 @@ namespace Vertex
         CreateSwapChain();
         CreateImageViews();
         CreateRenderPass();
+        CreateGraphicsPipelineLayout();
         CreateFrameBuffers();
         CreateCommandPool();
         CreateCommandBuffers();
@@ -67,7 +67,6 @@ namespace Vertex
     void VulkanContext::Render()
     {
         vkWaitForFences(m_Device, 1, &m_InFlightFences[m_CurrentFrame], VK_TRUE, UINT64_MAX);
-        vkResetFences(m_Device, 1, &m_InFlightFences[m_CurrentFrame]);
 
         uint32_t imageIndex;
         if (vkAcquireNextImageKHR(m_Device, m_SwapChain, UINT64_MAX, m_ImageAvailableSemaphores[m_CurrentFrame], VK_NULL_HANDLE, &imageIndex)
@@ -96,8 +95,6 @@ namespace Vertex
         VkSemaphore signalSemaphores[] = { m_RenderFinishedSemaphores[m_CurrentFrame] };
         submitInfo.signalSemaphoreCount = 1;
         submitInfo.pSignalSemaphores = signalSemaphores;
-
-        vkResetFences(m_Device, 1, &m_InFlightFences[m_CurrentFrame]);
 
         VkCommandBufferBeginInfo beginInfo{};
         beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -134,7 +131,9 @@ namespace Vertex
             VX_CORE_ASSERT(false, "vkEndCommandBuffer failed");
         }
 
-        if (vkQueueSubmit(m_GraphicsQueue, 1, &submitInfo, m_ImagesInFlight[imageIndex]) != VK_SUCCESS)
+        vkResetFences(m_Device, 1, &m_InFlightFences[m_CurrentFrame]);
+
+        if (vkQueueSubmit(m_GraphicsQueue, 1, &submitInfo, m_InFlightFences[m_CurrentFrame]) != VK_SUCCESS)
         {
             VX_CORE_ASSERT(false, "vkQueueSubmit failed");
         }
@@ -207,6 +206,7 @@ namespace Vertex
         CreateSwapChain();
         CreateImageViews();
         CreateRenderPass();
+        CreateGraphicsPipelineLayout();
         CreateFrameBuffers();
         CreateCommandBuffers();
     }
@@ -214,8 +214,6 @@ namespace Vertex
     void VulkanContext::CleanUpContext()
     {
         vkDeviceWaitIdle(m_Device);
-
-        CleanupSwapChain();
 
         vkDestroyDescriptorPool(m_Device, m_DescriptorPool, nullptr);
 
@@ -225,6 +223,10 @@ namespace Vertex
             vkDestroySemaphore(m_Device, m_ImageAvailableSemaphores[i], nullptr);
             vkDestroyFence(m_Device, m_InFlightFences[i], nullptr);
         }
+
+        CleanupSwapChain();
+
+        vkDestroyCommandPool(m_Device, m_CommandPool, nullptr);
 
         vkDestroyDevice(m_Device, nullptr);
         if constexpr (EnableValidationLayers)
@@ -691,6 +693,7 @@ namespace Vertex
             {
                 VX_CORE_ASSERT(false, "failed to create synchronization objects for a frame");
             }
+            CoreLogger::Get()->info("Created sync objects for {}", i);
         }
     }
 

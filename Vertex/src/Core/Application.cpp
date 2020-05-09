@@ -14,7 +14,7 @@ namespace Vertex
         VX_CORE_ASSERT((!s_AppInstance), "Application cannot be instantiated twice!");
 
         m_Window.reset(Window::Create());
-        
+
         m_Window->SetEventCallback(VX_BIND_FUNC_1(Application::OnEvent));
 
         // --------------------------------------
@@ -108,6 +108,7 @@ namespace Vertex
 
     Application::~Application()
     {
+        PopOverlay(m_ImGuiLayer);
     }
 
     void Application::OnEvent(Event& event)
@@ -163,6 +164,8 @@ namespace Vertex
 
             m_Window->OnUpdate();
         }
+
+        m_ImGuiLayer->OnDetach();
 
         return;
     }
