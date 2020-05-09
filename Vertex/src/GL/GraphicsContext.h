@@ -11,7 +11,6 @@ namespace Vertex
         typedef std::function<void(GraphicsContext*)> RenderFunc;
 
     public:
-        virtual ~GraphicsContext() = default; // the compiler complains if it tries to use shared pointers on types that have no destructor
 
         virtual void Render() = 0;
 

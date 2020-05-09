@@ -29,12 +29,12 @@ namespace Vertex
         ~Application();
 
         inline Window& GetWindow() { return *m_Window; }
-        
+
         static inline Application& Get() { return *s_AppInstance; }
 
         inline void PushLayer(Layer* layer) { m_LayerStack.PushLayer(layer); layer->OnAttach(); }
         inline void PopLayer(Layer* layer) { m_LayerStack.PopLayer(layer); }
-        
+
         inline void PushOverlay(Layer* overlay) { m_LayerStack.PushOverlay(overlay); overlay->OnAttach(); }
         inline void PopOverlay(Layer* overlay) { m_LayerStack.PopOverlay(overlay); }
 
@@ -43,13 +43,13 @@ namespace Vertex
         void Run();
 
     private:
+        std::shared_ptr<Window> m_Window;
+
         bool m_Running;
         // we want this^ variable since the application might close for multiple reasons
         LayerStack m_LayerStack;
 
         ImGuiLayer* m_ImGuiLayer;
-
-        std::shared_ptr<Window> m_Window;
 
         static Application* s_AppInstance;
         // ^ application is a singleton class

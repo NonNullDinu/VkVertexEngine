@@ -217,14 +217,14 @@ namespace Vertex {
 
         vkDestroyDescriptorPool(m_Device, m_DescriptorPool, nullptr);
 
-        CleanupSwapChain();
-
         for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
         {
             vkDestroySemaphore(m_Device, m_RenderFinishedSemaphores[i], nullptr);
             vkDestroySemaphore(m_Device, m_ImageAvailableSemaphores[i], nullptr);
             vkDestroyFence(m_Device, m_InFlightFences[i], nullptr);
         }
+
+        CleanupSwapChain();
 
         vkDestroyCommandPool(m_Device, m_CommandPool, nullptr);
 
@@ -673,9 +673,9 @@ namespace Vertex {
 
     void VulkanContext::CreateSyncObjects()
     {
-        m_ImageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
-        m_RenderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
-        m_InFlightFences.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
+        m_ImageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
+        m_RenderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
+        m_InFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
         m_ImagesInFlight.resize(m_SwapChainImages.size(), VK_NULL_HANDLE);
 
         VkSemaphoreCreateInfo semaphoreInfo{};
@@ -684,21 +684,17 @@ namespace Vertex {
         VkFenceCreateInfo fenceInfo{};
         fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
         fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
-        CoreLogger::Get()->info("Creating sync objects");
 
         for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
         {
-            CoreLogger::Get()->info("Creating sync objects for the {}th frame", i);
             if (vkCreateSemaphore(m_Device, &semaphoreInfo, nullptr, &m_ImageAvailableSemaphores[i]) != VK_SUCCESS ||
                 vkCreateSemaphore(m_Device, &semaphoreInfo, nullptr, &m_RenderFinishedSemaphores[i]) != VK_SUCCESS ||
                 vkCreateFence(m_Device, &fenceInfo, nullptr, &m_InFlightFences[i]) != VK_SUCCESS)
             {
                 VX_CORE_ASSERT(false, "failed to create synchronization objects for a frame");
             }
-            CoreLogger::Get()->info("Created sync objects for the {}th frame", i);
+            CoreLogger::Get()->info("Created sync objects for {}", i);
         }
-
-        CoreLogger::Get()->info("Created sync objects");
     }
 
     void VulkanContext::CreateDescriptorPool()
