@@ -1,12 +1,15 @@
 #include "Application.h"
 
+#include "Renderer/Camera.h"
+
 namespace Vertex
 {
 
     Application* Application::s_AppInstance = nullptr;
 
     Application::Application()
-        : m_Running(true)
+        : m_Running(true),
+          m_Camera(-1.0f, 1.0f, -1.0f, 1.0f)
     {
         VX_CORE_ASSERT((!s_AppInstance), "Application cannot be instantiated twice!");
 

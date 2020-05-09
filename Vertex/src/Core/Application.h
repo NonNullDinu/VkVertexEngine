@@ -66,6 +66,8 @@ namespace Vertex
         std::shared_ptr<VertexBuffer> m_VertexBuffer2;
         std::shared_ptr<IndexBuffer> m_IndexBuffer2;
 
+        OrthographicCamera2D m_Camera;
+
         // --------------------------------------
 
         void Render();
