@@ -17,6 +17,7 @@ class ImGuiLayer; // <- forward declare it to be accessible from application
 #include "GL/VertexArray.h"
 #include "GL/Shader.h"
 
+#include "Renderer/Camera.h"
 #include "Renderer/Renderer.h"
 
 namespace Vertex
