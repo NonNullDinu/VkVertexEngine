@@ -2,9 +2,8 @@
 #include "VulkanShaderPipeline.h"
 #include "VulkanExtensions.h"
 
-namespace Vertex
-{
-    
+namespace Vertex {
+
     static VKAPI_ATTR VkBool32 VKAPI_CALL VulkanDebugCallback(
         VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
         VkDebugUtilsMessageTypeFlagsEXT messageType,
@@ -48,6 +47,7 @@ namespace Vertex
         CreateSwapChain();
         CreateImageViews();
         CreateRenderPass();
+        CreateGraphicsPipelineLayout();
         CreateFrameBuffers();
         CreateCommandPool();
         CreateCommandBuffers();
@@ -67,7 +67,6 @@ namespace Vertex
     void VulkanContext::Render()
     {
         vkWaitForFences(m_Device, 1, &m_InFlightFences[m_CurrentFrame], VK_TRUE, UINT64_MAX);
-        vkResetFences(m_Device, 1, &m_InFlightFences[m_CurrentFrame]);
 
         uint32_t imageIndex;
         if (vkAcquireNextImageKHR(m_Device, m_SwapChain, UINT64_MAX, m_ImageAvailableSemaphores[m_CurrentFrame], VK_NULL_HANDLE, &imageIndex)
@@ -96,8 +95,6 @@ namespace Vertex
         VkSemaphore signalSemaphores[] = { m_RenderFinishedSemaphores[m_CurrentFrame] };
         submitInfo.signalSemaphoreCount = 1;
         submitInfo.pSignalSemaphores = signalSemaphores;
-
-        vkResetFences(m_Device, 1, &m_InFlightFences[m_CurrentFrame]);
 
         VkCommandBufferBeginInfo beginInfo{};
         beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -134,7 +131,9 @@ namespace Vertex
             VX_CORE_ASSERT(false, "vkEndCommandBuffer failed");
         }
 
-        if (vkQueueSubmit(m_GraphicsQueue, 1, &submitInfo, m_ImagesInFlight[imageIndex]) != VK_SUCCESS)
+        vkResetFences(m_Device, 1, &m_InFlightFences[m_CurrentFrame]);
+
+        if (vkQueueSubmit(m_GraphicsQueue, 1, &submitInfo, m_InFlightFences[m_CurrentFrame]) != VK_SUCCESS)
         {
             VX_CORE_ASSERT(false, "vkQueueSubmit failed");
         }
@@ -207,6 +206,7 @@ namespace Vertex
         CreateSwapChain();
         CreateImageViews();
         CreateRenderPass();
+        CreateGraphicsPipelineLayout();
         CreateFrameBuffers();
         CreateCommandBuffers();
     }
@@ -215,9 +215,9 @@ namespace Vertex
     {
         vkDeviceWaitIdle(m_Device);
 
-        CleanupSwapChain();
-
         vkDestroyDescriptorPool(m_Device, m_DescriptorPool, nullptr);
+
+        CleanupSwapChain();
 
         for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
         {
@@ -225,6 +225,8 @@ namespace Vertex
             vkDestroySemaphore(m_Device, m_ImageAvailableSemaphores[i], nullptr);
             vkDestroyFence(m_Device, m_InFlightFences[i], nullptr);
         }
+
+        vkDestroyCommandPool(m_Device, m_CommandPool, nullptr);
 
         vkDestroyDevice(m_Device, nullptr);
         if constexpr (EnableValidationLayers)
@@ -671,9 +673,9 @@ namespace Vertex
 
     void VulkanContext::CreateSyncObjects()
     {
-        m_ImageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
-        m_RenderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
-        m_InFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
+        m_ImageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
+        m_RenderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
+        m_InFlightFences.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
         m_ImagesInFlight.resize(m_SwapChainImages.size(), VK_NULL_HANDLE);
 
         VkSemaphoreCreateInfo semaphoreInfo{};
@@ -682,16 +684,21 @@ namespace Vertex
         VkFenceCreateInfo fenceInfo{};
         fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
         fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+        CoreLogger::Get()->info("Creating sync objects");
 
         for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
         {
+            CoreLogger::Get()->info("Creating sync objects for the {}th frame", i);
             if (vkCreateSemaphore(m_Device, &semaphoreInfo, nullptr, &m_ImageAvailableSemaphores[i]) != VK_SUCCESS ||
                 vkCreateSemaphore(m_Device, &semaphoreInfo, nullptr, &m_RenderFinishedSemaphores[i]) != VK_SUCCESS ||
                 vkCreateFence(m_Device, &fenceInfo, nullptr, &m_InFlightFences[i]) != VK_SUCCESS)
             {
                 VX_CORE_ASSERT(false, "failed to create synchronization objects for a frame");
             }
+            CoreLogger::Get()->info("Created sync objects for the {}th frame", i);
         }
+
+        CoreLogger::Get()->info("Created sync objects");
     }
 
     void VulkanContext::CreateDescriptorPool()
