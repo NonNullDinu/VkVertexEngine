@@ -9,34 +9,7 @@ Contributions are encouraged, however, discussing the proposed changes beforehan
 It is important for a healthy code base to have a consistent style through all internal code. This extends to design patterns as well as just the formatting of the code itself.
 
 ### Code formatting
-* Indents are 4 spaces, and not tabs.
-
 * References `&` and pointers `*` must be attached to the typename or the variable name if the typename is not applicable. For example:
-
-```cpp
-const char* foo;
-Foo& bar;
-void* foo = &bar;
-```
-
-* Curly braces must be on the next line of function definitions if not inline. For example:
-
-```cpp
-if (condition)
-{
-    // do something
-}
-
-namespace Foo
-{
-
-    void Bar()
-    {
-
-    }
-
-}
-```
 
 * Implicit casts should be done as such: `(foo)bar`.
 
@@ -50,10 +23,12 @@ namespace Foo
 
 * Macros must be indented.
 
-* Use `#pragma once` instead of include guards.
+Vertex formatting is based on the [LLVM coding standard](https://llvm.org/docs/CodingStandards.html).
 
 ### Patterns
 * Header files must have the `.h` extension.
+
+* Use `#pragma once` instead of include guards.
 
 * File names must be in `PascalCase`.
 
