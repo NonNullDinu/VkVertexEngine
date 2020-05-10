@@ -6,7 +6,8 @@
 namespace Vertex
 {
 
-    VulkanShaderPipeline::VulkanShaderPipeline(const std::vector<char> vertex_src, const std::vector<char> fragment_src)
+    VulkanShaderPipeline::VulkanShaderPipeline(const std::vector<unsigned char>& vertex_src,
+                                               const std::vector<unsigned char>& fragment_src)
     {
         VkViewport viewport{};
         viewport.x = 0.0f;
@@ -142,6 +143,7 @@ namespace Vertex
         }
 
         // test for now
+
         auto array =
             VulkanBufferBindings<VulkanBufferBinding<glm::vec3, 0, 0>,
                                  VulkanBufferBinding<glm::vec3, 0, 1, sizeof(glm::vec3)> >::GetAttributeDescriptions();

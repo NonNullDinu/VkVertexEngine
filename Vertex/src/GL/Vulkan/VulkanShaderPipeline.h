@@ -8,7 +8,8 @@ namespace Vertex
     class VulkanShaderPipeline : public Shader
     {
     public:
-        VulkanShaderPipeline(const std::vector<char> vertex_src, const std::vector<char> fragment_src);
+        VulkanShaderPipeline(const std::vector<unsigned char>& vertex_src,
+                             const std::vector<unsigned char>& fragment_src);
         ~VulkanShaderPipeline();
         void Bind() const override;
         void Unbind() const override;

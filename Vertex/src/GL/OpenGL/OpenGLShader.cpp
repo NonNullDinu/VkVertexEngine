@@ -35,7 +35,8 @@ namespace Vertex
         return 0;
     }
 
-    OpenGLShader::OpenGLShader(const char* vertex_src, const char* fragment_src) : m_UniformPack(&m_ID)
+    OpenGLShader::OpenGLShader(const std::vector<unsigned char>& vertex_src, const std::vector<unsigned char>& fragment_src)
+        : m_UniformPack(&m_ID)
     {
         // from khronos.org
 
@@ -43,8 +44,10 @@ namespace Vertex
         GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
 
         // Send the vertex shader source code to GL
-        glShaderSource(vertex_shader, 1, &vertex_src, 0);
-
+        {
+            const char* const vertex_src_data = vertex_src.data();
+            glShaderSource(vertex_shader, 1, &vertex_src_data, 0);
+        }
         // Compile the vertex shader
         glCompileShader(vertex_shader);
 
@@ -71,7 +74,10 @@ namespace Vertex
         GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
 
         // Send the fragment shader source code to GL
-        glShaderSource(fragment_shader, 1, &fragment_src, 0);
+        {
+            const char* const fragment_src_data = fragment_src.data();
+            glShaderSource(fragment_shader, 1, &fragment_src_data, 0);
+        }
 
         // Compile the fragment shader
         glCompileShader(fragment_shader);

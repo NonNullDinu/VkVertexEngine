@@ -15,7 +15,7 @@ namespace Vertex
     class OpenGLShader : public Shader
     {
     public:
-        OpenGLShader(const char* vertex_src, const char* fragment_src);
+        OpenGLShader(const std::vector<unsigned char>& vertex_src, const std::vector<unsigned char>& fragment_src);
         ~OpenGLShader();
 
         void LoadUniform(const char* uniform_var_name);

@@ -4,6 +4,10 @@
 
 namespace Vertex
 {
+    struct UniformBufferObject
+    {
+        glm::mat4 view_mat;
+    };
 
     static VKAPI_ATTR VkBool32 VKAPI_CALL VulkanDebugCallback(
         VkDebugUtilsMessageSeverityFlagBitsEXT message_severity,
@@ -49,12 +53,15 @@ namespace Vertex
         CreateSwapChain();
         CreateImageViews();
         CreateRenderPass();
+        CreateDescriptorSetLayout();
         CreateGraphicsPipelineLayout();
         CreateFrameBuffers();
         CreateCommandPool();
         CreateCommandBuffers();
+        CreateUniformBuffers();
         CreateSyncObjects();
         CreateDescriptorPool();
+        CreateDescriptorSets();
 
         s_Context = this;
         CoreLogger::Get()->info("Created the Vulkan Context");
@@ -220,6 +227,12 @@ namespace Vertex
         }
 
         vkDestroySwapchainKHR(m_Device, m_SwapChain, nullptr);
+
+        for (size_t i = 0; i < m_SwapChainImages.size(); i++)
+        {
+            vkDestroyBuffer(m_Device, m_UniformBuffers[i], nullptr);
+            vkFreeMemory(m_Device, m_UniformBuffersMemory[i], nullptr);
+        }
     }
 
     void VulkanContext::RecreateSwapChain()
@@ -244,6 +257,9 @@ namespace Vertex
         CreateGraphicsPipelineLayout();
         CreateFrameBuffers();
         CreateCommandBuffers();
+        CreateDescriptorPool();
+        CreateDescriptorSets();
+        CreateUniformBuffers();
     }
 
     void VulkanContext::CleanUpContext()
@@ -251,6 +267,8 @@ namespace Vertex
         vkDeviceWaitIdle(m_Device);
 
         vkDestroyDescriptorPool(m_Device, m_DescriptorPool, nullptr);
+
+        vkDestroyDescriptorSetLayout(m_Device, m_DescriptorSetLayout, nullptr);
 
         for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
         {
@@ -544,8 +562,8 @@ namespace Vertex
     {
         VkPipelineLayoutCreateInfo pipeline_layout_info{};
         pipeline_layout_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-        pipeline_layout_info.setLayoutCount = 0; // Optional
-        pipeline_layout_info.pSetLayouts = nullptr; // Optional
+        pipeline_layout_info.setLayoutCount = 1;
+        pipeline_layout_info.pSetLayouts = &m_DescriptorSetLayout;
         pipeline_layout_info.pushConstantRangeCount = 0; // Optional
         pipeline_layout_info.pPushConstantRanges = nullptr; // Optional
 
@@ -891,6 +909,157 @@ namespace Vertex
         }
 
         return extensions;
+    }
+
+    uint32_t VulkanContext::FindMemoryType(uint32_t type_filter, VkMemoryPropertyFlags properties)
+    {
+        VkPhysicalDeviceMemoryProperties mem_properties;
+        vkGetPhysicalDeviceMemoryProperties(m_PhysicalDevice, &mem_properties);
+
+        for (uint32_t i = 0; i < mem_properties.memoryTypeCount; i++)
+        {
+            if ((type_filter & (1 << i)) && (mem_properties.memoryTypes[i].propertyFlags & properties) == properties)
+            {
+                return i;
+            }
+        }
+
+        VX_CORE_ASSERT(false, "failed to find suitable memory type");
+    }
+    void VulkanContext::CreateDescriptorSetLayout()
+    {
+        VkDescriptorSetLayoutBinding uboLayoutBinding{};
+        uboLayoutBinding.binding = 0;
+        uboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        uboLayoutBinding.descriptorCount = 1;
+        uboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+        uboLayoutBinding.pImmutableSamplers = nullptr; // Optional
+
+        VkDescriptorSetLayoutCreateInfo layoutInfo{};
+        layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+        layoutInfo.bindingCount = 1;
+        layoutInfo.pBindings = &uboLayoutBinding;
+
+        if (vkCreateDescriptorSetLayout(m_Device, &layoutInfo, nullptr, &m_DescriptorSetLayout) != VK_SUCCESS)
+        {
+            VX_CORE_ASSERT(false, "vkCreateDescriptorSetLayout failed");
+        }
+    }
+    void VulkanContext::CreateUniformBuffers()
+    {
+        VkDeviceSize bufferSize = sizeof(UniformBufferObject);// for now the ubo is just a mat4
+
+        m_UniformBuffers.resize(m_SwapChainImages.size());
+        m_UniformBuffersMemory.resize(m_SwapChainImages.size());
+
+        for (size_t i = 0; i < m_SwapChainImages.size(); i++)
+        {
+            CreateBuffer(bufferSize,
+                         VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+                         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                         m_UniformBuffers[i],
+                         m_UniformBuffersMemory[i]);
+        }
+    }
+
+    void VulkanContext::CreateDescriptorSets()
+    {
+        std::vector<VkDescriptorSetLayout> layouts(m_SwapChainImages.size(), m_DescriptorSetLayout);
+        VkDescriptorSetAllocateInfo allocInfo{};
+        allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+        allocInfo.descriptorPool = m_DescriptorPool;
+        allocInfo.descriptorSetCount = static_cast<uint32_t>(m_SwapChainImages.size());
+        allocInfo.pSetLayouts = layouts.data();
+
+        m_DescriptorSets.resize(m_SwapChainImages.size());
+        if (vkAllocateDescriptorSets(m_Device, &allocInfo, m_DescriptorSets.data()) != VK_SUCCESS)
+        {
+            VX_CORE_ASSERT(false, "vkAllocateDescriptorSets failed");
+        }
+
+        for (size_t i = 0; i < m_SwapChainImages.size(); i++)
+        {
+            VkDescriptorBufferInfo bufferInfo{};
+            bufferInfo.buffer = m_UniformBuffers[i];
+            bufferInfo.offset = 0;
+            bufferInfo.range = sizeof(UniformBufferObject);
+
+            VkWriteDescriptorSet descriptorWrite{};
+            descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            descriptorWrite.dstSet = m_DescriptorSets[i];
+            descriptorWrite.dstBinding = 0;
+            descriptorWrite.dstArrayElement = 0;
+
+            descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+            descriptorWrite.descriptorCount = 1;
+
+            descriptorWrite.pBufferInfo = &bufferInfo;
+            descriptorWrite.pImageInfo = nullptr; // Optional
+            descriptorWrite.pTexelBufferView = nullptr; // Optional
+
+            vkUpdateDescriptorSets(m_Device, 1, &descriptorWrite, 0, nullptr);
+        }
+    }
+
+    // --------------------------------
+    // ------ Helper functions --------
+    // --------------------------------
+
+    void VulkanContext::CreateBuffer(VkDeviceSize size,
+                                     VkBufferUsageFlags usage,
+                                     VkMemoryPropertyFlags properties,
+                                     VkBuffer& buffer,
+                                     VkDeviceMemory& buffer_memory)
+    {
+        VkBufferCreateInfo buffer_info{};
+        buffer_info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        buffer_info.size = size;
+        buffer_info.usage = usage;
+        buffer_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+        if (vkCreateBuffer(m_Device, &buffer_info, nullptr, &buffer) != VK_SUCCESS)
+        {
+            VX_CORE_ASSERT(false, "vkCreateBuffer failed");
+        }
+
+        VkMemoryRequirements mem_requirements;
+        vkGetBufferMemoryRequirements(m_Device, buffer, &mem_requirements);
+
+        VkMemoryAllocateInfo alloc_info{};
+        alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+        alloc_info.allocationSize = mem_requirements.size;
+        alloc_info.memoryTypeIndex = FindMemoryType(mem_requirements.memoryTypeBits, properties);
+
+        if (vkAllocateMemory(m_Device, &alloc_info, nullptr, &buffer_memory) != VK_SUCCESS)
+        {
+            VX_CORE_ASSERT(false, "vkAllocateMemory failed");
+        }
+
+        vkBindBufferMemory(m_Device, buffer, buffer_memory, 0);
+    }
+
+    void VulkanContext::CopyBuffer(VkBuffer src_buffer, VkBuffer dst_buffer, VkDeviceSize size)
+    {
+        VkCommandBufferBeginInfo begin_info{};
+        begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+        vkBeginCommandBuffer(m_LoadCommandBuffer, &begin_info);
+
+        VkBufferCopy copy_region{};
+        copy_region.srcOffset = 0; // Optional
+        copy_region.dstOffset = 0; // Optional
+        copy_region.size = size;
+        vkCmdCopyBuffer(m_LoadCommandBuffer, src_buffer, dst_buffer, 1, &copy_region);
+
+        vkEndCommandBuffer(m_LoadCommandBuffer);
+
+        VkSubmitInfo submit_info{};
+        submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        submit_info.commandBufferCount = 1;
+        submit_info.pCommandBuffers = &m_LoadCommandBuffer;
+        vkQueueSubmit(m_GraphicsQueue, 1, &submit_info, VK_NULL_HANDLE);
+        vkQueueWaitIdle(m_GraphicsQueue);
     }
 
 }

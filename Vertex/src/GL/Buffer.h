@@ -87,6 +87,8 @@ namespace Vertex
         {}
 
         virtual const BufferLayout& GetLayout() const = 0;
+        virtual void BeforeRender() = 0;
+        virtual void AfterRender() = 0;
 
         static VertexBuffer* Create(float* vertices, size_t size, const BufferLayout& layout);
     };
@@ -102,6 +104,9 @@ namespace Vertex
         {}
 
         virtual uint32_t GetCount() const = 0;
+
+        virtual void BeforeRender() = 0;
+        virtual void AfterRender() = 0;
 
         static IndexBuffer* Create(uint32_t* indices, size_t size);
     };

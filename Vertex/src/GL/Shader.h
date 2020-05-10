@@ -27,7 +27,7 @@ namespace Vertex
         virtual void Bind() const = 0;
         virtual void Unbind() const = 0;
 
-        static Shader* Create(const char* vertex_src, const char* fragment_src);
+        static Shader* Create(const std::vector<unsigned char>& vertex_src, const std::vector<unsigned char>& fragment_src);
     };
 
 }

@@ -4,8 +4,8 @@
 namespace Vertex
 {
 
-    VulkanShaderModule::VulkanShaderModule(const std::vector<char> source,
-                                           VkPipelineShaderStageCreateInfo shader_stage_info)
+    VulkanShaderModule::VulkanShaderModule(const std::vector<unsigned char>& source,
+                                           VkPipelineShaderStageCreateInfo& shader_stage_info)
     {
         VkShaderModuleCreateInfo create_info{};
         create_info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
@@ -17,11 +17,14 @@ namespace Vertex
                                  nullptr,
                                  &m_InternalVkShaderModule) != VK_SUCCESS)
         {
-            throw std::runtime_error("failed to create shader module!");
+            VX_CORE_ASSERT(false, "vkCreateShaderModule failed");
         }
 
         shader_stage_info.module = m_InternalVkShaderModule;
+    }
 
+    VulkanShaderModule::~VulkanShaderModule()
+    {
         vkDestroyShaderModule(VulkanContext::GetContext()->GetDevice(), m_InternalVkShaderModule, nullptr);
     }
 

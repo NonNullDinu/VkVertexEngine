@@ -75,13 +75,12 @@ namespace Vertex
         return 0;
     }
 
-    Shader* Shader::Create(const char* vertex_src, const char* fragment_src)
+    Shader* Shader::Create(const std::vector<unsigned char>& vertex_src, const std::vector<unsigned char>& fragment_src)
     {
 #if defined(VX_RENDER_API_OPENGL)
         return new OpenGLShader(vertex_src, fragment_src);
 #elif defined(VX_RENDER_API_VULKAN)
-        return new VulkanShaderPipeline(std::vector<char>(vertex_src, vertex_src + strlen(vertex_src)),
-                                        std::vector<char>(fragment_src, fragment_src + strlen(fragment_src)));
+        return new VulkanShaderPipeline(vertex_src, fragment_src);
 #else
         return nullptr; // for now
 #endif

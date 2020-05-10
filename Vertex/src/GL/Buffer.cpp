@@ -2,6 +2,8 @@
 
 #if defined(VX_RENDER_API_OPENGL)
     #include "OpenGL/OpenGLBuffer.h"
+#elif defined(VX_RENDER_API_VULKAN)
+    #include "Vulkan/VulkanBuffer.h"
 #endif
 // ... per rendering API
 
@@ -12,6 +14,8 @@ namespace Vertex
     {
 #if defined(VX_RENDER_API_OPENGL)
         return new OpenGLVertexBuffer(vertices, size, layout);
+#elif defined(VX_RENDER_API_VULKAN)
+        return new VulkanVertexBuffer(vertices, size);
 #else
         return nullptr; // for now
 #endif
@@ -21,6 +25,8 @@ namespace Vertex
     {
 #if defined(VX_RENDER_API_OPENGL)
         return new OpenGLIndexBuffer(indices, size);
+#elif defined(VX_RENDER_API_VULKAN)
+        return new VulkanIndexBuffer(indices, size);
 #else
         return nullptr; // for now
 #endif

@@ -68,7 +68,18 @@ namespace Vertex
         inline VkCommandBuffer GetLoadCommandBuffer()
         { return m_LoadCommandBuffer; }
 
+        uint32_t FindMemoryType(uint32_t type_filter, VkMemoryPropertyFlags properties);
+
         static VulkanContext* GetContext();
+
+        /// public helper functions
+        void CreateBuffer(VkDeviceSize size,
+                          VkBufferUsageFlags usage,
+                          VkMemoryPropertyFlags properties,
+                          VkBuffer& buffer,
+                          VkDeviceMemory& buffer_memory);
+
+        void CopyBuffer(VkBuffer src_buffer, VkBuffer dst_buffer, VkDeviceSize size);
 
     private:
         GLFWwindow* m_WindowHandle;
@@ -87,6 +98,7 @@ namespace Vertex
         std::vector<VkImageView> m_SwapChainImageViews;
         std::vector<VkFramebuffer> m_SwapChainFramebuffers;
 
+        VkDescriptorSetLayout m_DescriptorSetLayout;
         VkPipelineLayout m_PipelineLayout;
         std::vector<std::reference_wrapper<VulkanShaderPipeline> > m_Pipelines;
 
@@ -102,8 +114,12 @@ namespace Vertex
         bool m_NeedSwapChainRecreate = false;
 
         VkDescriptorPool m_DescriptorPool;
+        std::vector<VkDescriptorSet> m_DescriptorSets;
 
         VkCommandBuffer m_CurrentCommandBuffer;
+
+        std::vector<VkBuffer> m_UniformBuffers;
+        std::vector<VkDeviceMemory> m_UniformBuffersMemory;
 
         void InitVulkan();
         void InitVulkanDebugger();
@@ -118,7 +134,10 @@ namespace Vertex
         void CreateCommandPool();
         void CreateCommandBuffers();
         void CreateSyncObjects();
+        void CreateDescriptorSetLayout();
         void CreateDescriptorPool();
+        void CreateUniformBuffers();
+        void CreateDescriptorSets();
 
         void CleanupSwapChain();
         void RecreateSwapChain();

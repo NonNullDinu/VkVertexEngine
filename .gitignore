@@ -47,6 +47,8 @@ build/
 out/
 /cmake-build-debug/
 /cmake-build-debug-gl/
+/bin/
+*.spv
 
 # Imgui configurations
 imgui.ini
