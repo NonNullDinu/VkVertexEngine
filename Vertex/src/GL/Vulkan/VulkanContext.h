@@ -99,6 +99,7 @@ namespace Vertex
         std::vector<VkFence> m_InFlightFences;
         std::vector<VkFence> m_ImagesInFlight;
         size_t m_CurrentFrame = 0;
+        bool m_NeedSwapChainRecreate = false;
 
         VkDescriptorPool m_DescriptorPool;
 

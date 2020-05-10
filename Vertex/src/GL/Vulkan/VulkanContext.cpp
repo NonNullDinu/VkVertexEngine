@@ -72,16 +72,24 @@ namespace Vertex
         vkWaitForFences(m_Device, 1, &m_InFlightFences[m_CurrentFrame], VK_TRUE, UINT64_MAX);
 
         uint32_t image_index;
-        if (vkAcquireNextImageKHR(m_Device,
-                                  m_SwapChain,
-                                  UINT64_MAX,
-                                  m_ImageAvailableSemaphores[m_CurrentFrame],
-                                  VK_NULL_HANDLE,
-                                  &image_index)
-            != VK_SUCCESS)
+
+        VkResult result = vkAcquireNextImageKHR(m_Device,
+                                                m_SwapChain,
+                                                UINT64_MAX,
+                                                m_ImageAvailableSemaphores[m_CurrentFrame],
+                                                VK_NULL_HANDLE,
+                                                &image_index);
+        if (result == VK_ERROR_OUT_OF_DATE_KHR)
+        {
+            RecreateSwapChain();
+            return;
+        }
+        else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
         {
             VX_CORE_ASSERT(false, "cannot acquire next image");
         }
+
+        m_PrepareRenderCallback(this);
 
         if (m_ImagesInFlight[image_index] != VK_NULL_HANDLE)
         {
@@ -159,7 +167,12 @@ namespace Vertex
 
         present_info.pResults = nullptr; // Optional
 
-        if (vkQueuePresentKHR(m_PresentQueue, &present_info) != VK_SUCCESS)
+        result = vkQueuePresentKHR(m_PresentQueue, &present_info);
+        if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
+        {
+            RecreateSwapChain();
+        }
+        else if (result != VK_SUCCESS)
         {
             VX_CORE_ASSERT(false, "vkQueuePresentKHR failed");
         }
@@ -170,11 +183,15 @@ namespace Vertex
 
     void VulkanContext::SwapBuffers()
     {
-
+        if (m_NeedSwapChainRecreate)
+        {
+            RecreateSwapChain();
+            m_NeedSwapChainRecreate = false;
+        }
     }
     void VulkanContext::NotifyResize(int new_width, int new_height)
     {
-
+        m_NeedSwapChainRecreate = true;
     }
 
     void VulkanContext::CleanupSwapChain()
@@ -207,6 +224,16 @@ namespace Vertex
 
     void VulkanContext::RecreateSwapChain()
     {
+        int width = 0, height = 0;
+        glfwGetFramebufferSize(m_WindowHandle, &width, &height);
+        while (width == 0 || height == 0)
+        {
+            glfwGetFramebufferSize(m_WindowHandle, &width, &height);
+            glfwWaitEvents();
+        }
+
+        CoreLogger::Get()->debug("Resizing swap chain for {}x{}", width, height);
+
         vkDeviceWaitIdle(m_Device);
 
         CleanupSwapChain();
@@ -462,7 +489,8 @@ namespace Vertex
 
         uint32_t image_count = swap_chain_support.capabilities.minImageCount + 1;
 
-        if (swap_chain_support.capabilities.maxImageCount > 0 && image_count > swap_chain_support.capabilities.maxImageCount)
+        if (swap_chain_support.capabilities.maxImageCount > 0
+            && image_count > swap_chain_support.capabilities.maxImageCount)
         {
             image_count = swap_chain_support.capabilities.maxImageCount;
         }
@@ -829,12 +857,15 @@ namespace Vertex
         }
         else
         {
-            VkExtent2D actual_extent = {1024, 576};
+            int width = 0, height = 0;
+            glfwGetFramebufferSize(m_WindowHandle, &width, &height);
+            VkExtent2D actual_extent = {(uint32_t)width, (uint32_t)height};
 
             actual_extent.width = std::max(capabilities.minImageExtent.width, std::min(capabilities.maxImageExtent
-                                                                                          .width, actual_extent.width));
+                                                                                           .width,
+                                                                                       actual_extent.width));
             actual_extent.height = std::max(capabilities.minImageExtent.height, std::min(capabilities.maxImageExtent
-                                                                                            .height,
+                                                                                             .height,
                                                                                          actual_extent.height));
 
             return actual_extent;

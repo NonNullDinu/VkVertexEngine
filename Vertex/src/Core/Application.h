@@ -83,7 +83,8 @@ namespace Vertex
 
         // --------------------------------------
 
-        void Render();
+        void PrepareForRender(GraphicsContext* context);
+        void Render(GraphicsContext* context);
 
     private:
         // Application specific event callbacks

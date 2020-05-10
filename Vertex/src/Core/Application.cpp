@@ -136,7 +136,8 @@ namespace Vertex
 
     void Application::Run()
     {
-        m_Window->GetGraphicsContext().SetRenderCallback(VX_BIND_FUNC_0(Application::Render));
+        m_Window->GetGraphicsContext().SetPrepareRenderCallback(VX_BIND_FUNC_1(Application::PrepareForRender));
+        m_Window->GetGraphicsContext().SetRenderCallback(VX_BIND_FUNC_1(Application::Render));
 
         while (m_Running)
         {
@@ -165,11 +166,6 @@ namespace Vertex
 
             // --------------- ImGui ----------------
 
-            m_ImGuiLayer->Begin();
-
-            for (Layer* layer : m_LayerStack)
-                layer->OnImguiRender();
-
             m_Window->GetGraphicsContext().Render();
 
             // --------------------------------------
@@ -182,7 +178,15 @@ namespace Vertex
         return;
     }
 
-    void Application::Render()
+    void Application::PrepareForRender(GraphicsContext* context)
+    {
+        m_ImGuiLayer->Begin();
+
+        for (Layer* layer : m_LayerStack)
+            layer->OnImguiRender();
+    }
+
+    void Application::Render(GraphicsContext* context)
     {
         m_ImGuiLayer->End();
     }

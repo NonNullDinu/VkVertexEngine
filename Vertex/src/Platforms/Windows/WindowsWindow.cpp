@@ -186,7 +186,7 @@ namespace Vertex
 
         glfwSetErrorCallback(GLFWErrorCallback);
 
-#if defined(VX_RENDER_API_DIRECTX12)
+#if defined(VX_RENDER_API_DIRECTX12) || defined(VX_RENDER_API_VULKAN)
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 #endif
 

@@ -8,6 +8,7 @@ namespace Vertex
     class GraphicsContext
     {
         // the this pointer from GraphicsContext::Render
+        typedef std::function<void(GraphicsContext*)> PrepareRenderFunc;
         typedef std::function<void(GraphicsContext*)> RenderFunc;
 
     public:
@@ -21,6 +22,8 @@ namespace Vertex
 
         virtual void CleanUpContext() = 0;
 
+        inline void SetPrepareRenderCallback(PrepareRenderFunc callback)
+        { m_PrepareRenderCallback = callback; }
         inline void SetRenderCallback(RenderFunc callback)
         { m_RenderCallback = callback; }
 
@@ -28,6 +31,7 @@ namespace Vertex
 
     protected:
         RenderFunc m_RenderCallback;
+        PrepareRenderFunc m_PrepareRenderCallback;
     };
 
 }

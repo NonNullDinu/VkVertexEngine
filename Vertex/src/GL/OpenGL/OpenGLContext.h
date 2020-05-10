@@ -13,7 +13,10 @@ namespace Vertex
         OpenGLContext(GLFWwindow* window);
 
         void Render() override
-        { m_RenderCallback(this); }
+        {
+            m_PrepareRenderCallback(this);
+            m_RenderCallback(this);
+        }
 
         void SwapBuffers() override;
 
