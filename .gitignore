@@ -46,6 +46,7 @@
 build/
 out/
 /cmake-build-debug/
+/cmake-build-debug-gl/
 
 # Imgui configurations
 imgui.ini

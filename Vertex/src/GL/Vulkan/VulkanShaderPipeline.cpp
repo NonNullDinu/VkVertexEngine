@@ -130,15 +130,21 @@ namespace Vertex
         pipeline_info.basePipelineIndex = -1; // Optional
 
         if (vkCreateGraphicsPipelines(VulkanContext::GetContext()
-                                          ->GetDevice(), VK_NULL_HANDLE, 1, &pipeline_info, nullptr, &m_GraphicsPipeline)
+                                          ->GetDevice(),
+                                      VK_NULL_HANDLE,
+                                      1,
+                                      &pipeline_info,
+                                      nullptr,
+                                      &m_GraphicsPipeline)
             != VK_SUCCESS)
         {
             throw std::runtime_error("failed to create graphics pipeline!");
         }
 
         // test for now
-        auto array = VulkanBufferBindings<VulkanBufferBinding<glm::vec3, 0>,
-                                          VulkanBufferBinding<glm::vec3, 0> >::GetAttributeDescriptions();
+        auto array =
+            VulkanBufferBindings<VulkanBufferBinding<glm::vec3, 0, 0>,
+                                 VulkanBufferBinding<glm::vec3, 0, 1, sizeof(glm::vec3)> >::GetAttributeDescriptions();
     }
 
     VulkanShaderPipeline::~VulkanShaderPipeline()
