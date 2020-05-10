@@ -100,6 +100,10 @@ namespace Vertex
 
         std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->LoadUniform("u_ProjectionViewMatrix");
 
+#if defined(VX_RENDER_API_OPENGL)
+        std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->LoadUniform("u_ProjectionViewMatrix");
+#endif
+
         // --------------------------------------
         // --------------------------------------
         // --------------------------------------

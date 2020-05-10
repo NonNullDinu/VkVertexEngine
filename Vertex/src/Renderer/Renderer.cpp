@@ -18,7 +18,9 @@ namespace Vertex
     void Renderer::Submit(std::shared_ptr<VertexArray>& vertex_array, const std::shared_ptr<Shader>& shader)
     {
         shader->Bind();
+#if defined(VX_RENDER_API_OPENGL)
         (*std::dynamic_pointer_cast<OpenGLShader>(shader))["u_ProjectionViewMatrix"] = s_Scene->camera.GetProjectionViewMatrix();
+#endif
         vertex_array->Bind();
         s_GraphicsAPI->DrawIndexed(vertex_array);
     }
