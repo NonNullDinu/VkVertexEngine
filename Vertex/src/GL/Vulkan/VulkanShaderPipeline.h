@@ -8,8 +8,11 @@ namespace Vertex
     class VulkanShaderPipeline : public Shader
     {
     public:
+        template<size_t InputBindingsLen, size_t InputAttribLen>
         VulkanShaderPipeline(const std::vector<unsigned char>& vertex_src,
-                             const std::vector<unsigned char>& fragment_src);
+                             const std::vector<unsigned char>& fragment_src,
+                             std::array<VkVertexInputBindingDescription, InputBindingsLen> bindings,
+                             std::array<VkVertexInputAttributeDescription, InputAttribLen> input_attributes);
         ~VulkanShaderPipeline();
         void Bind() const override;
         void Unbind() const override;

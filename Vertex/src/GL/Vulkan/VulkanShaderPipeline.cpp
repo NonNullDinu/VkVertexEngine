@@ -6,8 +6,13 @@
 namespace Vertex
 {
 
+    template<size_t InputBindingsLen, size_t InputAttribLen>
     VulkanShaderPipeline::VulkanShaderPipeline(const std::vector<unsigned char>& vertex_src,
-                                               const std::vector<unsigned char>& fragment_src)
+                                               const std::vector<unsigned char>& fragment_src,
+                                               std::array<VkVertexInputBindingDescription,
+                                                          InputBindingsLen> bindings,
+                                               std::array<VkVertexInputAttributeDescription,
+                                                          InputAttribLen> input_attributes)
     {
         VkViewport viewport{};
         viewport.x = 0.0f;
@@ -99,10 +104,10 @@ namespace Vertex
 
         VkPipelineVertexInputStateCreateInfo vertex_input_info{};
         vertex_input_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-        vertex_input_info.vertexBindingDescriptionCount = 0;
-        vertex_input_info.pVertexBindingDescriptions = nullptr; // Optional
-        vertex_input_info.vertexAttributeDescriptionCount = 0;
-        vertex_input_info.pVertexAttributeDescriptions = nullptr; // Optional
+        vertex_input_info.vertexBindingDescriptionCount = InputBindingsLen;
+        vertex_input_info.pVertexBindingDescriptions = bindings.data();
+        vertex_input_info.vertexAttributeDescriptionCount = InputAttribLen;
+        vertex_input_info.pVertexAttributeDescriptions = input_attributes.data();
 
         VkPipelineInputAssemblyStateCreateInfo input_assembly{};
         input_assembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -139,14 +144,8 @@ namespace Vertex
                                       &m_GraphicsPipeline)
             != VK_SUCCESS)
         {
-            throw std::runtime_error("failed to create graphics pipeline!");
+            VX_CORE_ASSERT(false, "failed to create a graphics pipeline");
         }
-
-        // test for now
-
-        auto array =
-            VulkanBufferBindings<VulkanBufferBinding<glm::vec3, 0, 0>,
-                                 VulkanBufferBinding<glm::vec3, 0, 1, sizeof(glm::vec3)> >::GetAttributeDescriptions();
     }
 
     VulkanShaderPipeline::~VulkanShaderPipeline()
@@ -167,4 +166,11 @@ namespace Vertex
         vkDestroyPipeline(VulkanContext::GetContext()->GetDevice(), m_GraphicsPipeline, nullptr);
     }
 
+    template
+    VulkanShaderPipeline::VulkanShaderPipeline(const std::vector<unsigned char>& vertex_src,
+                                               const std::vector<unsigned char>& fragment_src,
+                                               std::array<VkVertexInputBindingDescription,
+                                                          2> bindings,
+                                               std::array<VkVertexInputAttributeDescription,
+                                                          2> input_attributes);
 }

@@ -27,7 +27,17 @@ namespace Vertex
         virtual void Bind() const = 0;
         virtual void Unbind() const = 0;
 
-        static Shader* Create(const std::vector<unsigned char>& vertex_src, const std::vector<unsigned char>& fragment_src);
+#ifdef VX_RENDER_API_VULKAN
+        template<size_t InputBindingLen, size_t InputAttribLen>
+#endif
+        static Shader* Create(const std::vector<unsigned char>& vertex_src,
+                              const std::vector<unsigned char>& fragment_src
+#ifdef VX_RENDER_API_VULKAN
+            , std::tuple<std::array<VkVertexInputBindingDescription, InputBindingLen>,
+                         std::array<VkVertexInputAttributeDescription, InputAttribLen>>
+                              vertex_shader_input_layout
+#endif
+        );
     };
 
 }

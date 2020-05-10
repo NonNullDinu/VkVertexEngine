@@ -2,6 +2,8 @@
 
 #if defined(VX_RENDER_API_OPENGL)
     #include "GL/OpenGL/OpenGLShader.h"
+#elif defined(VX_RENDER_API_VULKAN)
+    #include "GL/Vulkan/VulkanBufferBinding.h"
 #endif
 
 namespace Vertex
@@ -249,7 +251,14 @@ namespace Vertex
              0x03, 0x00, 0x00, 0x00, 0xF8, 0x00, 0x02, 0x00, 0x05, 0x00, 0x00, 0x00, 0x3D, 0x00, 0x04, 0x00, 0x07, 0x00,
              0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0x0B, 0x00, 0x00, 0x00, 0x3E, 0x00, 0x03, 0x00, 0x09, 0x00, 0x00, 0x00,
              0x0C, 0x00, 0x00, 0x00, 0xFD, 0x00, 0x01, 0x00, 0x38, 0x00, 0x01, 0x00};
-        m_Shader.reset(Shader::Create(vertex_src, fragment_src));
+
+        m_Shader.reset(Shader::Create<2, 2>(vertex_src,
+                                            fragment_src,
+                                            VulkanBufferBindings<VulkanBufferBinding<glm::vec3, 0, 0>,
+                                                                 VulkanBufferBinding<glm::vec4,
+                                                                                     0, 1,
+                                                                                     sizeof(glm::vec3)>>::GetAttributeDescriptions()
+        ));
 #endif // VX_RENDER_API_OPENGL
 
         s_AppInstance = this;
@@ -298,6 +307,8 @@ namespace Vertex
             Renderer::Submit(m_VertexArray2, m_Shader);
 
             Renderer::EndScene();
+
+#elif defined(VX_RENDER_API_VULKAN)
 
 #endif
 

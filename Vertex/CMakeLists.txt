@@ -144,12 +144,12 @@ set(VX_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/include PARENT_SCOPE)
 target_precompile_headers(Vertex PUBLIC src/Core/vx_pch.h)
 
 if ($ENV{USE_VK})
-    add_compile_definitions(VX_RENDER_API_VULKAN)
+    target_compile_definitions(Vertex PUBLIC VX_RENDER_API_VULKAN)
 # elseif ($ENV{USE_DX12})
 #     add_compile_definitions(VX_RENDER_API_DIRECTX12)
 else ()
     target_compile_definitions(Vertex PRIVATE VX_BUILD_SHARED IMGUI_IMPL_OPENGL_LOADER_GLAD=1)
-    add_compile_definitions(VX_RENDER_API_OPENGL)
+    target_compile_definitions(Vertex PUBLIC VX_RENDER_API_OPENGL)
 endif ()
 
 if ($ENV{VX_RELEASE})
@@ -157,7 +157,7 @@ if ($ENV{VX_RELEASE})
 endif ()
 
 if ($ENV{CLION_IDE})
-    target_compile_options(Vertex PRIVATE -include Core/vx_pch.h)
+    target_compile_options(Vertex PUBLIC -include Core/vx_pch.h)
 endif ()
 
 install(TARGETS Vertex

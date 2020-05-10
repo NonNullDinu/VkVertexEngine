@@ -75,15 +75,41 @@ namespace Vertex
         return 0;
     }
 
-    Shader* Shader::Create(const std::vector<unsigned char>& vertex_src, const std::vector<unsigned char>& fragment_src)
+#ifdef VX_RENDER_API_VULKAN
+    template<size_t InputBindingLen, size_t InputAttribLen>
+#endif
+    Shader* Shader::Create(const std::vector<unsigned char>& vertex_src,
+                           const std::vector<unsigned char>& fragment_src
+#ifdef VX_RENDER_API_VULKAN
+        , std::tuple<std::array<VkVertexInputBindingDescription, InputBindingLen>,
+                     std::array<VkVertexInputAttributeDescription, InputAttribLen>>
+                           vertex_shader_input_layout
+#endif
+    )
     {
 #if defined(VX_RENDER_API_OPENGL)
         return new OpenGLShader(vertex_src, fragment_src);
 #elif defined(VX_RENDER_API_VULKAN)
-        return new VulkanShaderPipeline(vertex_src, fragment_src);
+        return new VulkanShaderPipeline
+            (vertex_src,
+             fragment_src,
+             std::get<0>(vertex_shader_input_layout),
+             std::get<1>(vertex_shader_input_layout)
+            );
 #else
         return nullptr; // for now
 #endif
     }
 
+    #ifdef VX_RENDER_API_VULKAN
+    template
+    Shader* Shader::Create<2, 2>(const std::vector<unsigned char>& vertex_src,
+                                 const std::vector<unsigned char>& fragment_src,
+                                 std::tuple<std::array<VkVertexInputBindingDescription,
+                                                       2>,
+                                            std::array<VkVertexInputAttributeDescription,
+                                                       2>>
+                                 vertex_shader_input_layout
+    );
+    #endif
 }
