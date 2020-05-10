@@ -1,6 +1,8 @@
 #include "Renderer.h"
 
-#include "GL/OpenGL/OpenGLShader.h"
+#if defined(VX_RENDER_API_OPENGL)
+    #include "GL/OpenGL/OpenGLShader.h"
+#endif
 
 namespace Vertex
 {
