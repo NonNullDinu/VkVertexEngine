@@ -55,7 +55,7 @@ namespace Vertex
         { return m_ProjectionViewMatrix; }
 
     private:
-        glm::vec3 m_Position;
+        glm::vec3 m_Position = glm::vec3(0.0f, 0.0f, 0.0f);
         float m_Rotation = 0.0f;
 
         glm::mat4 m_ViewMatrix;
