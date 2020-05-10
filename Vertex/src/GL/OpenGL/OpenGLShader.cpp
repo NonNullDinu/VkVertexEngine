@@ -45,7 +45,7 @@ namespace Vertex
 
         // Send the vertex shader source code to GL
         {
-            const char* const vertex_src_data = vertex_src.data();
+            const char* const vertex_src_data = reinterpret_cast<const char* const>(vertex_src.data());
             glShaderSource(vertex_shader, 1, &vertex_src_data, 0);
         }
         // Compile the vertex shader
@@ -75,7 +75,7 @@ namespace Vertex
 
         // Send the fragment shader source code to GL
         {
-            const char* const fragment_src_data = fragment_src.data();
+            const char* const fragment_src_data = reinterpret_cast<const char* const>(fragment_src.data());
             glShaderSource(fragment_shader, 1, &fragment_src_data, 0);
         }
 

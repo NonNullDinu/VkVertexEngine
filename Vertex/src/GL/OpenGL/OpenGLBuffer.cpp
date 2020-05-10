@@ -30,6 +30,12 @@ namespace Vertex
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
+    void OpenGLVertexBuffer::BeforeRender()
+    {}
+
+    void OpenGLVertexBuffer::AfterRender()
+    {}
+
     // ----------------------------------
     // ---------- Index Buffer ----------
     // ----------------------------------
@@ -56,5 +62,11 @@ namespace Vertex
     {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
+
+    void OpenGLIndexBuffer::BeforeRender()
+    {}
+
+    void OpenGLIndexBuffer::AfterRender()
+    {}
 
 }

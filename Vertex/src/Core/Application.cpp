@@ -94,8 +94,8 @@ namespace Vertex
             }
         )";
 
-        m_Shader.reset(Shader::Create(std::vector<char>(vertex_source.begin(), vertex_source.end()),
-                                      std::vector<char>(fragment_source.begin(), fragment_source.end())));
+        m_Shader.reset(Shader::Create(std::vector<unsigned char>(vertex_source.begin(), vertex_source.end()),
+                                      std::vector<unsigned char>(fragment_source.begin(), fragment_source.end())));
 
         std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->LoadUniform("u_ProjectionViewMatrix");
 
