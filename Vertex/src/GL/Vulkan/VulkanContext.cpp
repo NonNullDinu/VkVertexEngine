@@ -32,10 +32,11 @@ namespace Vertex
 #endif
     ;
 
-    std::shared_ptr<VulkanContext> VulkanContext::s_Context;
+    VulkanContext* VulkanContext::s_Context = nullptr;
     VulkanContext::VulkanContext(GLFWwindow* window)
         : m_WindowHandle(window)
     {
+        VX_CORE_ASSERT(s_Context == nullptr, "Cannot have multiple vulkan contexts at once");
         InitVulkan();
         LoadVkExtensions(m_VkInstance);
         if constexpr (EnableValidationLayers)
@@ -55,7 +56,7 @@ namespace Vertex
         CreateSyncObjects();
         CreateDescriptorPool();
 
-        s_Context.reset(this);
+        s_Context = this;
         CoreLogger::Get()->info("Created the Vulkan Context");
     }
 
@@ -63,6 +64,7 @@ namespace Vertex
     {
         CoreLogger::Get()->info("Cleaning up the Vulkan Context");
         CleanUpContext();
+        s_Context = nullptr;
     }
 
     void VulkanContext::Render()
@@ -699,7 +701,6 @@ namespace Vertex
             {
                 VX_CORE_ASSERT(false, "failed to create synchronization objects for a frame");
             }
-            CoreLogger::Get()->info("Created sync objects for {}", i);
         }
     }
 
@@ -842,7 +843,7 @@ namespace Vertex
             return actualExtent;
         }
     }
-    std::shared_ptr<VulkanContext> VulkanContext::GetContext()
+    VulkanContext* VulkanContext::GetContext()
     {
         return s_Context;
     }

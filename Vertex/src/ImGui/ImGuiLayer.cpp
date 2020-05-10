@@ -43,7 +43,7 @@ namespace Vertex
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init("#version 410");
 #elif defined(VX_RENDER_API_VULKAN)
-        std::shared_ptr<VulkanContext> context = VulkanContext::GetContext();
+        VulkanContext* context = VulkanContext::GetContext();
         ImGui_ImplGlfw_InitForVulkan(window, true);
         ImGui_ImplVulkan_InitInfo init_info = {};
         init_info.Instance = context->GetInstance();

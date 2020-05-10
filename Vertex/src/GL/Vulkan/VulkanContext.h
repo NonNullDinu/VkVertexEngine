@@ -68,7 +68,7 @@ namespace Vertex
         inline VkCommandBuffer GetLoadCommandBuffer()
         { return m_LoadCommandBuffer; }
 
-        static std::shared_ptr<VulkanContext> GetContext();
+        static VulkanContext* GetContext();
 
     private:
         GLFWwindow* m_WindowHandle;
@@ -134,7 +134,7 @@ namespace Vertex
         VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
         std::vector<const char*> GetRequiredExtensions();
 
-        static std::shared_ptr<VulkanContext> s_Context;
+        static VulkanContext* s_Context;
         void PopulateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
     };
 

@@ -16,6 +16,8 @@ namespace Vertex
     {
 #if defined(VX_RENDER_API_OPENGL)
         return new OpenGLContext(window_handle);
+#elif defined(VX_RENDER_API_VULKAN)
+        return new VulkanContext(window_handle);
 #elif defined(VX_RENDER_API_DIRECTX12)
         return new DirectX12Context(window_handle);
 #else

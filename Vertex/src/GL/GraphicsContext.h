@@ -11,6 +11,7 @@ namespace Vertex
         typedef std::function<void(GraphicsContext*)> RenderFunc;
 
     public:
+        virtual ~GraphicsContext() = default;
 
         virtual void Render() = 0;
 
