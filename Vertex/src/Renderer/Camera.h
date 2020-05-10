@@ -24,7 +24,7 @@ namespace Vertex
         virtual void SetRotation(const float rotation) = 0;
     };
 
-    class OrthographicCamera2D : public Camera2D
+    class VX_PUBLIC_API OrthographicCamera2D : public Camera2D
     {
     public:
         OrthographicCamera2D(float left, float right, float top, float bottom);

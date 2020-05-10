@@ -9,6 +9,8 @@ Contributions are encouraged, however, discussing the proposed changes beforehan
 It is important for a healthy code base to have a consistent style through all internal code. This extends to design patterns as well as just the formatting of the code itself.
 
 ### Code formatting
+Vertex formatting is similar to the [LLVM coding standard](https://llvm.org/docs/CodingStandards.html), with the following exceptions:
+
 * References `&` and pointers `*` must be attached to the typename or the variable name if the typename is not applicable. For example:
 
 * Implicit casts should be done as such: `(foo)bar`.
@@ -22,8 +24,6 @@ It is important for a healthy code base to have a consistent style through all i
 * All macros are in the `UPPER_CASE_SNAKE_CASE`.
 
 * Macros must be indented.
-
-Vertex formatting is based on the [LLVM coding standard](https://llvm.org/docs/CodingStandards.html).
 
 ### Patterns
 * Header files must have the `.h` extension.

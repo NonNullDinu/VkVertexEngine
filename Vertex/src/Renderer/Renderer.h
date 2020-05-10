@@ -28,7 +28,7 @@ namespace Vertex
         }
     };
 
-    class Renderer
+    class VX_PUBLIC_API Renderer
     {
     public:
         static void Clear()
