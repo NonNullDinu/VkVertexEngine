@@ -13,12 +13,13 @@ namespace Vertex
         void Bind() const override;
         void Unbind() const override;
 
-        inline void SetVkCommandBuffer(VkCommandBuffer command_buffer) { m_CommandBuffer = command_buffer; }
+        inline void SetVkCommandBuffer(VkCommandBuffer command_buffer)
+        { m_CommandBuffer = command_buffer; }
 
         void CleanUp();
-     private:
+    private:
         VkPipeline m_GraphicsPipeline;
         VkCommandBuffer m_CommandBuffer;
     };
-    
+
 }

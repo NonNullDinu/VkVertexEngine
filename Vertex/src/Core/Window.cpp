@@ -6,7 +6,8 @@
 #include "Platforms/Linux/LinuxWindow.h"
 #endif
 
-namespace Vertex {
+namespace Vertex
+{
 
     Window* Window::Create()
     {

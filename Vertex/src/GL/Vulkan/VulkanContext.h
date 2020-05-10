@@ -4,7 +4,7 @@
 
 namespace Vertex
 {
-    
+
     class VulkanShaderPipeline;
 
     class VulkanContext : public GraphicsContext
@@ -21,39 +21,56 @@ namespace Vertex
 
         void CleanUpContext() override;
 
-        struct QueueFamilyIndices {
+        struct QueueFamilyIndices
+        {
             std::optional<uint32_t> graphicsFamily;
             std::optional<uint32_t> presentFamily;
 
-            bool IsComplete() {
+            bool IsComplete()
+            {
                 return graphicsFamily.has_value() && presentFamily.has_value();
             }
         };
 
-        struct SwapChainSupportDetails {
+        struct SwapChainSupportDetails
+        {
             VkSurfaceCapabilitiesKHR capabilities;
             std::vector<VkSurfaceFormatKHR> formats;
             std::vector<VkPresentModeKHR> presentModes;
         };
 
-        inline VkInstance GetInstance() { return m_VkInstance; }
-        inline VkDevice GetDevice() { return m_Device; }
-        inline VkExtent2D GetSwapChainExtent() { return m_SwapChainExtent; }
-        inline VkRenderPass GetRenderPass() { return m_RenderPass; }
-        inline VkCommandBuffer GetCurrentCommandBuffer() { return m_CurrentCommandBuffer; }
-        inline VkPhysicalDevice GetPhysicalDevice() { return m_PhysicalDevice; }
-        inline VkQueue GetQueue() { return m_GraphicsQueue; }
-        inline VkDescriptorPool GetDescriptorPool() { return m_DescriptorPool; }
-        inline std::vector<VkImage> GetSwapChainImages() { return m_SwapChainImages; }
-        inline VkPipelineLayout GetPipelineLayout() { return m_PipelineLayout; }
-        inline uint32_t GetQueueFamily() { return FindQueueFamilies(m_PhysicalDevice).graphicsFamily.value(); }
-        inline VkSurfaceKHR GetSurface() { return m_Surface; }
-        inline VkCommandPool GetCommandPool() { return m_CommandPool; }
-        inline VkCommandBuffer GetLoadCommandBuffer() { return m_LoadCommandBuffer; }
+        inline VkInstance GetInstance()
+        { return m_VkInstance; }
+        inline VkDevice GetDevice()
+        { return m_Device; }
+        inline VkExtent2D GetSwapChainExtent()
+        { return m_SwapChainExtent; }
+        inline VkRenderPass GetRenderPass()
+        { return m_RenderPass; }
+        inline VkCommandBuffer GetCurrentCommandBuffer()
+        { return m_CurrentCommandBuffer; }
+        inline VkPhysicalDevice GetPhysicalDevice()
+        { return m_PhysicalDevice; }
+        inline VkQueue GetQueue()
+        { return m_GraphicsQueue; }
+        inline VkDescriptorPool GetDescriptorPool()
+        { return m_DescriptorPool; }
+        inline std::vector<VkImage> GetSwapChainImages()
+        { return m_SwapChainImages; }
+        inline VkPipelineLayout GetPipelineLayout()
+        { return m_PipelineLayout; }
+        inline uint32_t GetQueueFamily()
+        { return FindQueueFamilies(m_PhysicalDevice).graphicsFamily.value(); }
+        inline VkSurfaceKHR GetSurface()
+        { return m_Surface; }
+        inline VkCommandPool GetCommandPool()
+        { return m_CommandPool; }
+        inline VkCommandBuffer GetLoadCommandBuffer()
+        { return m_LoadCommandBuffer; }
 
         static std::shared_ptr<VulkanContext> GetContext();
-        
-     private:
+
+    private:
         GLFWwindow* m_WindowHandle;
         VkInstance m_VkInstance;
 
@@ -86,7 +103,6 @@ namespace Vertex
         VkDescriptorPool m_DescriptorPool;
 
         VkCommandBuffer m_CurrentCommandBuffer;
-
 
         void InitVulkan();
         void InitVulkanDebugger();

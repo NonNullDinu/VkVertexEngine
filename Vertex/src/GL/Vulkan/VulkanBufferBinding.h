@@ -16,18 +16,25 @@ namespace Vertex
         }
     };
 
-    template <typename T>
-    struct is_VulkanBufferBinding : std::false_type {};
+    template<typename T>
+    struct is_VulkanBufferBinding : std::false_type
+    {
+    };
 
-    template <typename T, int loc>
-    struct is_VulkanBufferBinding<VulkanBufferBinding<T, loc> > : std::true_type {};
+    template<typename T, int loc>
+    struct is_VulkanBufferBinding<VulkanBufferBinding<T, loc> > : std::true_type
+    {
+    };
 
     VX_TEMPLATE_ALL(VulkanBufferBindingTest, is_VulkanBufferBinding)
 
     template<typename ...args>
-    struct VulkanBufferBindings {
-        static constexpr std::array<VkVertexInputAttributeDescription, sizeof...(args)> getAttributeDescriptions() {
-            VX_CORE_STATIC_ASSERT(VX_TEMPLATE_TCALL(VulkanBufferBindingTest, args...), "not all args are of type VulkanBufferBinding");
+    struct VulkanBufferBindings
+    {
+        static constexpr std::array<VkVertexInputAttributeDescription, sizeof...(args)> getAttributeDescriptions()
+        {
+            VX_CORE_STATIC_ASSERT(VX_TEMPLATE_TCALL(VulkanBufferBindingTest, args...),
+                                  "not all args are of type VulkanBufferBinding");
             std::array<VkVertexInputAttributeDescription, sizeof...(args)> attributeDescriptions{};
 //            attributeDescriptions[0].binding = 0;
 //            attributeDescriptions[0].location = 0;
@@ -36,5 +43,5 @@ namespace Vertex
             return attributeDescriptions;
         }
     };
-    
+
 }

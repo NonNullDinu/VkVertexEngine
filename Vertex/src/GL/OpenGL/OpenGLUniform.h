@@ -11,10 +11,11 @@ namespace Vertex
     {
     public:
         OpenGLUniform(int location, const char* uniform_name);
-        
+
         friend bool operator<(OpenGLUniform, OpenGLUniform);
-        
-        inline const char* GetName() const { return m_UniformName; }
+
+        inline const char* GetName() const
+        { return m_UniformName; }
 
         void operator=(OpenGLUniformValue value);
 
@@ -46,7 +47,7 @@ namespace Vertex
 
         OpenGLUniform& operator[](const char* uniform_name);
     private:
-        std::map<const char*, OpenGLUniform, OpenGLUniformPackMapKeyCompFunctor > m_UniformMap;
+        std::map<const char*, OpenGLUniform, OpenGLUniformPackMapKeyCompFunctor> m_UniformMap;
         const uint32_t& m_ProgramId;
     };
 

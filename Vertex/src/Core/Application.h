@@ -24,20 +24,32 @@ namespace Vertex
 {
 
     class VX_PUBLIC_API Application
-	{
+    {
     public:
         Application();
         ~Application();
 
-        inline Window& GetWindow() { return *m_Window; }
+        inline Window& GetWindow()
+        { return *m_Window; }
 
-        static inline Application& Get() { return *s_AppInstance; }
+        static inline Application& Get()
+        { return *s_AppInstance; }
 
-        inline void PushLayer(Layer* layer) { m_LayerStack.PushLayer(layer); layer->OnAttach(); }
-        inline void PopLayer(Layer* layer) { m_LayerStack.PopLayer(layer); }
+        inline void PushLayer(Layer* layer)
+        {
+            m_LayerStack.PushLayer(layer);
+            layer->OnAttach();
+        }
+        inline void PopLayer(Layer* layer)
+        { m_LayerStack.PopLayer(layer); }
 
-        inline void PushOverlay(Layer* overlay) { m_LayerStack.PushOverlay(overlay); overlay->OnAttach(); }
-        inline void PopOverlay(Layer* overlay) { m_LayerStack.PopOverlay(overlay); }
+        inline void PushOverlay(Layer* overlay)
+        {
+            m_LayerStack.PushOverlay(overlay);
+            overlay->OnAttach();
+        }
+        inline void PopOverlay(Layer* overlay)
+        { m_LayerStack.PopOverlay(overlay); }
 
         void OnEvent(Event& event);
 

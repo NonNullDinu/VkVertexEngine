@@ -8,7 +8,7 @@ namespace Vertex
 {
 
     static bool s_GLFW_Initialized = false;
-    
+
     static void GLFWErrorCallback(int error, const char* description)
     {
         CoreLogger::Get()->error("GLFW error {0} : {1}", error, description);
@@ -154,7 +154,7 @@ namespace Vertex
                 CoreLogger::Get()->error("Null window properties");
                 return;
             }
-            
+
             if (entered == GLFW_TRUE)
             {
                 WindowCursorEnteredEvent e;
@@ -166,7 +166,6 @@ namespace Vertex
                 properties->event_callback(e);
             }
         }
-
 
     }
 
@@ -230,7 +229,8 @@ namespace Vertex
     void WindowsWindow::OnEvent(Event& event)
     {
         EventHandler handler(event);
-        handler.Dispatch<EventTypes::WindowResize, WindowResizeEvent>(VX_BIND_FUNC_1(WindowsWindow::OnWindowResizeEvent));
+        handler
+            .Dispatch<EventTypes::WindowResize, WindowResizeEvent>(VX_BIND_FUNC_1(WindowsWindow::OnWindowResizeEvent));
     }
 
     // event callbacks

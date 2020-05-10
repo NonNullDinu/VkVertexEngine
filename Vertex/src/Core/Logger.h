@@ -96,7 +96,8 @@ namespace Vertex
         }
 
     private:
-        CoreLogger() { Init(); }
+        CoreLogger()
+        { Init(); }
 
         static CoreLogger s_Instance;
 
@@ -172,7 +173,8 @@ namespace Vertex
         }
 
     private:
-        ClientLogger() { Init(); }
+        ClientLogger()
+        { Init(); }
 
         static ClientLogger s_Instance;
 

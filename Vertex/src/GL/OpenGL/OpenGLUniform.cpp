@@ -51,17 +51,17 @@ namespace Vertex
 
     void OpenGLUniform::operator=(OpenGLUniformValue value)
     {
-        std::visit([this](auto&& v) -> void
-        {
-            this->operator()(v);
-        }, value);
+        std::visit([this](auto&& v)->void
+                   {
+                       this->operator()(v);
+                   }, value);
     }
 
     // ----------------------------------
     // ---------- Uniform Pack ----------
     // ----------------------------------
 
-    OpenGLUniformPack::OpenGLUniformPack(uint32_t * program_id)
+    OpenGLUniformPack::OpenGLUniformPack(uint32_t* program_id)
         : m_ProgramId(*program_id)
     {
     }
@@ -71,10 +71,10 @@ namespace Vertex
         OpenGLUniform uniform(glGetUniformLocation(m_ProgramId, uniform_var_name), uniform_var_name);
         m_UniformMap.insert(std::pair<const char*, OpenGLUniform>(uniform_var_name, uniform));
     }
-    
+
     OpenGLUniform& OpenGLUniformPack::operator[](const char* uniform_name)
     {
         return m_UniformMap.at(uniform_name);
     }
-    
+
 }

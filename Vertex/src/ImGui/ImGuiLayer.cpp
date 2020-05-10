@@ -56,7 +56,7 @@ namespace Vertex
         init_info.Allocator = nullptr;
         init_info.MinImageCount = context->GetSwapChainImages().size();
         init_info.ImageCount = context->GetSwapChainImages().size();
-        init_info.CheckVkResultFn = [](VkResult result) -> void
+        init_info.CheckVkResultFn = [](VkResult result)->void
         {
             if (result != VK_SUCCESS)
             {
@@ -150,7 +150,8 @@ namespace Vertex
         ImGui::SetNextWindowBgAlpha(0.0f);
 
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-        window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+        window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
+            | ImGuiWindowFlags_NoMove;
         window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);

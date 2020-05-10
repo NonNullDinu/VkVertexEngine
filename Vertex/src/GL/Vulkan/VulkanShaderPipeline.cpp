@@ -17,7 +17,7 @@ namespace Vertex
         viewport.maxDepth = 1.0f;
 
         VkRect2D scissor{};
-        scissor.offset = { 0, 0 };
+        scissor.offset = {0, 0};
         scissor.extent = VulkanContext::GetContext()->GetSwapChainExtent();
 
         VkPipelineViewportStateCreateInfo viewportState{};
@@ -94,7 +94,7 @@ namespace Vertex
         VulkanShaderModule vertex_module(vertex_src, vertShaderStageInfo);
         VulkanShaderModule fragment_module(fragment_src, fragShaderStageInfo);
 
-        VkPipelineShaderStageCreateInfo shaderStages[] = { vertShaderStageInfo, fragShaderStageInfo };
+        VkPipelineShaderStageCreateInfo shaderStages[] = {vertShaderStageInfo, fragShaderStageInfo};
 
         VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
         vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -130,13 +130,15 @@ namespace Vertex
         pipelineInfo.basePipelineIndex = -1; // Optional
 
         if (vkCreateGraphicsPipelines(VulkanContext::GetContext()
-            ->GetDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_GraphicsPipeline) != VK_SUCCESS)
+                                          ->GetDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_GraphicsPipeline)
+            != VK_SUCCESS)
         {
             throw std::runtime_error("failed to create graphics pipeline!");
         }
 
         // test for now
-        auto array = VulkanBufferBindings<VulkanBufferBinding<glm::vec3, 0>, VulkanBufferBinding<glm::vec3, 0> >::getAttributeDescriptions();
+        auto array = VulkanBufferBindings<VulkanBufferBinding<glm::vec3, 0>,
+                                          VulkanBufferBinding<glm::vec3, 0> >::getAttributeDescriptions();
     }
 
     VulkanShaderPipeline::~VulkanShaderPipeline()
@@ -156,5 +158,5 @@ namespace Vertex
     {
         vkDestroyPipeline(VulkanContext::GetContext()->GetDevice(), m_GraphicsPipeline, nullptr);
     }
-    
+
 }

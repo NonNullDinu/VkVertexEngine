@@ -31,7 +31,7 @@ namespace Vertex
 
         return (float)xpos;
     }
-    
+
     float WindowsInput::GetMouseYImpl()
     {
         GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());

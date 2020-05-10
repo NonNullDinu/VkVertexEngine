@@ -27,7 +27,7 @@ namespace Vertex
         virtual void* GetNativeWindow() const = 0;
 
         virtual bool ShouldClose() const = 0;
-        
+
         virtual GraphicsContext& GetGraphicsContext() const = 0;
 
         static Window* Create();

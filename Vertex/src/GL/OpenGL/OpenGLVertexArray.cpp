@@ -12,7 +12,7 @@ namespace Vertex
 
     OpenGLVertexArray::~OpenGLVertexArray()
     {
-        
+
     }
 
     void OpenGLVertexArray::Bind() const
@@ -38,11 +38,11 @@ namespace Vertex
             glEnableVertexAttribArray(index);
 
             glVertexAttribPointer(index,
-                elem.component_count,
-                ShaderDataTypeToOpenGL(elem.type),
-                elem.normalized ? GL_TRUE : GL_FALSE,
-                layout.GetStride(),
-                (const void*)elem.offset
+                                  elem.component_count,
+                                  ShaderDataTypeToOpenGL(elem.type),
+                                  elem.normalized ? GL_TRUE : GL_FALSE,
+                                  layout.GetStride(),
+                                  (const void*)elem.offset
             );
 
             index++;
@@ -50,7 +50,7 @@ namespace Vertex
 
         m_VBOs.emplace_back(vbo);
     }
-    
+
     void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer> ibo)
     {
         Bind();

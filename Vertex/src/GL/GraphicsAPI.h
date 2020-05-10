@@ -6,7 +6,7 @@
 
 namespace Vertex
 {
-    
+
     class GraphicsAPI
     {
     public:

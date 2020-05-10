@@ -6,7 +6,7 @@
 
 namespace Vertex
 {
-    
+
     GraphicsAPI* Renderer::s_GraphicsAPI = GraphicsAPI::Create();
     Scene* Renderer::s_Scene = nullptr;
 

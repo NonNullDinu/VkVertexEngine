@@ -8,7 +8,7 @@ namespace Vertex
     // -----------------------------------
 
     OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, size_t size, const BufferLayout& layout)
-        : m_Layout(layout) 
+        : m_Layout(layout)
     {
         glCreateBuffers(1, &m_ID);
         Bind();
@@ -35,7 +35,7 @@ namespace Vertex
     // ----------------------------------
 
     OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, size_t size)
-        : m_Count((size)/(sizeof(uint32_t)))
+        : m_Count((size) / (sizeof(uint32_t)))
     {
         glCreateBuffers(1, &m_ID);
         Bind();

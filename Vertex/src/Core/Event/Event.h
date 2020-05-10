@@ -11,9 +11,9 @@ namespace Vertex
     {
         WindowResize, WindowClose, WindowGainedFocus, WindowLostFocus,
         WindowCursorEntered, WindowCursorLeft,
-        
+
         KeyPress, KeyRelease, KeyCharInput,
-        
+
         MouseClick, MouseRelease, MouseScroll, MouseMove
     };
 
@@ -34,7 +34,8 @@ namespace Vertex
         virtual const char* GetEventName() = 0;
         virtual std::string GetDetails() = 0;
 
-        inline bool IsHandled() { return m_Handled; }
+        inline bool IsHandled()
+        { return m_Handled; }
 
     protected:
         bool m_Handled = false;

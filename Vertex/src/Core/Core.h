@@ -35,13 +35,13 @@
 #define VX_WINDOWING_GLFW
 
 #if defined(VX_WINDOWING_GLFW)
-    // Key IDs
-    // From glfw3.h
+// Key IDs
+// From glfw3.h
 
-    /* The unknown key */
+/* The unknown key */
     #define VX_KEY_UNKNOWN            -1
 
-    /* Printable keys */
+/* Printable keys */
     #define VX_KEY_SPACE              32
     #define VX_KEY_APOSTROPHE         39  /* ' */
     #define VX_KEY_COMMA              44  /* , */
@@ -93,7 +93,7 @@
     #define VX_KEY_WORLD_1            161 /* non-US #1 */
     #define VX_KEY_WORLD_2            162 /* non-US #2 */
 
-    /* Function keys */
+/* Function keys */
     #define VX_KEY_ESCAPE             256
     #define VX_KEY_ENTER              257
     #define VX_KEY_TAB                258
@@ -168,8 +168,8 @@
     #define VX_KEY_LAST               VX_KEY_MENU
 
 
-    // Mouse IDs
-    // From glfw3.h
+// Mouse IDs
+// From glfw3.h
 
     #define VX_MOUSE_BUTTON_1         0
     #define VX_MOUSE_BUTTON_2         1

@@ -15,17 +15,20 @@ namespace Vertex
 
         void PushLayer(Layer* layer);
         void PopLayer(Layer* layer);
-        
+
         void PushOverlay(Layer* overlay);
         void PopOverlay(Layer* overlay);
 
-        unsigned int size() { return m_Layers.size(); }
+        unsigned int size()
+        { return m_Layers.size(); }
 
-        std::vector<Layer*>::iterator begin() { return m_Layers.begin(); }
-        std::vector<Layer*>::iterator end() { return m_Layers.end(); }
+        std::vector<Layer*>::iterator begin()
+        { return m_Layers.begin(); }
+        std::vector<Layer*>::iterator end()
+        { return m_Layers.end(); }
 
     private:
         std::vector<Layer*> m_Layers;
     };
-    
+
 }

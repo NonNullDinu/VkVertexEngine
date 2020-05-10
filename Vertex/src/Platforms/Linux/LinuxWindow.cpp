@@ -8,7 +8,7 @@ namespace Vertex
 {
 
     static bool s_GLFW_Initialized = false;
-    
+
     static void GLFWErrorCallback(int error, const char* description)
     {
         CoreLogger::Get()->error("GLFW error {0} : {1}", error, description);
@@ -154,7 +154,7 @@ namespace Vertex
                 CoreLogger::Get()->error("Null window properties");
                 return;
             }
-            
+
             if (entered == GLFW_TRUE)
             {
                 WindowCursorEnteredEvent e;
@@ -166,7 +166,6 @@ namespace Vertex
                 properties->event_callback(e);
             }
         }
-
 
     }
 
@@ -196,7 +195,8 @@ namespace Vertex
         m_Context.reset(GraphicsContext::Create(m_Window));
 #elif defined(VX_RENDER_API_VULKAN)
         { new VulkanContext(m_Window); } // create a instance so the static field Vertex::VulkanContext::s_Context is set
-        m_Context = VulkanContext::GetContext(); // get it and copy it to m_Context to prevent calling the destructor twice
+        m_Context =
+            VulkanContext::GetContext(); // get it and copy it to m_Context to prevent calling the destructor twice
 #endif
 
         glfwSetWindowUserPointer(m_Window, &m_Data);
