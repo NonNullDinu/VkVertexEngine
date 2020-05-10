@@ -13,6 +13,8 @@ namespace Vertex
 
         virtual const glm::mat4& GetViewMatrix() const = 0;
         virtual const glm::mat4& GetProjectionMatrix() const = 0;
+
+        virtual const glm::mat4& GetProjectionViewMatrix() const = 0;
     };
 
     class Camera2D : public Camera
@@ -45,6 +47,8 @@ namespace Vertex
         inline const glm::mat4& GetViewMatrix() const override { return m_ViewMatrix; }
         inline const glm::mat4& GetProjectionMatrix() const override { return m_ProjectionMatrix; }
 
+        inline const glm::mat4& GetProjectionViewMatrix() const override { return m_ProjectionViewMatrix; }
+
     private:
         glm::vec3 m_Position;
         float m_Rotation = 0.0f;
@@ -52,9 +56,10 @@ namespace Vertex
         glm::mat4 m_ViewMatrix;
         glm::mat4 m_ProjectionMatrix;
 
+        glm::mat4 m_ProjectionViewMatrix; // cache
+
     private:
         void UpdateViewMatrix();
     };
-    
 
 } // namespace Vertex

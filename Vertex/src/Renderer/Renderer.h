@@ -6,12 +6,26 @@
 
 #include "GL/VertexArray.h"
 
+#include "GL/Shader.h"
+
+#include "Camera.h"
+
 namespace Vertex
 {
 
     enum class RenderAPI
     {
         OpenGL, Vulkan, DirectX12
+    };
+
+    struct Scene
+    {
+        Camera& camera;
+
+        Scene(Camera& _camera)
+            : camera(_camera)
+        {
+        }
     };
 
     class Renderer
@@ -32,15 +46,16 @@ namespace Vertex
             s_GraphicsAPI->Clear(color);
         }
 
-        static void BeginScene();
+        static void BeginScene(Camera& camera);
         static void EndScene();
 
-        static void Submit(std::shared_ptr<VertexArray> vertex_array);
+        static void Submit(std::shared_ptr<VertexArray>& vertex_array, const std::shared_ptr<Shader>& shader);
 
         static RenderAPI GetAPI();
 
     private:
         static GraphicsAPI* s_GraphicsAPI;
+        static Scene* s_Scene;
     };
 
 }

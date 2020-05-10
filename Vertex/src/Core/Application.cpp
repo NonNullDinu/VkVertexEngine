@@ -1,6 +1,6 @@
 #include "Application.h"
 
-#include "Renderer/Camera.h"
+#include "GL/OpenGL/OpenGLShader.h"
 
 namespace Vertex
 {
@@ -9,7 +9,7 @@ namespace Vertex
 
     Application::Application()
         : m_Running(true),
-          m_Camera(-1.0f, 1.0f, -1.0f, 1.0f)
+          m_Camera(-1.6f, 1.6f, -0.9f, 0.9f)
     {
         VX_CORE_ASSERT((!s_AppInstance), "Application cannot be instantiated twice!");
 
@@ -19,7 +19,7 @@ namespace Vertex
 
         // --------------------------------------
         // ------------- Temporary --------------
-        // --------- Will be abstracted ---------
+        // ------ Should be in client side ------
         // --------------------------------------
 
 #if defined(VX_RENDER_API_OPENGL)
@@ -70,11 +70,13 @@ namespace Vertex
             layout(location = 0) in vec3 a_Position;
             layout(location = 1) in vec4 a_Color;
 
+            uniform mat4 u_ProjectionViewMatrix;
+
             out vec4 v_Color;
 
             void main()
             {
-                gl_Position = vec4(a_Position, 1.0);
+                gl_Position = u_ProjectionViewMatrix * vec4(a_Position, 1.0);
                 v_Color = a_Color;
             }
         )";
@@ -93,6 +95,8 @@ namespace Vertex
         )";
 
         m_Shader.reset(Shader::Create(vertex_src, fragment_src));
+
+        std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->LoadUniform("u_ProjectionViewMatrix");
 
         // --------------------------------------
         // --------------------------------------
@@ -136,12 +140,10 @@ namespace Vertex
 
             Renderer::Clear({0.1f, 0.1f, 0.1f, 1.0f});
 
-            m_Shader->Bind();
+            Renderer::BeginScene(m_Camera);
 
-            Renderer::BeginScene();
-
-            Renderer::Submit(m_VertexArray);
-            Renderer::Submit(m_VertexArray2);
+            Renderer::Submit(m_VertexArray, m_Shader);
+            Renderer::Submit(m_VertexArray2, m_Shader);
 
             Renderer::EndScene();
 
