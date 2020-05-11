@@ -26,7 +26,7 @@ namespace Vertex
         void Unbind() const override;
 
     private:
-        uint32_t m_ID;
+        uint32_t          m_ID;
         OpenGLUniformPack m_UniformPack;
     };
 

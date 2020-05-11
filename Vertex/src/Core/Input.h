@@ -9,15 +9,23 @@ namespace Vertex
     {
     public:
         inline static bool IsKeyPressed(int key)
-        { return s_Instance->IsKeyPressedImpl(key); }
+        {
+            return s_Instance->IsKeyPressedImpl(key);
+        }
 
         inline static bool IsMouseButtonPressed(int button)
-        { return s_Instance->IsMouseButtonPressedImpl(button); }
+        {
+            return s_Instance->IsMouseButtonPressedImpl(button);
+        }
 
         inline static float GetMouseX()
-        { return s_Instance->GetMouseXImpl(); }
+        {
+            return s_Instance->GetMouseXImpl();
+        }
         inline static float GetMouseY()
-        { return s_Instance->GetMouseYImpl(); }
+        {
+            return s_Instance->GetMouseYImpl();
+        }
 
         static void Init();
 

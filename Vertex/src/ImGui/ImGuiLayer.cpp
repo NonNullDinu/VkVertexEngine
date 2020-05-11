@@ -24,8 +24,8 @@ namespace Vertex
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO();
         (void)io;
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
-        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;     // Enable Docking
         // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;      // Enable Multi-Viewport / Platform Windows
 
         ImGui::StyleColorsDark();
@@ -55,8 +55,7 @@ namespace Vertex
         init_info.Allocator = nullptr;
         init_info.MinImageCount = context->GetSwapChainImages().size();
         init_info.ImageCount = context->GetSwapChainImages().size();
-        init_info.CheckVkResultFn = [](VkResult result)->void
-        {
+        init_info.CheckVkResultFn = [](VkResult result) -> void {
             if (result != VK_SUCCESS)
             {
                 CoreLogger::Get()->error("Something went wrong in dear imgui");
@@ -109,7 +108,7 @@ namespace Vertex
 
     void ImGuiLayer::End()
     {
-        ImGuiIO& io = ImGui::GetIO();
+        ImGuiIO&     io = ImGui::GetIO();
         Application& app = Application::Get();
         io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
         // Rendering
@@ -159,7 +158,7 @@ namespace Vertex
         ImGui::Begin("DockSpace Demo", p_open, window_flags);
         ImGui::PopStyleVar(3);
 
-        ImGuiID dockspace_id = ImGui::GetID("MyDockspace");
+        ImGuiID            dockspace_id = ImGui::GetID("MyDockspace");
         ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
         ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 

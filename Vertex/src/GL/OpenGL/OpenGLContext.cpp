@@ -12,9 +12,9 @@ namespace Vertex
         VX_CORE_ASSERT(status, "Could not initialize glad.");
 
         CoreLogger::Get()->debug("\nRenderer Info:\n\tRendering API: OpenGL {0}\n\tRenderer: {1}\n\tVendored by: {2}",
-                                 glGetString(GL_VERSION),
-                                 glGetString(GL_RENDERER),
-                                 glGetString(GL_VENDOR));
+            glGetString(GL_VERSION),
+            glGetString(GL_RENDERER),
+            glGetString(GL_VENDOR));
     }
 
     void OpenGLContext::SwapBuffers()

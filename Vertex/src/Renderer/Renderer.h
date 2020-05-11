@@ -15,7 +15,9 @@ namespace Vertex
 
     enum class RenderAPI
     {
-        OpenGL, Vulkan, DirectX12
+        OpenGL,
+        Vulkan,
+        DirectX12
     };
 
     struct Scene
@@ -55,7 +57,7 @@ namespace Vertex
 
     private:
         static GraphicsAPI* s_GraphicsAPI;
-        static Scene* s_Scene;
+        static Scene*       s_Scene;
     };
 
 }

@@ -23,14 +23,18 @@ namespace Vertex
         virtual void CleanUpContext() = 0;
 
         inline void SetPrepareRenderCallback(PrepareRenderFunc callback)
-        { m_PrepareRenderCallback = callback; }
+        {
+            m_PrepareRenderCallback = callback;
+        }
         inline void SetRenderCallback(RenderFunc callback)
-        { m_RenderCallback = callback; }
+        {
+            m_RenderCallback = callback;
+        }
 
         static GraphicsContext* Create(GLFWwindow* window_handle);
 
     protected:
-        RenderFunc m_RenderCallback;
+        RenderFunc        m_RenderCallback;
         PrepareRenderFunc m_PrepareRenderCallback;
     };
 

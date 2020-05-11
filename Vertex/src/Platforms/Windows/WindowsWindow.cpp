@@ -1,8 +1,8 @@
 #include "WindowsWindow.h"
 
-#include "Core/Event/WindowEvent.h"
 #include "Core/Event/KeyEvent.h"
 #include "Core/Event/MouseEvent.h"
+#include "Core/Event/WindowEvent.h"
 
 namespace Vertex
 {
@@ -31,7 +31,7 @@ namespace Vertex
         static void WindowCloseCallback(GLFWwindow* window)
         {
             WindowProperties* properties = (WindowProperties*)glfwGetWindowUserPointer(window);
-            WindowCloseEvent e;
+            WindowCloseEvent  e;
             properties->event_callback(e);
         }
 

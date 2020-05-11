@@ -12,7 +12,6 @@ namespace Vertex
 
     OpenGLVertexArray::~OpenGLVertexArray()
     {
-
     }
 
     void OpenGLVertexArray::Bind() const
@@ -31,19 +30,18 @@ namespace Vertex
 
         vbo->Bind();
 
-        uint16_t index = 0;
+        uint16_t     index = 0;
         BufferLayout layout = vbo->GetLayout();
         for (const auto& elem : layout)
         {
             glEnableVertexAttribArray(index);
 
             glVertexAttribPointer(index,
-                                  elem.component_count,
-                                  ShaderDataTypeToOpenGL(elem.type),
-                                  elem.normalized ? GL_TRUE : GL_FALSE,
-                                  layout.GetStride(),
-                                  (const void*)elem.offset
-            );
+                elem.component_count,
+                ShaderDataTypeToOpenGL(elem.type),
+                elem.normalized ? GL_TRUE : GL_FALSE,
+                layout.GetStride(),
+                (const void*)elem.offset);
 
             index++;
         }

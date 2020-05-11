@@ -1,9 +1,9 @@
 #include "Window.h"
 
 #if defined(_WIN32)
-#include "Platforms/Windows/WindowsWindow.h"
+    #include "Platforms/Windows/WindowsWindow.h"
 #elif defined(__linux__)
-#include "Platforms/Linux/LinuxWindow.h"
+    #include "Platforms/Linux/LinuxWindow.h"
 #endif
 
 namespace Vertex
@@ -16,7 +16,7 @@ namespace Vertex
 #elif defined(__linux__)
         return new LinuxWindow();
 #else
-#error Unsupported platform
+    #error Unsupported platform
 #endif
     }
 

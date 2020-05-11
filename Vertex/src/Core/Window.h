@@ -36,16 +36,16 @@ namespace Vertex
     // utility class
     struct WindowProperties
     {
-        bool v_sync;
-        const char* title;
+        bool         v_sync;
+        const char*  title;
         unsigned int width, height;
 
         std::function<void(Event&)> event_callback;
 
         WindowProperties(const char* _title = "Vertex",
-                         unsigned int _width = 1024,
-                         unsigned int _height = 576,
-                         bool _v_sync = true)
+            unsigned int             _width = 1024,
+            unsigned int             _height = 576,
+            bool                     _v_sync = true)
             : title(_title), width(_width), height(_height), v_sync(_v_sync)
         {
         }

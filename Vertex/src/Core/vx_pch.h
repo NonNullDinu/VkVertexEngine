@@ -4,17 +4,17 @@
 
 #pragma once
 
-#include <tuple>
-#include <map>
-#include <set>
 #include <any>
-#include <chrono>
-#include <variant>
-#include <memory>
-#include <vector>
 #include <cassert>
-#include <stdexcept>
+#include <chrono>
 #include <functional>
+#include <map>
+#include <memory>
+#include <set>
+#include <stdexcept>
+#include <tuple>
+#include <variant>
+#include <vector>
 
 #include "Core.h"
 #include "Logger.h"
@@ -27,5 +27,5 @@
 
 #include <GLFW/glfw3.h>
 
-#include <glm/glm.hpp>
 #include <glm/ext.hpp>
+#include <glm/glm.hpp>

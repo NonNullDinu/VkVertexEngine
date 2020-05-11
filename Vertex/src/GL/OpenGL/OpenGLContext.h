@@ -23,7 +23,8 @@ namespace Vertex
         void NotifyResize(int new_width, int new_height) override;
 
         void CleanUpContext() override
-        {}
+        {
+        }
 
     private:
         GLFWwindow* m_WindowHandle;

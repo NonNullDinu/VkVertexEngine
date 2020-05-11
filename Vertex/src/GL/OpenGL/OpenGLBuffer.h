@@ -19,13 +19,15 @@ namespace Vertex
         void Unbind() const override;
 
         inline const BufferLayout& GetLayout() const override
-        { return m_Layout; }
+        {
+            return m_Layout;
+        }
 
         virtual void BeforeRender() override;
         virtual void AfterRender() override;
 
     private:
-        uint32_t m_ID;
+        uint32_t     m_ID;
         BufferLayout m_Layout;
     };
 
@@ -43,7 +45,9 @@ namespace Vertex
         void Unbind() const override;
 
         uint32_t GetCount() const override
-        { return m_Count; }
+        {
+            return m_Count;
+        }
 
         virtual void BeforeRender() override;
         virtual void AfterRender() override;

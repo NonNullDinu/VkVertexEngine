@@ -14,10 +14,14 @@ namespace Vertex
         }
 
         inline int GetKey()
-        { return m_Key; }
+        {
+            return m_Key;
+        }
 
         inline EventCategories GetEventCategory() override
-        { return EventCategories::KeyEvent; }
+        {
+            return EventCategories::KeyEvent;
+        }
 
     protected:
         int m_Key;
@@ -32,12 +36,18 @@ namespace Vertex
         }
 
         inline int GetRepeatCount()
-        { return m_RepeatCount; }
+        {
+            return m_RepeatCount;
+        }
 
         inline EventTypes GetEventType() override
-        { return EventTypes::KeyPress; }
+        {
+            return EventTypes::KeyPress;
+        }
         inline const char* GetEventName() override
-        { return "EventTypes::KeyPress"; }
+        {
+            return "EventTypes::KeyPress";
+        }
 
         inline std::string GetDetails() override
         {
@@ -57,9 +67,13 @@ namespace Vertex
         }
 
         inline EventTypes GetEventType() override
-        { return EventTypes::KeyRelease; }
+        {
+            return EventTypes::KeyRelease;
+        }
         inline const char* GetEventName() override
-        { return "EventTypes::KeyRelease"; }
+        {
+            return "EventTypes::KeyRelease";
+        }
 
         inline std::string GetDetails() override
         {
@@ -76,9 +90,13 @@ namespace Vertex
         }
 
         inline EventTypes GetEventType() override
-        { return EventTypes::KeyCharInput; }
+        {
+            return EventTypes::KeyCharInput;
+        }
         inline const char* GetEventName() override
-        { return "EventTypes::KeyCharInput"; }
+        {
+            return "EventTypes::KeyCharInput";
+        }
 
         inline std::string GetDetails() override
         {

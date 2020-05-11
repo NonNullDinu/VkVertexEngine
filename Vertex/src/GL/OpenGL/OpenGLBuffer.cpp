@@ -31,10 +31,12 @@ namespace Vertex
     }
 
     void OpenGLVertexBuffer::BeforeRender()
-    {}
+    {
+    }
 
     void OpenGLVertexBuffer::AfterRender()
-    {}
+    {
+    }
 
     // ----------------------------------
     // ---------- Index Buffer ----------
@@ -64,9 +66,11 @@ namespace Vertex
     }
 
     void OpenGLIndexBuffer::BeforeRender()
-    {}
+    {
+    }
 
     void OpenGLIndexBuffer::AfterRender()
-    {}
+    {
+    }
 
 }

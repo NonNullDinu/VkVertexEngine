@@ -12,10 +12,8 @@ namespace Vertex
         VulkanVertexArray();
         virtual ~VulkanVertexArray() = default;
 
-        void Bind() const override
-        {};
-        void Unbind() const override
-        {};
+        void Bind() const override {};
+        void Unbind() const override {};
 
         void AddVertexBuffer(const std::shared_ptr<VertexBuffer> vbo) override;
         void SetIndexBuffer(const std::shared_ptr<IndexBuffer> ibo) override;

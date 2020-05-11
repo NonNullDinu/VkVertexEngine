@@ -3,11 +3,9 @@ namespace Vertex
 {
     VulkanVertexArray::VulkanVertexArray()
     {
-
     }
     void VulkanVertexArray::AddVertexBuffer(std::shared_ptr<VertexBuffer> vbo)
     {
-
     }
     void VulkanVertexArray::SetIndexBuffer(std::shared_ptr<IndexBuffer> ibo)
     {

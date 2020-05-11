@@ -30,7 +30,7 @@ namespace Vertex
         uint32_t m_ID;
 
         std::vector<std::shared_ptr<VertexBuffer>> m_VBOs;
-        std::shared_ptr<IndexBuffer> m_IBO;
+        std::shared_ptr<IndexBuffer>               m_IBO;
     };
 
 }

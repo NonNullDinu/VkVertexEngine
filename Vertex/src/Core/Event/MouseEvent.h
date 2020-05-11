@@ -9,7 +9,9 @@ namespace Vertex
     {
     public:
         inline EventCategories GetEventCategory() override
-        { return EventCategories::MouseEvent; }
+        {
+            return EventCategories::MouseEvent;
+        }
     };
 
     class MouseClickEvent : public MouseEvent
@@ -21,12 +23,18 @@ namespace Vertex
         }
 
         inline int GetButton()
-        { return m_Button; }
+        {
+            return m_Button;
+        }
 
         inline EventTypes GetEventType() override
-        { return EventTypes::MouseClick; }
+        {
+            return EventTypes::MouseClick;
+        }
         inline const char* GetEventName() override
-        { return "EventTypes::MouseClick"; }
+        {
+            return "EventTypes::MouseClick";
+        }
 
         inline std::string GetDetails() override
         {
@@ -46,12 +54,18 @@ namespace Vertex
         }
 
         inline int GetButton()
-        { return m_Button; }
+        {
+            return m_Button;
+        }
 
         inline EventTypes GetEventType() override
-        { return EventTypes::MouseRelease; }
+        {
+            return EventTypes::MouseRelease;
+        }
         inline const char* GetEventName() override
-        { return "EventTypes::MouseRelease"; }
+        {
+            return "EventTypes::MouseRelease";
+        }
 
         inline std::string GetDetails() override
         {
@@ -71,14 +85,22 @@ namespace Vertex
         }
 
         inline const float GetOffsetX()
-        { return m_OffsetX; }
+        {
+            return m_OffsetX;
+        }
         inline const float GetOffsetY()
-        { return m_OffsetY; }
+        {
+            return m_OffsetY;
+        }
 
         inline EventTypes GetEventType() override
-        { return EventTypes::MouseScroll; }
+        {
+            return EventTypes::MouseScroll;
+        }
         inline const char* GetEventName() override
-        { return "EventTypes::MouseScroll"; }
+        {
+            return "EventTypes::MouseScroll";
+        }
 
         inline std::string GetDetails() override
         {
@@ -98,14 +120,22 @@ namespace Vertex
         }
 
         inline const float GetPosX()
-        { return m_PosX; }
+        {
+            return m_PosX;
+        }
         inline const float GetPosY()
-        { return m_PosY; }
+        {
+            return m_PosY;
+        }
 
         inline EventTypes GetEventType() override
-        { return EventTypes::MouseMove; }
+        {
+            return EventTypes::MouseMove;
+        }
         inline const char* GetEventName() override
-        { return "EventTypes::MouseMove"; }
+        {
+            return "EventTypes::MouseMove";
+        }
 
         inline std::string GetDetails() override
         {

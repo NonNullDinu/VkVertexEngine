@@ -13,20 +13,27 @@ namespace Vertex
         virtual ~Layer();
 
         virtual void OnAttach()
-        {}
+        {
+        }
         virtual void OnDetach()
-        {}
+        {
+        }
 
         virtual void OnUpdate()
-        {}
+        {
+        }
         virtual void OnEvent(Event& event)
-        {}
+        {
+        }
 
         virtual void OnImguiRender()
-        {}
+        {
+        }
 
         inline const char* GetName()
-        { return m_Name; }
+        {
+            return m_Name;
+        }
 
     protected:
         const char* m_Name; // this is supposed to be used for debugging only

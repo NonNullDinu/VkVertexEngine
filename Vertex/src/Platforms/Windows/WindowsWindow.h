@@ -18,12 +18,18 @@ namespace Vertex
         void OnEvent(Event& event) override;
 
         unsigned int GetWidth() const override
-        { return m_Data.width; }
+        {
+            return m_Data.width;
+        }
         unsigned int GetHeight() const override
-        { return m_Data.height; }
+        {
+            return m_Data.height;
+        }
 
         inline void SetEventCallback(std::function<void(Event&)> func) override
-        { m_Data.event_callback = func; }
+        {
+            m_Data.event_callback = func;
+        }
 
         inline void SetVSync(bool conf) override
         {
@@ -32,21 +38,29 @@ namespace Vertex
         }
 
         inline bool IsVSync() const override
-        { return m_Data.v_sync; }
+        {
+            return m_Data.v_sync;
+        }
 
         inline void* GetNativeWindow() const override
-        { return m_Window; }
+        {
+            return m_Window;
+        }
 
         inline bool ShouldClose() const override
-        { return glfwWindowShouldClose(m_Window); }
+        {
+            return glfwWindowShouldClose(m_Window);
+        }
 
         inline GraphicsContext& GetGraphicsContext() const override
-        { return *m_Context; }
+        {
+            return *m_Context;
+        }
 
     private:
-        GLFWwindow* m_Window;
+        GLFWwindow*                      m_Window;
         std::shared_ptr<GraphicsContext> m_Context;
-        WindowProperties m_Data;
+        WindowProperties                 m_Data;
 
     private:
         void ShutDown();

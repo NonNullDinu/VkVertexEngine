@@ -1,6 +1,6 @@
 #include "VulkanContext.h"
-#include "VulkanShaderPipeline.h"
 #include "VulkanExtensions.h"
+#include "VulkanShaderPipeline.h"
 
 namespace Vertex
 {
@@ -10,10 +10,10 @@ namespace Vertex
     };
 
     static VKAPI_ATTR VkBool32 VKAPI_CALL VulkanDebugCallback(
-        VkDebugUtilsMessageSeverityFlagBitsEXT message_severity,
-        VkDebugUtilsMessageTypeFlagsEXT message_type,
+        VkDebugUtilsMessageSeverityFlagBitsEXT      message_severity,
+        VkDebugUtilsMessageTypeFlagsEXT             message_type,
         const VkDebugUtilsMessengerCallbackDataEXT* p_callback_data,
-        void* p_user_data)
+        void*                                       p_user_data)
     {
 
         CoreLogger::Get()->debug("validation layer: {}", p_callback_data->pMessage);
@@ -21,7 +21,7 @@ namespace Vertex
         return VK_FALSE;
     }
 
-    constexpr int MAX_FRAMES_IN_FLIGHT = 4;
+    constexpr int                         MAX_FRAMES_IN_FLIGHT = 4;
     static const std::vector<const char*> VulkanDeviceExtensions = {
         VK_KHR_SWAPCHAIN_EXTENSION_NAME
     };
@@ -81,11 +81,11 @@ namespace Vertex
         uint32_t image_index;
 
         VkResult result = vkAcquireNextImageKHR(m_Device,
-                                                m_SwapChain,
-                                                UINT64_MAX,
-                                                m_ImageAvailableSemaphores[m_CurrentFrame],
-                                                VK_NULL_HANDLE,
-                                                &image_index);
+            m_SwapChain,
+            UINT64_MAX,
+            m_ImageAvailableSemaphores[m_CurrentFrame],
+            VK_NULL_HANDLE,
+            &image_index);
         if (result == VK_ERROR_OUT_OF_DATE_KHR)
         {
             RecreateSwapChain();
@@ -104,40 +104,40 @@ namespace Vertex
         }
         m_ImagesInFlight[image_index] = m_InFlightFences[m_CurrentFrame];
 
-        VkSubmitInfo submit_info{};
+        VkSubmitInfo submit_info {};
         submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-        VkSemaphore wait_semaphores[] = {m_ImageAvailableSemaphores[m_CurrentFrame]};
-        VkPipelineStageFlags wait_stages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
+        VkSemaphore          wait_semaphores[] = { m_ImageAvailableSemaphores[m_CurrentFrame] };
+        VkPipelineStageFlags wait_stages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
         submit_info.waitSemaphoreCount = 1;
         submit_info.pWaitSemaphores = wait_semaphores;
         submit_info.pWaitDstStageMask = wait_stages;
         submit_info.commandBufferCount = 1;
         submit_info.pCommandBuffers = &m_CommandBuffers[image_index];
 
-        VkSemaphore signal_semaphores[] = {m_RenderFinishedSemaphores[m_CurrentFrame]};
+        VkSemaphore signal_semaphores[] = { m_RenderFinishedSemaphores[m_CurrentFrame] };
         submit_info.signalSemaphoreCount = 1;
         submit_info.pSignalSemaphores = signal_semaphores;
 
-        VkCommandBufferBeginInfo begin_info{};
+        VkCommandBufferBeginInfo begin_info {};
         begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
         begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT; // Optional
-        begin_info.pInheritanceInfo = nullptr; // Optional
+        begin_info.pInheritanceInfo = nullptr;                          // Optional
 
         if (vkBeginCommandBuffer(m_CommandBuffers[image_index], &begin_info) != VK_SUCCESS)
         {
             VX_CORE_ASSERT(false, "vkBeginCommandBuffer failed");
         }
 
-        VkRenderPassBeginInfo render_pass_info{};
+        VkRenderPassBeginInfo render_pass_info {};
         render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
         render_pass_info.renderPass = m_RenderPass;
         render_pass_info.framebuffer = m_SwapChainFramebuffers[image_index];
 
-        render_pass_info.renderArea.offset = {0, 0};
+        render_pass_info.renderArea.offset = { 0, 0 };
         render_pass_info.renderArea.extent = m_SwapChainExtent;
 
-        VkClearValue clear_color = {0.0f, 0.0f, 0.0f, 1.0f};
+        VkClearValue clear_color = { 0.0f, 0.0f, 0.0f, 1.0f };
         render_pass_info.clearValueCount = 1;
         render_pass_info.pClearValues = &clear_color;
 
@@ -161,13 +161,13 @@ namespace Vertex
             VX_CORE_ASSERT(false, "vkQueueSubmit failed");
         }
 
-        VkPresentInfoKHR present_info{};
+        VkPresentInfoKHR present_info {};
         present_info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 
         present_info.waitSemaphoreCount = 1;
         present_info.pWaitSemaphores = signal_semaphores;
 
-        VkSwapchainKHR swap_chains[] = {m_SwapChain};
+        VkSwapchainKHR swap_chains[] = { m_SwapChain };
         present_info.swapchainCount = 1;
         present_info.pSwapchains = swap_chains;
         present_info.pImageIndices = &image_index;
@@ -210,8 +210,7 @@ namespace Vertex
             vkDestroyFramebuffer(m_Device, m_SwapChainFramebuffers[i], nullptr);
         }
 
-        vkFreeCommandBuffers(m_Device, m_CommandPool, static_cast<uint32_t>(m_CommandBuffers.size()), m_CommandBuffers
-            .data());
+        vkFreeCommandBuffers(m_Device, m_CommandPool, static_cast<uint32_t>(m_CommandBuffers.size()), m_CommandBuffers.data());
 
         for (VulkanShaderPipeline& pipelinew : m_Pipelines)
         {
@@ -301,7 +300,7 @@ namespace Vertex
             }
         }
 
-        VkApplicationInfo app_info{};
+        VkApplicationInfo app_info {};
         app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
         app_info.pApplicationName = "Vertex Engine";
         app_info.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
@@ -309,7 +308,7 @@ namespace Vertex
         app_info.engineVersion = VK_MAKE_VERSION(1, 0, 0);
         app_info.apiVersion = VK_API_VERSION_1_1;
 
-        VkInstanceCreateInfo create_info{};
+        VkInstanceCreateInfo create_info {};
         create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
         create_info.pApplicationInfo = &app_info;
 
@@ -350,12 +349,10 @@ namespace Vertex
     {
         create_info = {};
         create_info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-        create_info.messageSeverity =
-            VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT
-                | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
-        create_info.messageType =
-            VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT
-                | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+        create_info.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT
+            | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+        create_info.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT
+            | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
         create_info.pfnUserCallback = VulkanDebugCallback;
     }
 
@@ -397,12 +394,12 @@ namespace Vertex
         QueueFamilyIndices indices = FindQueueFamilies(m_PhysicalDevice);
 
         std::vector<VkDeviceQueueCreateInfo> queue_create_infos;
-        std::set<uint32_t> unique_queue_families = {indices.graphicsFamily.value(), indices.presentFamily.value()};
+        std::set<uint32_t>                   unique_queue_families = { indices.graphicsFamily.value(), indices.presentFamily.value() };
 
         float queue_priority = 1.0f;
         for (uint32_t queue_family : unique_queue_families)
         {
-            VkDeviceQueueCreateInfo queue_create_info{};
+            VkDeviceQueueCreateInfo queue_create_info {};
             queue_create_info.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
             queue_create_info.queueFamilyIndex = queue_family;
             queue_create_info.queueCount = 1;
@@ -410,8 +407,8 @@ namespace Vertex
             queue_create_infos.push_back(queue_create_info);
         }
 
-        VkPhysicalDeviceFeatures device_features{};
-        VkDeviceCreateInfo create_info{};
+        VkPhysicalDeviceFeatures device_features {};
+        VkDeviceCreateInfo       create_info {};
         create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
         create_info.queueCreateInfoCount = static_cast<uint32_t>(queue_create_infos.size());
         create_info.pQueueCreateInfos = queue_create_infos.data();
@@ -435,7 +432,7 @@ namespace Vertex
     VulkanContext::QueueFamilyIndices VulkanContext::FindQueueFamilies(VkPhysicalDevice device)
     {
         QueueFamilyIndices indices;
-        uint32_t queue_family_count = 0;
+        uint32_t           queue_family_count = 0;
         vkGetPhysicalDeviceQueueFamilyProperties(device, &queue_family_count, nullptr);
 
         std::vector<VkQueueFamilyProperties> queue_families(queue_family_count);
@@ -482,8 +479,7 @@ namespace Vertex
         if (present_mode_count != 0)
         {
             details.presentModes.resize(present_mode_count);
-            vkGetPhysicalDeviceSurfacePresentModesKHR(device, m_Surface, &present_mode_count, details.presentModes
-                .data());
+            vkGetPhysicalDeviceSurfacePresentModesKHR(device, m_Surface, &present_mode_count, details.presentModes.data());
         }
 
         return details;
@@ -502,8 +498,8 @@ namespace Vertex
         SwapChainSupportDetails swap_chain_support = QuerySwapChainSupport(m_PhysicalDevice);
 
         VkSurfaceFormatKHR surface_format = ChooseSwapSurfaceFormat(swap_chain_support.formats);
-        VkPresentModeKHR present_mode = ChooseSwapPresentMode(swap_chain_support.presentModes);
-        VkExtent2D extent = ChooseSwapExtent(swap_chain_support.capabilities);
+        VkPresentModeKHR   present_mode = ChooseSwapPresentMode(swap_chain_support.presentModes);
+        VkExtent2D         extent = ChooseSwapExtent(swap_chain_support.capabilities);
 
         uint32_t image_count = swap_chain_support.capabilities.minImageCount + 1;
 
@@ -513,7 +509,7 @@ namespace Vertex
             image_count = swap_chain_support.capabilities.maxImageCount;
         }
 
-        VkSwapchainCreateInfoKHR create_info{};
+        VkSwapchainCreateInfoKHR create_info {};
         create_info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
         create_info.surface = m_Surface;
 
@@ -525,7 +521,7 @@ namespace Vertex
         create_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
         QueueFamilyIndices indices = FindQueueFamilies(m_PhysicalDevice);
-        uint32_t queue_family_indices[] = {indices.graphicsFamily.value(), indices.presentFamily.value()};
+        uint32_t           queue_family_indices[] = { indices.graphicsFamily.value(), indices.presentFamily.value() };
 
         if (indices.graphicsFamily != indices.presentFamily)
         {
@@ -536,7 +532,7 @@ namespace Vertex
         else
         {
             create_info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-            create_info.queueFamilyIndexCount = 0; // Optional
+            create_info.queueFamilyIndexCount = 0;     // Optional
             create_info.pQueueFamilyIndices = nullptr; // Optional
         }
         create_info.preTransform = swap_chain_support.capabilities.currentTransform;
@@ -560,11 +556,11 @@ namespace Vertex
 
     void VulkanContext::CreateGraphicsPipelineLayout()
     {
-        VkPipelineLayoutCreateInfo pipeline_layout_info{};
+        VkPipelineLayoutCreateInfo pipeline_layout_info {};
         pipeline_layout_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
         pipeline_layout_info.setLayoutCount = 1;
         pipeline_layout_info.pSetLayouts = &m_DescriptorSetLayout;
-        pipeline_layout_info.pushConstantRangeCount = 0; // Optional
+        pipeline_layout_info.pushConstantRangeCount = 0;    // Optional
         pipeline_layout_info.pPushConstantRanges = nullptr; // Optional
 
         if (vkCreatePipelineLayout(m_Device, &pipeline_layout_info, nullptr, &m_PipelineLayout) != VK_SUCCESS)
@@ -579,7 +575,7 @@ namespace Vertex
 
         for (size_t i = 0; i < m_SwapChainImages.size(); i++)
         {
-            VkImageViewCreateInfo create_info{};
+            VkImageViewCreateInfo create_info {};
             create_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
             create_info.image = m_SwapChainImages[i];
 
@@ -606,7 +602,7 @@ namespace Vertex
 
     void VulkanContext::CreateRenderPass()
     {
-        VkAttachmentDescription color_attachment{};
+        VkAttachmentDescription color_attachment {};
         color_attachment.format = m_SwapChainImageFormat;
         color_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
         color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
@@ -616,23 +612,23 @@ namespace Vertex
         color_attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         color_attachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
-        VkAttachmentReference color_attachment_ref{};
+        VkAttachmentReference color_attachment_ref {};
         color_attachment_ref.attachment = 0;
         color_attachment_ref.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
-        VkSubpassDescription subpass{};
+        VkSubpassDescription subpass {};
         subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
         subpass.colorAttachmentCount = 1;
         subpass.pColorAttachments = &color_attachment_ref;
 
-        VkRenderPassCreateInfo render_pass_info{};
+        VkRenderPassCreateInfo render_pass_info {};
         render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
         render_pass_info.attachmentCount = 1;
         render_pass_info.pAttachments = &color_attachment;
         render_pass_info.subpassCount = 1;
         render_pass_info.pSubpasses = &subpass;
 
-        VkSubpassDependency dependency{};
+        VkSubpassDependency dependency {};
         dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
         dependency.dstSubpass = 0;
 
@@ -660,7 +656,7 @@ namespace Vertex
                 m_SwapChainImageViews[i]
             };
 
-            VkFramebufferCreateInfo framebuffer_info{};
+            VkFramebufferCreateInfo framebuffer_info {};
             framebuffer_info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
             framebuffer_info.renderPass = m_RenderPass;
             framebuffer_info.attachmentCount = 1;
@@ -680,7 +676,7 @@ namespace Vertex
     {
         QueueFamilyIndices queue_family_indices = FindQueueFamilies(m_PhysicalDevice);
 
-        VkCommandPoolCreateInfo pool_info{};
+        VkCommandPoolCreateInfo pool_info {};
         pool_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
         pool_info.queueFamilyIndex = queue_family_indices.graphicsFamily.value();
         pool_info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT; // Optional
@@ -696,7 +692,7 @@ namespace Vertex
         {
             m_CommandBuffers.resize(m_SwapChainFramebuffers.size());
 
-            VkCommandBufferAllocateInfo alloc_info{};
+            VkCommandBufferAllocateInfo alloc_info {};
             alloc_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
             alloc_info.commandPool = m_CommandPool;
             alloc_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
@@ -709,7 +705,7 @@ namespace Vertex
         }
         {
             // allocate the load command buffer
-            VkCommandBufferAllocateInfo alloc_info{};
+            VkCommandBufferAllocateInfo alloc_info {};
             alloc_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
             alloc_info.commandPool = m_CommandPool;
             alloc_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
@@ -729,18 +725,16 @@ namespace Vertex
         m_InFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
         m_ImagesInFlight.resize(m_SwapChainImages.size(), VK_NULL_HANDLE);
 
-        VkSemaphoreCreateInfo semaphore_info{};
+        VkSemaphoreCreateInfo semaphore_info {};
         semaphore_info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 
-        VkFenceCreateInfo fence_info{};
+        VkFenceCreateInfo fence_info {};
         fence_info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
         fence_info.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
         for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
         {
-            if (vkCreateSemaphore(m_Device, &semaphore_info, nullptr, &m_ImageAvailableSemaphores[i]) != VK_SUCCESS ||
-                vkCreateSemaphore(m_Device, &semaphore_info, nullptr, &m_RenderFinishedSemaphores[i]) != VK_SUCCESS ||
-                vkCreateFence(m_Device, &fence_info, nullptr, &m_InFlightFences[i]) != VK_SUCCESS)
+            if (vkCreateSemaphore(m_Device, &semaphore_info, nullptr, &m_ImageAvailableSemaphores[i]) != VK_SUCCESS || vkCreateSemaphore(m_Device, &semaphore_info, nullptr, &m_RenderFinishedSemaphores[i]) != VK_SUCCESS || vkCreateFence(m_Device, &fence_info, nullptr, &m_InFlightFences[i]) != VK_SUCCESS)
             {
                 VX_CORE_ASSERT(false, "failed to create synchronization objects for a frame");
             }
@@ -749,20 +743,19 @@ namespace Vertex
 
     void VulkanContext::CreateDescriptorPool()
     {
-        std::vector<VkDescriptorPoolSize> pool_sizes =
-            {
-                {VK_DESCRIPTOR_TYPE_SAMPLER, 1000},
-                {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000},
-                {VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000},
-                {VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1000},
-                {VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1000},
-                {VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1000},
-                {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000},
-                {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1000},
-                {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1000},
-                {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000},
-                {VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000}
-            };
+        std::vector<VkDescriptorPoolSize> pool_sizes = {
+            { VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },
+            { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000 },
+            { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000 },
+            { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1000 },
+            { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1000 },
+            { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1000 },
+            { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000 },
+            { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1000 },
+            { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1000 },
+            { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000 },
+            { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000 }
+        };
         VkDescriptorPoolCreateInfo pool_info = {};
         pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
         pool_info.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
@@ -877,14 +870,10 @@ namespace Vertex
         {
             int width = 0, height = 0;
             glfwGetFramebufferSize(m_WindowHandle, &width, &height);
-            VkExtent2D actual_extent = {(uint32_t)width, (uint32_t)height};
+            VkExtent2D actual_extent = { (uint32_t)width, (uint32_t)height };
 
-            actual_extent.width = std::max(capabilities.minImageExtent.width, std::min(capabilities.maxImageExtent
-                                                                                           .width,
-                                                                                       actual_extent.width));
-            actual_extent.height = std::max(capabilities.minImageExtent.height, std::min(capabilities.maxImageExtent
-                                                                                             .height,
-                                                                                         actual_extent.height));
+            actual_extent.width = std::max(capabilities.minImageExtent.width, std::min(capabilities.maxImageExtent.width, actual_extent.width));
+            actual_extent.height = std::max(capabilities.minImageExtent.height, std::min(capabilities.maxImageExtent.height, actual_extent.height));
 
             return actual_extent;
         }
@@ -896,7 +885,7 @@ namespace Vertex
 
     std::vector<const char*> VulkanContext::GetRequiredExtensions()
     {
-        uint32_t glfw_extension_count = 0;
+        uint32_t     glfw_extension_count = 0;
         const char** glfw_extensions;
         glfw_extensions = glfwGetRequiredInstanceExtensions(&glfw_extension_count);
 
@@ -928,14 +917,14 @@ namespace Vertex
     }
     void VulkanContext::CreateDescriptorSetLayout()
     {
-        VkDescriptorSetLayoutBinding uboLayoutBinding{};
+        VkDescriptorSetLayoutBinding uboLayoutBinding {};
         uboLayoutBinding.binding = 0;
         uboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         uboLayoutBinding.descriptorCount = 1;
         uboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
         uboLayoutBinding.pImmutableSamplers = nullptr; // Optional
 
-        VkDescriptorSetLayoutCreateInfo layoutInfo{};
+        VkDescriptorSetLayoutCreateInfo layoutInfo {};
         layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
         layoutInfo.bindingCount = 1;
         layoutInfo.pBindings = &uboLayoutBinding;
@@ -947,7 +936,7 @@ namespace Vertex
     }
     void VulkanContext::CreateUniformBuffers()
     {
-        VkDeviceSize bufferSize = sizeof(UniformBufferObject);// for now the ubo is just a mat4
+        VkDeviceSize bufferSize = sizeof(UniformBufferObject); // for now the ubo is just a mat4
 
         m_UniformBuffers.resize(m_SwapChainImages.size());
         m_UniformBuffersMemory.resize(m_SwapChainImages.size());
@@ -955,17 +944,17 @@ namespace Vertex
         for (size_t i = 0; i < m_SwapChainImages.size(); i++)
         {
             CreateBuffer(bufferSize,
-                         VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
-                         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-                         m_UniformBuffers[i],
-                         m_UniformBuffersMemory[i]);
+                VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                m_UniformBuffers[i],
+                m_UniformBuffersMemory[i]);
         }
     }
 
     void VulkanContext::CreateDescriptorSets()
     {
         std::vector<VkDescriptorSetLayout> layouts(m_SwapChainImages.size(), m_DescriptorSetLayout);
-        VkDescriptorSetAllocateInfo allocInfo{};
+        VkDescriptorSetAllocateInfo        allocInfo {};
         allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
         allocInfo.descriptorPool = m_DescriptorPool;
         allocInfo.descriptorSetCount = static_cast<uint32_t>(m_SwapChainImages.size());
@@ -979,12 +968,12 @@ namespace Vertex
 
         for (size_t i = 0; i < m_SwapChainImages.size(); i++)
         {
-            VkDescriptorBufferInfo bufferInfo{};
+            VkDescriptorBufferInfo bufferInfo {};
             bufferInfo.buffer = m_UniformBuffers[i];
             bufferInfo.offset = 0;
             bufferInfo.range = sizeof(UniformBufferObject);
 
-            VkWriteDescriptorSet descriptorWrite{};
+            VkWriteDescriptorSet descriptorWrite {};
             descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
             descriptorWrite.dstSet = m_DescriptorSets[i];
             descriptorWrite.dstBinding = 0;
@@ -994,7 +983,7 @@ namespace Vertex
             descriptorWrite.descriptorCount = 1;
 
             descriptorWrite.pBufferInfo = &bufferInfo;
-            descriptorWrite.pImageInfo = nullptr; // Optional
+            descriptorWrite.pImageInfo = nullptr;       // Optional
             descriptorWrite.pTexelBufferView = nullptr; // Optional
 
             vkUpdateDescriptorSets(m_Device, 1, &descriptorWrite, 0, nullptr);
@@ -1006,12 +995,12 @@ namespace Vertex
     // --------------------------------
 
     void VulkanContext::CreateBuffer(VkDeviceSize size,
-                                     VkBufferUsageFlags usage,
-                                     VkMemoryPropertyFlags properties,
-                                     VkBuffer& buffer,
-                                     VkDeviceMemory& buffer_memory)
+        VkBufferUsageFlags                        usage,
+        VkMemoryPropertyFlags                     properties,
+        VkBuffer&                                 buffer,
+        VkDeviceMemory&                           buffer_memory)
     {
-        VkBufferCreateInfo buffer_info{};
+        VkBufferCreateInfo buffer_info {};
         buffer_info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
         buffer_info.size = size;
         buffer_info.usage = usage;
@@ -1025,7 +1014,7 @@ namespace Vertex
         VkMemoryRequirements mem_requirements;
         vkGetBufferMemoryRequirements(m_Device, buffer, &mem_requirements);
 
-        VkMemoryAllocateInfo alloc_info{};
+        VkMemoryAllocateInfo alloc_info {};
         alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
         alloc_info.allocationSize = mem_requirements.size;
         alloc_info.memoryTypeIndex = FindMemoryType(mem_requirements.memoryTypeBits, properties);
@@ -1040,13 +1029,13 @@ namespace Vertex
 
     void VulkanContext::CopyBuffer(VkBuffer src_buffer, VkBuffer dst_buffer, VkDeviceSize size)
     {
-        VkCommandBufferBeginInfo begin_info{};
+        VkCommandBufferBeginInfo begin_info {};
         begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
         begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
         vkBeginCommandBuffer(m_LoadCommandBuffer, &begin_info);
 
-        VkBufferCopy copy_region{};
+        VkBufferCopy copy_region {};
         copy_region.srcOffset = 0; // Optional
         copy_region.dstOffset = 0; // Optional
         copy_region.size = size;
@@ -1054,7 +1043,7 @@ namespace Vertex
 
         vkEndCommandBuffer(m_LoadCommandBuffer);
 
-        VkSubmitInfo submit_info{};
+        VkSubmitInfo submit_info {};
         submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
         submit_info.commandBufferCount = 1;
         submit_info.pCommandBuffers = &m_LoadCommandBuffer;

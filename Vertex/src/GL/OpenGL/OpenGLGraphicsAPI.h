@@ -28,9 +28,9 @@ namespace Vertex
         inline void DrawIndexed(std::shared_ptr<VertexArray> vertex_array) override
         {
             glDrawElements(GL_TRIANGLES,
-                           vertex_array->GetIndexBuffer()->GetCount(),
-                           GL_UNSIGNED_INT,
-                           nullptr); // for now
+                vertex_array->GetIndexBuffer()->GetCount(),
+                GL_UNSIGNED_INT,
+                nullptr); // for now
         }
     };
 

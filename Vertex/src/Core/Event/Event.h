@@ -9,12 +9,21 @@ namespace Vertex
 
     enum class EventTypes
     {
-        WindowResize, WindowClose, WindowGainedFocus, WindowLostFocus,
-        WindowCursorEntered, WindowCursorLeft,
+        WindowResize,
+        WindowClose,
+        WindowGainedFocus,
+        WindowLostFocus,
+        WindowCursorEntered,
+        WindowCursorLeft,
 
-        KeyPress, KeyRelease, KeyCharInput,
+        KeyPress,
+        KeyRelease,
+        KeyCharInput,
 
-        MouseClick, MouseRelease, MouseScroll, MouseMove
+        MouseClick,
+        MouseRelease,
+        MouseScroll,
+        MouseMove
     };
 
     enum class EventCategories
@@ -30,12 +39,14 @@ namespace Vertex
 
     public:
         virtual EventCategories GetEventCategory() = 0;
-        virtual EventTypes GetEventType() = 0;
-        virtual const char* GetEventName() = 0;
-        virtual std::string GetDetails() = 0;
+        virtual EventTypes      GetEventType() = 0;
+        virtual const char*     GetEventName() = 0;
+        virtual std::string     GetDetails() = 0;
 
         inline bool IsHandled()
-        { return m_Handled; }
+        {
+            return m_Handled;
+        }
 
     protected:
         bool m_Handled = false;
@@ -51,7 +62,7 @@ namespace Vertex
 
 #define TOSTR(x) Logger::GetCoreLogger()->debug(##x);
 
-        template<EventTypes T, typename EventTypeName, typename F>
+        template <EventTypes T, typename EventTypeName, typename F>
         void Dispatch(F&& func)
         {
             if (m_Event.GetEventType() == T && !m_Event.m_Handled)

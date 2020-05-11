@@ -3,7 +3,7 @@
 namespace Vertex
 {
 
-    CoreLogger CoreLogger::s_Instance;
+    CoreLogger                      CoreLogger::s_Instance;
     std::shared_ptr<spdlog::logger> CoreLogger::s_Logger;
 
     void CoreLogger::Init()
@@ -12,7 +12,7 @@ namespace Vertex
         s_Logger->set_level(vx_log_level_debug);
     }
 
-    ClientLogger ClientLogger::s_Instance;
+    ClientLogger                    ClientLogger::s_Instance;
     std::shared_ptr<spdlog::logger> ClientLogger::s_Logger;
 
     void ClientLogger::Init()

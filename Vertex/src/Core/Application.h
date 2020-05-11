@@ -14,8 +14,8 @@ class ImGuiLayer; // <- forward declare it to be accessible from application
 #include "Window.h"
 
 #include "GL/Buffer.h"
-#include "GL/VertexArray.h"
 #include "GL/Shader.h"
+#include "GL/VertexArray.h"
 
 #include "Renderer/Camera.h"
 #include "Renderer/Renderer.h"
@@ -30,10 +30,14 @@ namespace Vertex
         ~Application();
 
         inline Window& GetWindow()
-        { return *m_Window; }
+        {
+            return *m_Window;
+        }
 
         static inline Application& Get()
-        { return *s_AppInstance; }
+        {
+            return *s_AppInstance;
+        }
 
         inline void PushLayer(Layer* layer)
         {
@@ -41,7 +45,9 @@ namespace Vertex
             layer->OnAttach();
         }
         inline void PopLayer(Layer* layer)
-        { m_LayerStack.PopLayer(layer); }
+        {
+            m_LayerStack.PopLayer(layer);
+        }
 
         inline void PushOverlay(Layer* overlay)
         {
@@ -49,7 +55,9 @@ namespace Vertex
             overlay->OnAttach();
         }
         inline void PopOverlay(Layer* overlay)
-        { m_LayerStack.PopOverlay(overlay); }
+        {
+            m_LayerStack.PopOverlay(overlay);
+        }
 
         void OnEvent(Event& event);
 
@@ -71,13 +79,13 @@ namespace Vertex
 
         std::shared_ptr<Shader> m_Shader;
 
-        std::shared_ptr<VertexArray> m_VertexArray;
+        std::shared_ptr<VertexArray>  m_VertexArray;
         std::shared_ptr<VertexBuffer> m_VertexBuffer;
-        std::shared_ptr<IndexBuffer> m_IndexBuffer;
+        std::shared_ptr<IndexBuffer>  m_IndexBuffer;
 
-        std::shared_ptr<VertexArray> m_VertexArray2;
+        std::shared_ptr<VertexArray>  m_VertexArray2;
         std::shared_ptr<VertexBuffer> m_VertexBuffer2;
-        std::shared_ptr<IndexBuffer> m_IndexBuffer2;
+        std::shared_ptr<IndexBuffer>  m_IndexBuffer2;
 
         OrthographicCamera2D m_Camera;
 
