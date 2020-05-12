@@ -256,9 +256,9 @@ namespace Vertex
         CreateGraphicsPipelineLayout();
         CreateFrameBuffers();
         CreateCommandBuffers();
-        CreateDescriptorPool();
-        CreateDescriptorSets();
+//        CreateDescriptorPool();
         CreateUniformBuffers();
+        CreateDescriptorSets();
     }
 
     void VulkanContext::CleanUpContext()
