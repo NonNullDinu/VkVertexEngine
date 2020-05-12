@@ -144,6 +144,7 @@ namespace Vertex
         vkCmdBeginRenderPass(m_CommandBuffers[image_index], &render_pass_info, VK_SUBPASS_CONTENTS_INLINE);
 
         m_CurrentCommandBuffer = m_CommandBuffers[image_index];
+        m_CurrentDescriptorSet = m_DescriptorSets[image_index];
 
         m_RenderCallback(this);
 
@@ -256,7 +257,7 @@ namespace Vertex
         CreateGraphicsPipelineLayout();
         CreateFrameBuffers();
         CreateCommandBuffers();
-//        CreateDescriptorPool();
+        //        CreateDescriptorPool();
         CreateUniformBuffers();
         CreateDescriptorSets();
     }

@@ -59,6 +59,10 @@ namespace Vertex
         {
             return m_CurrentCommandBuffer;
         }
+        inline VkDescriptorSet* GetCurrentDescriptorSet()
+        {
+            return &m_CurrentDescriptorSet;
+        }
         inline VkPhysicalDevice GetPhysicalDevice()
         {
             return m_PhysicalDevice;
@@ -145,6 +149,7 @@ namespace Vertex
         std::vector<VkDescriptorSet> m_DescriptorSets;
 
         VkCommandBuffer m_CurrentCommandBuffer;
+        VkDescriptorSet m_CurrentDescriptorSet;
 
         std::vector<VkBuffer>       m_UniformBuffers;
         std::vector<VkDeviceMemory> m_UniformBuffersMemory;

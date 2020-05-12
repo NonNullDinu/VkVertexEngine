@@ -101,10 +101,10 @@ namespace Vertex
     }
 
 #ifdef VX_RENDER_API_VULKAN
-    template Shader* Shader::Create<2, 2>(const std::vector<unsigned char>& vertex_src,
+    template Shader* Shader::Create<1, 2>(const std::vector<unsigned char>& vertex_src,
         const std::vector<unsigned char>&                                   fragment_src,
         std::tuple<std::array<VkVertexInputBindingDescription,
-                       2>,
+                       1>,
             std::array<VkVertexInputAttributeDescription,
                 2>>
             vertex_shader_input_layout);

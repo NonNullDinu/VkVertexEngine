@@ -22,7 +22,11 @@ namespace Vertex
         (*std::dynamic_pointer_cast<OpenGLShader>(shader))["u_ProjectionViewMatrix"] = s_Scene->camera.GetProjectionViewMatrix();
 #endif
         vertex_array->Bind();
+#if defined(VX_RENDER_API_OPENGL)
         s_GraphicsAPI->DrawIndexed(vertex_array);
+#else
+        s_GraphicsAPI->Queue<DrawIndexed>(vertex_array);
+#endif
     }
 
     void Renderer::EndScene()

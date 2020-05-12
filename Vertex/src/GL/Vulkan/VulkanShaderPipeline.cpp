@@ -42,7 +42,7 @@ namespace Vertex
         rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
         rasterizer.lineWidth = 1.0f;
         rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
-        rasterizer.frontFace = VK_FRONT_FACE_CLOCKWISE;
+        rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
         rasterizer.depthBiasEnable = VK_FALSE;
         rasterizer.depthBiasConstantFactor = 0.0f; // Optional
         rasterizer.depthBiasClamp = 0.0f;          // Optional
@@ -156,7 +156,8 @@ namespace Vertex
 
     void VulkanShaderPipeline::Bind() const
     {
-        vkCmdBindPipeline(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_GraphicsPipeline);
+        vkCmdBindPipeline(VulkanContext::GetContext()->GetCurrentCommandBuffer(), VK_PIPELINE_BIND_POINT_GRAPHICS, m_GraphicsPipeline);
+        vkCmdBindDescriptorSets(VulkanContext::GetContext()->GetCurrentCommandBuffer(), VK_PIPELINE_BIND_POINT_GRAPHICS, VulkanContext::GetContext()->GetPipelineLayout(), 0, 1, VulkanContext::GetContext()->GetCurrentDescriptorSet(), 0, nullptr);
     }
     void VulkanShaderPipeline::Unbind() const
     {
@@ -169,7 +170,7 @@ namespace Vertex
     template VulkanShaderPipeline::VulkanShaderPipeline(const std::vector<unsigned char>& vertex_src,
         const std::vector<unsigned char>&                                                 fragment_src,
         std::array<VkVertexInputBindingDescription,
-            2>
+            1>
             bindings,
         std::array<VkVertexInputAttributeDescription,
             2>
