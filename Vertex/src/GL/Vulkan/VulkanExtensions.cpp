@@ -27,45 +27,31 @@ static void loadDebugUtilsCommands(VkInstance instance)
     SubmitDebugUtilsMessageEXTDispatchTable = reinterpret_cast<PFN_vkSubmitDebugUtilsMessageEXT>(temp_fp);
 }
 
-static void unloadDebugUtilsCommands(VkInstance instance)
-{
-}
+static void unloadDebugUtilsCommands(VkInstance instance) { }
 
-VKAPI_ATTR VkResult VKAPI_CALL vkCreateDebugUtilsMessengerEXT(
-    VkInstance                                instance,
-    const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
-    const VkAllocationCallbacks*              pAllocator,
-    VkDebugUtilsMessengerEXT*                 pMessenger)
+VKAPI_ATTR VkResult VKAPI_CALL vkCreateDebugUtilsMessengerEXT(VkInstance instance,
+    const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator,
+    VkDebugUtilsMessengerEXT* pMessenger)
 {
     auto dispatched_cmd = CreateDebugUtilsMessengerEXTDispatchTable;
     return dispatched_cmd(instance, pCreateInfo, pAllocator, pMessenger);
 }
 
 VKAPI_ATTR void VKAPI_CALL vkDestroyDebugUtilsMessengerEXT(
-    VkInstance                   instance,
-    VkDebugUtilsMessengerEXT     messenger,
-    const VkAllocationCallbacks* pAllocator)
+    VkInstance instance, VkDebugUtilsMessengerEXT messenger, const VkAllocationCallbacks* pAllocator)
 {
     auto dispatched_cmd = DestroyDebugUtilsMessengerEXTDispatchTable;
     return dispatched_cmd(instance, messenger, pAllocator);
 }
 
-VKAPI_ATTR void VKAPI_CALL vkSubmitDebugUtilsMessageEXT(
-    VkInstance                                  instance,
-    VkDebugUtilsMessageSeverityFlagBitsEXT      messageSeverity,
-    VkDebugUtilsMessageTypeFlagsEXT             messageTypes,
+VKAPI_ATTR void VKAPI_CALL vkSubmitDebugUtilsMessageEXT(VkInstance instance,
+    VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageTypes,
     const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData)
 {
     auto dispatched_cmd = SubmitDebugUtilsMessageEXTDispatchTable;
     return dispatched_cmd(instance, messageSeverity, messageTypes, pCallbackData);
 }
 
-void LoadVkExtensions(VkInstance instance)
-{
-    loadDebugUtilsCommands(instance);
-}
+void LoadVkExtensions(VkInstance instance) { loadDebugUtilsCommands(instance); }
 
-void UnloadVkExtensions(VkInstance instance)
-{
-    unloadDebugUtilsCommands(instance);
-}
+void UnloadVkExtensions(VkInstance instance) { unloadDebugUtilsCommands(instance); }

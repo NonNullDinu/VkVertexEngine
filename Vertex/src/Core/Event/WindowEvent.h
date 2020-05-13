@@ -8,37 +8,19 @@ namespace Vertex
     class WindowEvent : public Event
     {
     public:
-        inline EventCategories GetEventCategory() override
-        {
-            return EventCategories::WindowEvent;
-        }
+        inline EventCategories GetEventCategory() override { return EventCategories::WindowEvent; }
     };
 
     class WindowResizeEvent : public WindowEvent
     {
     public:
-        WindowResizeEvent(unsigned int width, unsigned int height)
-            : m_Width(width), m_Height(height)
-        {
-        }
+        WindowResizeEvent(unsigned int width, unsigned int height) : m_Width(width), m_Height(height) { }
 
-        inline unsigned int GetWidth()
-        {
-            return m_Width;
-        }
-        inline unsigned int GetHeight()
-        {
-            return m_Height;
-        }
+        inline unsigned int GetWidth() { return m_Width; }
+        inline unsigned int GetHeight() { return m_Height; }
 
-        inline EventTypes GetEventType() override
-        {
-            return EventTypes::WindowResize;
-        }
-        inline const char* GetEventName() override
-        {
-            return "EventTypes::WindowResize";
-        }
+        inline EventTypes  GetEventType() override { return EventTypes::WindowResize; }
+        inline const char* GetEventName() override { return "EventTypes::WindowResize"; }
 
         inline std::string GetDetails() override
         {
@@ -52,110 +34,55 @@ namespace Vertex
     class WindowCloseEvent : public WindowEvent
     {
     public:
-        WindowCloseEvent()
-        {
-        }
+        WindowCloseEvent() { }
 
-        inline EventTypes GetEventType() override
-        {
-            return EventTypes::WindowClose;
-        }
-        inline const char* GetEventName() override
-        {
-            return "EventTypes::WindowClose";
-        }
+        inline EventTypes  GetEventType() override { return EventTypes::WindowClose; }
+        inline const char* GetEventName() override { return "EventTypes::WindowClose"; }
 
-        inline std::string GetDetails() override
-        {
-            return "WindowCloseEvent";
-        }
+        inline std::string GetDetails() override { return "WindowCloseEvent"; }
     };
 
     class WindowGainedFocusEvent : public WindowEvent
     {
     public:
-        WindowGainedFocusEvent()
-        {
-        }
+        WindowGainedFocusEvent() { }
 
-        inline EventTypes GetEventType() override
-        {
-            return EventTypes::WindowGainedFocus;
-        }
-        inline const char* GetEventName() override
-        {
-            return "EventTypes::WindowGainedFocus";
-        }
+        inline EventTypes  GetEventType() override { return EventTypes::WindowGainedFocus; }
+        inline const char* GetEventName() override { return "EventTypes::WindowGainedFocus"; }
 
-        inline std::string GetDetails() override
-        {
-            return "WindowGainedFocusEvent";
-        }
+        inline std::string GetDetails() override { return "WindowGainedFocusEvent"; }
     };
 
     class WindowLostFocusEvent : public WindowEvent
     {
     public:
-        WindowLostFocusEvent()
-        {
-        }
+        WindowLostFocusEvent() { }
 
-        inline EventTypes GetEventType() override
-        {
-            return EventTypes::WindowLostFocus;
-        }
-        inline const char* GetEventName() override
-        {
-            return "EventTypes::WindowLostFocus";
-        }
+        inline EventTypes  GetEventType() override { return EventTypes::WindowLostFocus; }
+        inline const char* GetEventName() override { return "EventTypes::WindowLostFocus"; }
 
-        inline std::string GetDetails() override
-        {
-            return "WindowLostFocusEvent";
-        }
+        inline std::string GetDetails() override { return "WindowLostFocusEvent"; }
     };
 
     class WindowCursorEnteredEvent : public WindowEvent
     {
     public:
-        WindowCursorEnteredEvent()
-        {
-        }
+        WindowCursorEnteredEvent() { }
 
-        inline EventTypes GetEventType() override
-        {
-            return EventTypes::WindowCursorEntered;
-        }
-        inline const char* GetEventName() override
-        {
-            return "EventTypes::WindowCursorEntered";
-        }
+        inline EventTypes  GetEventType() override { return EventTypes::WindowCursorEntered; }
+        inline const char* GetEventName() override { return "EventTypes::WindowCursorEntered"; }
 
-        inline std::string GetDetails() override
-        {
-            return "WindowCursorEnteredEvent";
-        }
+        inline std::string GetDetails() override { return "WindowCursorEnteredEvent"; }
     };
 
     class WindowCursorLeftEvent : public WindowEvent
     {
     public:
-        WindowCursorLeftEvent()
-        {
-        }
+        WindowCursorLeftEvent() { }
 
-        inline EventTypes GetEventType() override
-        {
-            return EventTypes::WindowCursorLeft;
-        }
-        inline const char* GetEventName() override
-        {
-            return "EventTypes::WindowCursorLeft";
-        }
+        inline EventTypes  GetEventType() override { return EventTypes::WindowCursorLeft; }
+        inline const char* GetEventName() override { return "EventTypes::WindowCursorLeft"; }
 
-        inline std::string GetDetails() override
-        {
-            return "WindowCursorLeftEvent";
-        }
+        inline std::string GetDetails() override { return "WindowCursorLeftEvent"; }
     };
 }

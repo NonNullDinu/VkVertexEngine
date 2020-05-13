@@ -8,8 +8,8 @@ namespace Vertex
         friend class VulkanShaderPipeline;
 
     public:
-        VulkanShaderModule(const std::vector<unsigned char>& source,
-            VkPipelineShaderStageCreateInfo&                 shader_stage_info);
+        VulkanShaderModule(
+            const std::vector<unsigned char>& source, VkPipelineShaderStageCreateInfo& shader_stage_info);
         ~VulkanShaderModule();
 
     private:

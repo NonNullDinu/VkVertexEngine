@@ -9,12 +9,8 @@ namespace Vertex
     template <size_t InputBindingsLen, size_t InputAttribLen>
     VulkanShaderPipeline::VulkanShaderPipeline(const std::vector<unsigned char>& vertex_src,
         const std::vector<unsigned char>&                                        fragment_src,
-        std::array<VkVertexInputBindingDescription,
-            InputBindingsLen>
-            bindings,
-        std::array<VkVertexInputAttributeDescription,
-            InputAttribLen>
-            input_attributes)
+        std::array<VkVertexInputBindingDescription, InputBindingsLen>            bindings,
+        std::array<VkVertexInputAttributeDescription, InputAttribLen>            input_attributes)
     {
         VkViewport viewport {};
         viewport.x = 0.0f;
@@ -58,7 +54,8 @@ namespace Vertex
         multisampling.alphaToOneEnable = VK_FALSE;      // Optional
 
         VkPipelineColorBlendAttachmentState color_blend_attachment {};
-        color_blend_attachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+        color_blend_attachment.colorWriteMask
+            = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
         color_blend_attachment.blendEnable = VK_FALSE;
         color_blend_attachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;  // Optional
         color_blend_attachment.dstColorBlendFactor = VK_BLEND_FACTOR_ZERO; // Optional
@@ -78,10 +75,7 @@ namespace Vertex
         color_blending.blendConstants[2] = 0.0f; // Optional
         color_blending.blendConstants[3] = 0.0f; // Optional
 
-        VkDynamicState dynamic_states[] = {
-            VK_DYNAMIC_STATE_VIEWPORT,
-            VK_DYNAMIC_STATE_LINE_WIDTH
-        };
+        VkDynamicState dynamic_states[] = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_LINE_WIDTH };
 
         VkPipelineDynamicStateCreateInfo dynamic_state {};
         dynamic_state.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
@@ -136,43 +130,31 @@ namespace Vertex
         pipeline_info.basePipelineHandle = VK_NULL_HANDLE; // Optional
         pipeline_info.basePipelineIndex = -1;              // Optional
 
-        if (vkCreateGraphicsPipelines(VulkanContext::GetContext()
-                                          ->GetDevice(),
-                VK_NULL_HANDLE,
-                1,
-                &pipeline_info,
-                nullptr,
-                &m_GraphicsPipeline)
+        if (vkCreateGraphicsPipelines(VulkanContext::GetContext()->GetDevice(), VK_NULL_HANDLE, 1, &pipeline_info,
+                nullptr, &m_GraphicsPipeline)
             != VK_SUCCESS)
         {
             VX_CORE_ASSERT(false, "failed to create a graphics pipeline");
         }
     }
 
-    VulkanShaderPipeline::~VulkanShaderPipeline()
-    {
-        CleanUp();
-    }
+    VulkanShaderPipeline::~VulkanShaderPipeline() { CleanUp(); }
 
     void VulkanShaderPipeline::Bind() const
     {
-        vkCmdBindPipeline(VulkanContext::GetContext()->GetCurrentCommandBuffer(), VK_PIPELINE_BIND_POINT_GRAPHICS, m_GraphicsPipeline);
-        vkCmdBindDescriptorSets(VulkanContext::GetContext()->GetCurrentCommandBuffer(), VK_PIPELINE_BIND_POINT_GRAPHICS, VulkanContext::GetContext()->GetPipelineLayout(), 0, 1, VulkanContext::GetContext()->GetCurrentDescriptorSet(), 0, nullptr);
+        vkCmdBindPipeline(VulkanContext::GetContext()->GetCurrentCommandBuffer(), VK_PIPELINE_BIND_POINT_GRAPHICS,
+            m_GraphicsPipeline);
+        vkCmdBindDescriptorSets(VulkanContext::GetContext()->GetCurrentCommandBuffer(), VK_PIPELINE_BIND_POINT_GRAPHICS,
+            VulkanContext::GetContext()->GetPipelineLayout(), 0, 1,
+            VulkanContext::GetContext()->GetCurrentDescriptorSet(), 0, nullptr);
     }
-    void VulkanShaderPipeline::Unbind() const
-    {
-    }
+    void VulkanShaderPipeline::Unbind() const { }
     void VulkanShaderPipeline::CleanUp()
     {
         vkDestroyPipeline(VulkanContext::GetContext()->GetDevice(), m_GraphicsPipeline, nullptr);
     }
 
     template VulkanShaderPipeline::VulkanShaderPipeline(const std::vector<unsigned char>& vertex_src,
-        const std::vector<unsigned char>&                                                 fragment_src,
-        std::array<VkVertexInputBindingDescription,
-            1>
-            bindings,
-        std::array<VkVertexInputAttributeDescription,
-            2>
-            input_attributes);
+        const std::vector<unsigned char>& fragment_src, std::array<VkVertexInputBindingDescription, 1> bindings,
+        std::array<VkVertexInputAttributeDescription, 2> input_attributes);
 }

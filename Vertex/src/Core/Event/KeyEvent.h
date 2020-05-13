@@ -8,20 +8,11 @@ namespace Vertex
     class KeyEvent : public Event
     {
     public:
-        KeyEvent(int key)
-            : m_Key(key)
-        {
-        }
+        KeyEvent(int key) : m_Key(key) { }
 
-        inline int GetKey()
-        {
-            return m_Key;
-        }
+        inline int GetKey() { return m_Key; }
 
-        inline EventCategories GetEventCategory() override
-        {
-            return EventCategories::KeyEvent;
-        }
+        inline EventCategories GetEventCategory() override { return EventCategories::KeyEvent; }
 
     protected:
         int m_Key;
@@ -30,24 +21,12 @@ namespace Vertex
     class KeyPressEvent : public KeyEvent
     {
     public:
-        KeyPressEvent(int key, int repeat_count)
-            : KeyEvent(key), m_RepeatCount(repeat_count)
-        {
-        }
+        KeyPressEvent(int key, int repeat_count) : KeyEvent(key), m_RepeatCount(repeat_count) { }
 
-        inline int GetRepeatCount()
-        {
-            return m_RepeatCount;
-        }
+        inline int GetRepeatCount() { return m_RepeatCount; }
 
-        inline EventTypes GetEventType() override
-        {
-            return EventTypes::KeyPress;
-        }
-        inline const char* GetEventName() override
-        {
-            return "EventTypes::KeyPress";
-        }
+        inline EventTypes  GetEventType() override { return EventTypes::KeyPress; }
+        inline const char* GetEventName() override { return "EventTypes::KeyPress"; }
 
         inline std::string GetDetails() override
         {
@@ -61,47 +40,23 @@ namespace Vertex
     class KeyReleaseEvent : public KeyEvent
     {
     public:
-        KeyReleaseEvent(int key)
-            : KeyEvent(key)
-        {
-        }
+        KeyReleaseEvent(int key) : KeyEvent(key) { }
 
-        inline EventTypes GetEventType() override
-        {
-            return EventTypes::KeyRelease;
-        }
-        inline const char* GetEventName() override
-        {
-            return "EventTypes::KeyRelease";
-        }
+        inline EventTypes  GetEventType() override { return EventTypes::KeyRelease; }
+        inline const char* GetEventName() override { return "EventTypes::KeyRelease"; }
 
-        inline std::string GetDetails() override
-        {
-            return fmt::format("KeyReleaseEvent : Key<{0}>", m_Key);
-        }
+        inline std::string GetDetails() override { return fmt::format("KeyReleaseEvent : Key<{0}>", m_Key); }
     };
 
     class KeyCharInputEvent : public KeyEvent
     {
     public:
-        KeyCharInputEvent(int key)
-            : KeyEvent(key)
-        {
-        }
+        KeyCharInputEvent(int key) : KeyEvent(key) { }
 
-        inline EventTypes GetEventType() override
-        {
-            return EventTypes::KeyCharInput;
-        }
-        inline const char* GetEventName() override
-        {
-            return "EventTypes::KeyCharInput";
-        }
+        inline EventTypes  GetEventType() override { return EventTypes::KeyCharInput; }
+        inline const char* GetEventName() override { return "EventTypes::KeyCharInput"; }
 
-        inline std::string GetDetails() override
-        {
-            return fmt::format("EventTypes::KeyCharInput : Key<{0}>", m_Key);
-        }
+        inline std::string GetDetails() override { return fmt::format("EventTypes::KeyCharInput : Key<{0}>", m_Key); }
     };
 
 }

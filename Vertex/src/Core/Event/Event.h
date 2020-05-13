@@ -43,10 +43,7 @@ namespace Vertex
         virtual const char*     GetEventName() = 0;
         virtual std::string     GetDetails() = 0;
 
-        inline bool IsHandled()
-        {
-            return m_Handled;
-        }
+        inline bool IsHandled() { return m_Handled; }
 
     protected:
         bool m_Handled = false;
@@ -55,15 +52,11 @@ namespace Vertex
     class EventHandler
     {
     public:
-        EventHandler(Event& event)
-            : m_Event(event)
-        {
-        }
+        EventHandler(Event& event) : m_Event(event) { }
 
 #define TOSTR(x) Logger::GetCoreLogger()->debug(##x);
 
-        template <EventTypes T, typename EventTypeName, typename F>
-        void Dispatch(F&& func)
+        template <EventTypes T, typename EventTypeName, typename F> void Dispatch(F&& func)
         {
             if (m_Event.GetEventType() == T && !m_Event.m_Handled)
             {

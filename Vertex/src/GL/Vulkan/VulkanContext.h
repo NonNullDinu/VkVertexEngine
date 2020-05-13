@@ -26,10 +26,7 @@ namespace Vertex
             std::optional<uint32_t> graphicsFamily;
             std::optional<uint32_t> presentFamily;
 
-            bool IsComplete()
-            {
-                return graphicsFamily.has_value() && presentFamily.has_value();
-            }
+            bool IsComplete() { return graphicsFamily.has_value() && presentFamily.has_value(); }
         };
 
         struct SwapChainSupportDetails
@@ -39,77 +36,29 @@ namespace Vertex
             std::vector<VkPresentModeKHR>   presentModes;
         };
 
-        inline VkInstance GetInstance()
-        {
-            return m_VkInstance;
-        }
-        inline VkDevice GetDevice()
-        {
-            return m_Device;
-        }
-        inline VkExtent2D GetSwapChainExtent()
-        {
-            return m_SwapChainExtent;
-        }
-        inline VkRenderPass GetRenderPass()
-        {
-            return m_RenderPass;
-        }
-        inline VkCommandBuffer GetCurrentCommandBuffer()
-        {
-            return m_CurrentCommandBuffer;
-        }
-        inline VkDescriptorSet* GetCurrentDescriptorSet()
-        {
-            return &m_CurrentDescriptorSet;
-        }
-        inline VkPhysicalDevice GetPhysicalDevice()
-        {
-            return m_PhysicalDevice;
-        }
-        inline VkQueue GetQueue()
-        {
-            return m_GraphicsQueue;
-        }
-        inline VkDescriptorPool GetDescriptorPool()
-        {
-            return m_DescriptorPool;
-        }
-        inline std::vector<VkImage> GetSwapChainImages()
-        {
-            return m_SwapChainImages;
-        }
-        inline VkPipelineLayout GetPipelineLayout()
-        {
-            return m_PipelineLayout;
-        }
-        inline uint32_t GetQueueFamily()
-        {
-            return FindQueueFamilies(m_PhysicalDevice).graphicsFamily.value();
-        }
-        inline VkSurfaceKHR GetSurface()
-        {
-            return m_Surface;
-        }
-        inline VkCommandPool GetCommandPool()
-        {
-            return m_CommandPool;
-        }
-        inline VkCommandBuffer GetLoadCommandBuffer()
-        {
-            return m_LoadCommandBuffer;
-        }
+        inline VkInstance           GetInstance() { return m_VkInstance; }
+        inline VkDevice             GetDevice() { return m_Device; }
+        inline VkExtent2D           GetSwapChainExtent() { return m_SwapChainExtent; }
+        inline VkRenderPass         GetRenderPass() { return m_RenderPass; }
+        inline VkCommandBuffer      GetCurrentCommandBuffer() { return m_CurrentCommandBuffer; }
+        inline VkDescriptorSet*     GetCurrentDescriptorSet() { return &m_CurrentDescriptorSet; }
+        inline VkPhysicalDevice     GetPhysicalDevice() { return m_PhysicalDevice; }
+        inline VkQueue              GetQueue() { return m_GraphicsQueue; }
+        inline VkDescriptorPool     GetDescriptorPool() { return m_DescriptorPool; }
+        inline std::vector<VkImage> GetSwapChainImages() { return m_SwapChainImages; }
+        inline VkPipelineLayout     GetPipelineLayout() { return m_PipelineLayout; }
+        inline uint32_t        GetQueueFamily() { return FindQueueFamilies(m_PhysicalDevice).graphicsFamily.value(); }
+        inline VkSurfaceKHR    GetSurface() { return m_Surface; }
+        inline VkCommandPool   GetCommandPool() { return m_CommandPool; }
+        inline VkCommandBuffer GetLoadCommandBuffer() { return m_LoadCommandBuffer; }
 
         uint32_t FindMemoryType(uint32_t type_filter, VkMemoryPropertyFlags properties);
 
         static VulkanContext* GetContext();
 
         /// public helper functions
-        void CreateBuffer(VkDeviceSize size,
-            VkBufferUsageFlags         usage,
-            VkMemoryPropertyFlags      properties,
-            VkBuffer&                  buffer,
-            VkDeviceMemory&            buffer_memory);
+        void CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties,
+            VkBuffer& buffer, VkDeviceMemory& buffer_memory);
 
         void CopyBuffer(VkBuffer src_buffer, VkBuffer dst_buffer, VkDeviceSize size);
 

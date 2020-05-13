@@ -8,24 +8,12 @@ namespace Vertex
     class VX_PUBLIC_API Input
     {
     public:
-        inline static bool IsKeyPressed(int key)
-        {
-            return s_Instance->IsKeyPressedImpl(key);
-        }
+        inline static bool IsKeyPressed(int key) { return s_Instance->IsKeyPressedImpl(key); }
 
-        inline static bool IsMouseButtonPressed(int button)
-        {
-            return s_Instance->IsMouseButtonPressedImpl(button);
-        }
+        inline static bool IsMouseButtonPressed(int button) { return s_Instance->IsMouseButtonPressedImpl(button); }
 
-        inline static float GetMouseX()
-        {
-            return s_Instance->GetMouseXImpl();
-        }
-        inline static float GetMouseY()
-        {
-            return s_Instance->GetMouseYImpl();
-        }
+        inline static float GetMouseX() { return s_Instance->GetMouseXImpl(); }
+        inline static float GetMouseY() { return s_Instance->GetMouseYImpl(); }
 
         static void Init();
 
