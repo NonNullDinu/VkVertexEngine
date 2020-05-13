@@ -70,18 +70,4 @@ namespace Vertex
         return 0;
     }
 
-    template <size_t InputBindingLen, size_t InputAttribLen>
-    Shader* Shader::Create(const std::vector<unsigned char>& vertex_src, const std::vector<unsigned char>& fragment_src,
-        std::tuple<std::array<VkVertexInputBindingDescription, InputBindingLen>,
-            std::array<VkVertexInputAttributeDescription, InputAttribLen>>
-            vertex_shader_input_layout)
-    {
-        return new VulkanShaderPipeline(
-            vertex_src, fragment_src, std::get<0>(vertex_shader_input_layout), std::get<1>(vertex_shader_input_layout));
-    }
-
-    template Shader* Shader::Create<1, 2>(const std::vector<unsigned char>& vertex_src,
-        const std::vector<unsigned char>&                                   fragment_src,
-        std::tuple<std::array<VkVertexInputBindingDescription, 1>, std::array<VkVertexInputAttributeDescription, 2>>
-            vertex_shader_input_layout);
 }

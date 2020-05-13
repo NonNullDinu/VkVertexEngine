@@ -1,6 +1,7 @@
 #include "Application.h"
 
 #include "GL/Vulkan/VulkanBufferBinding.h"
+#include "GL/ShaderTemplateImpl.h"
 
 namespace Vertex
 {
