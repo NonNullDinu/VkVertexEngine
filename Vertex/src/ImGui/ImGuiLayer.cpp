@@ -2,21 +2,14 @@
 
 #include "Core/Event/Event.h"
 
-#if defined(VX_RENDER_API_VULKAN)
-    #include "GL/Vulkan/VulkanContext.h"
-#endif
+#include "GL/Vulkan/VulkanContext.h"
 
 namespace Vertex
 {
 
-    ImGuiLayer::ImGuiLayer()
-        : Layer("ImGuiLayer")
-    {
-    }
+    ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer") { }
 
-    ImGuiLayer::~ImGuiLayer()
-    {
-    }
+    ImGuiLayer::~ImGuiLayer() { }
 
     void ImGuiLayer::OnAttach()
     {
@@ -38,10 +31,6 @@ namespace Vertex
 
         GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 
-#if defined(VX_RENDER_API_OPENGL)
-        ImGui_ImplGlfw_InitForOpenGL(window, true);
-        ImGui_ImplOpenGL3_Init("#version 410");
-#elif defined(VX_RENDER_API_VULKAN)
         VulkanContext* context = VulkanContext::GetContext();
         ImGui_ImplGlfw_InitForVulkan(window, true);
         ImGui_ImplVulkan_InitInfo init_info = {};
@@ -81,27 +70,18 @@ namespace Vertex
 
         vkDeviceWaitIdle(VulkanContext::GetContext()->GetDevice());
         ImGui_ImplVulkan_DestroyFontUploadObjects();
-#endif
     }
 
     void ImGuiLayer::OnDetach()
     {
-#if defined(VX_RENDER_API_OPENGL)
-        ImGui_ImplOpenGL3_Shutdown();
-#elif defined(VX_RENDER_API_VULKAN)
         ImGui_ImplVulkan_Shutdown();
-#endif
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
     }
 
     void ImGuiLayer::Begin()
     {
-#if defined(VX_RENDER_API_OPENGL)
-        ImGui_ImplOpenGL3_NewFrame();
-#elif defined(VX_RENDER_API_VULKAN)
         ImGui_ImplVulkan_NewFrame();
-#endif
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
     }
@@ -113,21 +93,11 @@ namespace Vertex
         io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
         // Rendering
         ImGui::Render();
-#if defined(VX_RENDER_API_OPENGL)
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-#elif defined(VX_RENDER_API_VULKAN)
         ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), VulkanContext::GetContext()->GetCurrentCommandBuffer());
-#endif
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
         {
-#ifdef VX_RENDER_API_OPENGL
-            GLFWwindow* backup_current_context = glfwGetCurrentContext();
-#endif
             ImGui::UpdatePlatformWindows();
             ImGui::RenderPlatformWindowsDefault();
-#ifdef VX_RENDER_API_OPENGL
-            glfwMakeContextCurrent(backup_current_context);
-#endif
         }
     }
 

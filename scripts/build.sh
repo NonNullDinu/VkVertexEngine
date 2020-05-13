@@ -2,5 +2,5 @@ set -e
 cd ..
 mkdir -p build || exit $?
 pushd build
-cmake .. && make -j "$(nproc)"
+USE_VK=1 cmake .. && make -j "$(nproc)"
 popd

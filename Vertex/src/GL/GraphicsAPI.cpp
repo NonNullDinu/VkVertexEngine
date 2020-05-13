@@ -1,24 +1,11 @@
 #include "GraphicsAPI.h"
 
-#if defined(VX_RENDER_API_OPENGL)
-    #include "OpenGL/OpenGLGraphicsAPI.h"
-#elif defined(VX_RENDER_API_VULKAN)
-    #include "Vulkan/VulkanGraphicsAPI.h"
-#endif
+#include "Vulkan/VulkanGraphicsAPI.h"
 
 namespace Vertex
 {
 
-    GraphicsAPI* GraphicsAPI::Create()
-    {
-#if defined(VX_RENDER_API_OPENGL)
-        return new OpenGLGraphicsAPI();
-#elif defined(VX_RENDER_API_VULKAN)
-        return new VulkanGraphicsAPI();
-#else
-        return nullptr; // for now
-#endif
-    }
+    GraphicsAPI* GraphicsAPI::Create() { return new VulkanGraphicsAPI(); }
     template <GraphicsAPIAction action, typename... GraphicsAPIActionArgument>
     void GraphicsAPI::Queue(GraphicsAPIActionArgument... args)
     {
@@ -28,5 +15,6 @@ namespace Vertex
         }
     }
 
-    template void GraphicsAPI::Queue<DrawIndexed, std::shared_ptr<VertexArray>>(std::shared_ptr<VertexArray> vertex_array);
+    template void GraphicsAPI::Queue<DrawIndexed, std::shared_ptr<VertexArray>>(
+        std::shared_ptr<VertexArray> vertex_array);
 }

@@ -4,6 +4,8 @@
 #include "Core/Event/MouseEvent.h"
 #include "Core/Event/WindowEvent.h"
 
+#include "GL/Vulkan/VulkanContext.h"
+
 namespace Vertex
 {
 
@@ -169,8 +171,7 @@ namespace Vertex
 
     }
 
-    WindowsWindow::WindowsWindow(WindowProperties properties)
-        : m_Data(properties)
+    WindowsWindow::WindowsWindow(WindowProperties properties) : m_Data(properties)
     {
         CoreLogger::Get()->info("Creating window {0}...", m_Data.title);
 
@@ -186,9 +187,7 @@ namespace Vertex
 
         glfwSetErrorCallback(GLFWErrorCallback);
 
-#if defined(VX_RENDER_API_DIRECTX12) || defined(VX_RENDER_API_VULKAN)
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-#endif
 
         m_Window = glfwCreateWindow((int)m_Data.width, (int)m_Data.height, m_Data.title, nullptr, nullptr);
 
@@ -210,10 +209,7 @@ namespace Vertex
         glfwSetCursorPosCallback(m_Window, GLFWInputCallbacks::CursorPositionCallback);
     }
 
-    WindowsWindow::~WindowsWindow()
-    {
-        ShutDown();
-    }
+    WindowsWindow::~WindowsWindow() { ShutDown(); }
 
     void WindowsWindow::ShutDown()
     {
@@ -229,8 +225,8 @@ namespace Vertex
     void WindowsWindow::OnEvent(Event& event)
     {
         EventHandler handler(event);
-        handler
-            .Dispatch<EventTypes::WindowResize, WindowResizeEvent>(VX_BIND_FUNC_1(WindowsWindow::OnWindowResizeEvent));
+        handler.Dispatch<EventTypes::WindowResize, WindowResizeEvent>(
+            VX_BIND_FUNC_1(WindowsWindow::OnWindowResizeEvent));
     }
 
     // event callbacks

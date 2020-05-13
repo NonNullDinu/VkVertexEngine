@@ -42,6 +42,3 @@ namespace Vertex
     };
 
 }
-
-#include "Platforms/Linux/LinuxInput.h"
-#include "Platforms/Windows/WindowsInput.h"
