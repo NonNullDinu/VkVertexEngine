@@ -1,8 +1,8 @@
 #pragma once
 
 #include "GL/Shader.h"
-#include "VulkanShaderModule.h"
 #include "VulkanContext.h"
+#include "VulkanShaderModule.h"
 
 namespace Vertex
 {
@@ -18,6 +18,9 @@ namespace Vertex
         ~VulkanShaderPipeline();
         void Bind() const override;
         void Unbind() const override;
+
+        void BeforeRender() override;
+        void AfterRender() override;
 
         void CleanUp();
 
@@ -56,7 +59,7 @@ namespace Vertex
         rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
         rasterizer.lineWidth = 1.0f;
         rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
-        rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+        rasterizer.frontFace = VK_FRONT_FACE_CLOCKWISE;
         rasterizer.depthBiasEnable = VK_FALSE;
         rasterizer.depthBiasConstantFactor = 0.0f; // Optional
         rasterizer.depthBiasClamp = 0.0f;          // Optional

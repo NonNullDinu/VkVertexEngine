@@ -23,5 +23,6 @@
 
 #include <GLFW/glfw3.h>
 
+#define GLM_FORCE_DEFAULT_ALIGNED_GENTYPES
 #include <glm/ext.hpp>
 #include <glm/glm.hpp>

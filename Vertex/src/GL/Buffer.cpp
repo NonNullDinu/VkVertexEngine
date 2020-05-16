@@ -4,11 +4,7 @@
 
 namespace Vertex
 {
-
-    VertexBuffer* VertexBuffer::Create(float* vertices, size_t size, const BufferLayout& layout)
-    {
-        return new VulkanVertexBuffer(vertices, size);
-    }
+    // VertexBuffer::Create implemented in Vulkan/VulkanTemplateImplementations.h
 
     IndexBuffer* IndexBuffer::Create(uint32_t* indices, size_t size) { return new VulkanIndexBuffer(indices, size); }
 

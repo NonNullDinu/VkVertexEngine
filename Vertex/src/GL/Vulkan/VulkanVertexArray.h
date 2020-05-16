@@ -20,6 +20,9 @@ namespace Vertex
 
         const std::shared_ptr<IndexBuffer>& GetIndexBuffer() const override;
 
+        void BeforeRender() override;
+        void AfterRender() override;
+
     private:
         std::shared_ptr<IndexBuffer>               m_IndexBuffer;
         std::vector<std::shared_ptr<VertexBuffer>> m_VBOs;

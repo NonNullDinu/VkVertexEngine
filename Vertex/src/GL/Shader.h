@@ -1,36 +1,21 @@
 #pragma once
 
 #include "Core/Core.h"
+#include "UniformPack.h"
 
 namespace Vertex
 {
-    // Make definite shader types so the API is more consistent
-    enum class ShaderDataType
-    {
-        Bool,
-        Mat3,
-        Mat4,
-        Int,
-        Int2,
-        Int3,
-        Int4,
-        Float,
-        Float2,
-        Float3,
-        Float4
-    };
-
-    // helper functions
-    const size_t   GetSizeOfShaderDataType(ShaderDataType type);
-    const uint32_t GetComponentCountOfShaderDataType(ShaderDataType type);
-
     class Shader
     {
     public:
+        UniformPack uniforms;
         virtual ~Shader() { }
 
         virtual void Bind() const = 0;
         virtual void Unbind() const = 0;
+
+        virtual void BeforeRender() = 0;
+        virtual void AfterRender() = 0;
 
         template <size_t InputBindingLen, size_t InputAttribLen>
         static Shader* Create(const std::vector<unsigned char>& vertex_src,

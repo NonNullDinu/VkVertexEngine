@@ -7,27 +7,7 @@ namespace Vertex
     // --------- Vertex Buffer --------
     // --------------------------------
 
-    VulkanVertexBuffer::VulkanVertexBuffer(float* vertices, size_t size)
-    {
-        VulkanContext* context = VulkanContext::GetContext();
-        VkBuffer       staging_buffer;
-        VkDeviceMemory staging_buffer_memory;
-        context->CreateBuffer(size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, staging_buffer,
-            staging_buffer_memory);
-
-        void* data;
-        vkMapMemory(context->GetDevice(), staging_buffer_memory, 0, size, 0, &data);
-        memcpy(data, vertices, size);
-        vkUnmapMemory(context->GetDevice(), staging_buffer_memory);
-
-        context->CreateBuffer(size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
-            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_InternalVkBuffer, m_BufferMemory);
-        context->CopyBuffer(staging_buffer, m_InternalVkBuffer, size);
-
-        vkDestroyBuffer(context->GetDevice(), staging_buffer, nullptr);
-        vkFreeMemory(context->GetDevice(), staging_buffer_memory, nullptr);
-    }
+    // constructor in the header file
 
     VulkanVertexBuffer::~VulkanVertexBuffer()
     {
@@ -44,8 +24,6 @@ namespace Vertex
     }
 
     void VulkanVertexBuffer::AfterRender() { }
-
-    const BufferLayout& VulkanVertexBuffer::GetLayout() const { return {}; }
 
     // --------------------------
     // ----- Index Buffer -------

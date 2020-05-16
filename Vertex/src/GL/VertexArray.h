@@ -13,6 +13,9 @@ namespace Vertex
         virtual void Bind() const = 0;
         virtual void Unbind() const = 0;
 
+        virtual void BeforeRender() = 0;
+        virtual void AfterRender() = 0;
+
         virtual void AddVertexBuffer(const std::shared_ptr<VertexBuffer> vbo) = 0;
         virtual void SetIndexBuffer(const std::shared_ptr<IndexBuffer> ibo) = 0;
 

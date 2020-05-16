@@ -1,12 +1,27 @@
 #include "Application.h"
 
-#include "GL/Vulkan/VulkanBufferBinding.h"
 #include "GL/ShaderTemplateImpl.h"
+#include "GL/Vulkan/VulkanBufferBinding.h"
+#include "GL/Vulkan/VulkanTemplateImplementations.h"
 
 namespace Vertex
 {
 
     Application* Application::s_AppInstance = nullptr;
+
+    struct VertexData
+    {
+        glm::vec3 pos;
+        glm::vec4 color;
+
+        static constexpr auto GetDescriptions()
+        {
+            return VulkanBufferBindings<1,
+                VulkanBufferBinding<sizeof(VertexData), 0, 0, offsetof(VertexData, pos), VK_FORMAT_R32G32B32_SFLOAT>,
+                VulkanBufferBinding<sizeof(VertexData), 0, 1, offsetof(VertexData, color),
+                    VK_FORMAT_R32G32B32A32_SFLOAT, false>>::GetAttributeDescriptions();
+        }
+    };
 
     Application::Application() : m_Running(true), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f)
     {
@@ -21,15 +36,14 @@ namespace Vertex
         // ------ Should be in client side ------
         // --------------------------------------
 
-        float vertices[21] = { -0.5f, -0.5f, 0.0f, 0.4f, 0.8f, 0.4f, 1.0f, 0.5f, -0.5f, 0.0f, 0.4f, 0.8f, 0.4f, 1.0f,
-            -0.5f, 0.5f, 0.0f, 0.4f, 0.8f, 0.4f, 1.0f };
+        std::vector<VertexData> vertices = { { { -0.5f, -0.5f, 0.0f }, { 0.4f, 0.8f, 0.4f, 1.0f } },
+            { { 0.5f, -0.5f, 0.0f }, { 0.4f, 0.8f, 0.4f, 1.0f } },
+            { { -0.5f, 0.5f, 0.0f }, { 0.4f, 0.8f, 0.4f, 1.0f } } };
 
         uint32_t indices[3] = { 0, 1, 2 };
 
-        BufferLayout layout = { { ShaderDataType::Float3 }, { ShaderDataType::Float4 } };
-
         m_VertexArray.reset(VertexArray::Create());
-        m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices), layout));
+        m_VertexBuffer.reset(VertexBuffer::Create(vertices));
 
         m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 
@@ -39,15 +53,14 @@ namespace Vertex
 
         // --------------------------------------
 
-        float vertices2[21] = { 0.5f, -0.5f, 0.0f, 0.8f, 0.4f, 0.4f, 1.0f, 0.5f, 0.5f, 0.0f, 0.8f, 0.4f, 0.4f, 1.0f,
-            -0.5f, 0.5f, 0.0f, 0.8f, 0.4f, 0.4f, 1.0f };
+        std::vector<VertexData> vertices2 = { { { 0.5f, -0.5f, 0.0f }, { 0.8f, 0.4f, 0.4f, 1.0f } },
+            { { 0.5f, 0.5f, 0.0f }, { 0.8f, 0.4f, 0.4f, 1.0f } },
+            { { -0.5f, 0.5f, 0.0f }, { 0.8f, 0.4f, 0.4f, 1.0f } } };
 
         uint32_t indices2[3] = { 0, 1, 2 };
 
-        BufferLayout layout2 = { { ShaderDataType::Float3 }, { ShaderDataType::Float4 } };
-
         m_VertexArray2.reset(VertexArray::Create());
-        m_VertexBuffer2.reset(VertexBuffer::Create(vertices2, sizeof(vertices2), layout2));
+        m_VertexBuffer2.reset(VertexBuffer::Create(vertices2));
 
         m_VertexArray2->AddVertexBuffer(m_VertexBuffer2);
 
@@ -142,10 +155,7 @@ namespace Vertex
             0x00, 0x03, 0x00, 0x09, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0xFD, 0x00, 0x01, 0x00, 0x38, 0x00, 0x01,
             0x00 };
 
-        m_Shader.reset(Shader::Create<1, 2>(vertex_src, fragment_src,
-            VulkanBufferBindings<1, VulkanBufferBinding<3 * sizeof(float), 0, 0, 0, VK_FORMAT_R32G32B32_SFLOAT>,
-                VulkanBufferBinding<4 * sizeof(float), 0, 1, 3 * sizeof(float), VK_FORMAT_R32G32B32A32_SFLOAT,
-                    false>>::GetAttributeDescriptions()));
+        m_Shader.reset(Shader::Create<1, 2>(vertex_src, fragment_src, VertexData::GetDescriptions()));
 
         s_AppInstance = this;
 
