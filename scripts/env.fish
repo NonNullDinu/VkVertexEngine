@@ -1,0 +1,1 @@
+set -a PATH (pwd)/bin

@@ -19,4 +19,4 @@ jobs:
           submodules: recursive
 
       - name: build-vulkan
-        run: cd scripts && bash build.sh
+        run: bash build.sh

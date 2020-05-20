@@ -18,6 +18,7 @@
 
 #include "Core.h"
 #include "Logger.h"
+#include "VxTypes.h"
 
 #define GLFW_INCLUDE_VULKAN
 

@@ -11,9 +11,6 @@ namespace Vertex
     {
     public:
         virtual ~Buffer() { }
-
-        virtual void Bind() const = 0;
-        virtual void Unbind() const = 0;
     };
 
     // -----------------------------------
@@ -25,6 +22,8 @@ namespace Vertex
     public:
         virtual ~VertexBuffer() { }
 
+        virtual void                               Bind() const = 0;
+        virtual void                               Unbind() const = 0;
         virtual void                               BeforeRender() = 0;
         virtual void                               AfterRender() = 0;
         template <typename T> static VertexBuffer* Create(std::vector<T> vertices);
@@ -41,10 +40,24 @@ namespace Vertex
 
         virtual uint32_t GetCount() const = 0;
 
+        virtual void Bind() const = 0;
+        virtual void Unbind() const = 0;
         virtual void BeforeRender() = 0;
         virtual void AfterRender() = 0;
 
         static IndexBuffer* Create(uint32_t* indices, size_t size);
     };
 
+    // -------------------------------------
+    // ---------- Uniform Buffer -----------
+    // -------------------------------------
+
+    class UniformBuffer : public Buffer
+    {
+    public:
+        virtual ~UniformBuffer() { }
+
+        virtual void BeforeRender() = 0;
+        virtual void AfterRender() = 0;
+    };
 }

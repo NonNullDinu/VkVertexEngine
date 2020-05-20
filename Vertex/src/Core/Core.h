@@ -11,9 +11,9 @@
 #define VX_BIND_FUNC_0(x) std::bind(&x, this)
 #define VX_BIND_FUNC_1(x) std::bind(&x, this, std::placeholders::_1)
 
-#define VX_CORE_STATIC_ASSERT(x, ...)                                                                                  \
+#define VX_CORE_STATIC_ASSERT(...)                                                                                     \
     {                                                                                                                  \
-        static_assert(x, __VA_ARGS__);                                                                                 \
+        static_assert(__VA_ARGS__);                                                                                    \
     }
 #define VX_CORE_ASSERT(x, ...)                                                                                         \
     {                                                                                                                  \

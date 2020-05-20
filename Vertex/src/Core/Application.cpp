@@ -1,8 +1,8 @@
 #include "Application.h"
 
 #include "GL/ShaderTemplateImpl.h"
-#include "GL/Vulkan/VulkanBufferBinding.h"
 #include "GL/Vulkan/VulkanTemplateImplementations.h"
+#include "GL/Vulkan/VulkanVertexShaderInputHelper.h"
 
 namespace Vertex
 {
@@ -11,16 +11,22 @@ namespace Vertex
 
     struct VertexData
     {
-        glm::vec3 pos;
-        glm::vec4 color;
-
-        static constexpr auto GetDescriptions()
+        struct VertexStaticData : public VxDataBuffer<0, sizeof(glm::vec3) + sizeof(glm::vec4)>
         {
-            return VulkanBufferBindings<1,
-                VulkanBufferBinding<sizeof(VertexData), 0, 0, offsetof(VertexData, pos), VK_FORMAT_R32G32B32_SFLOAT>,
-                VulkanBufferBinding<sizeof(VertexData), 0, 1, offsetof(VertexData, color),
-                    VK_FORMAT_R32G32B32A32_SFLOAT, false>>::GetAttributeDescriptions();
-        }
+            VertexField<glm::vec3, 0, 0>                 pos;
+            VertexField<glm::vec4, sizeof(glm::vec3), 1> color;
+
+            VertexStaticData(glm::vec3 p_pos, glm::vec4 p_color) : pos(p_pos), color(p_color) { }
+        } StaticData;
+
+        using ShaderInputs = VulkanVertexShaderInputs<VertexStaticData, decltype(VertexStaticData::pos),
+            decltype(VertexStaticData::color)>;
+
+        VertexData() : StaticData { glm::vec3(), glm::vec4() } { }
+        VertexData(glm::vec3 p_pos, glm::vec4 p_color) : StaticData { p_pos, p_color } { }
+
+        static constexpr auto GetDescriptions() { return ShaderInputs::GetAttributeDescriptions(); }
+        static constexpr auto GetVertexArrayLayout() { return ShaderInputs::GetVertexArrayLayout(); }
     };
 
     Application::Application() : m_Running(true), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f)
@@ -155,7 +161,7 @@ namespace Vertex
             0x00, 0x03, 0x00, 0x09, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0xFD, 0x00, 0x01, 0x00, 0x38, 0x00, 0x01,
             0x00 };
 
-        m_Shader.reset(Shader::Create<1, 2>(vertex_src, fragment_src, VertexData::GetDescriptions()));
+        m_Shader.reset(Shader::Create(vertex_src, fragment_src, VertexData::GetDescriptions()));
 
         s_AppInstance = this;
 

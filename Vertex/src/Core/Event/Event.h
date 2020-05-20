@@ -54,8 +54,6 @@ namespace Vertex
     public:
         EventHandler(Event& event) : m_Event(event) { }
 
-#define TOSTR(x) Logger::GetCoreLogger()->debug(##x);
-
         template <EventTypes T, typename EventTypeName, typename F> void Dispatch(F&& func)
         {
             if (m_Event.GetEventType() == T && !m_Event.m_Handled)

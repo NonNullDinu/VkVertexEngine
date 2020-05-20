@@ -14,7 +14,7 @@ namespace Vertex
             {
                 return *it->second;
             }
-            Uniform* new_uniform = nullptr//new Uniform(name)
+            Uniform* new_uniform = nullptr // new Uniform(name)
                 ;
             m_Uniforms.insert({ name, new_uniform });
             return *new_uniform;
