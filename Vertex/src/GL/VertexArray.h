@@ -4,6 +4,7 @@
 
 namespace Vertex
 {
+    template <typename T> concept VertexDataConcept = requires { T::GetVertexArrayLayout(); };
 
     class VertexArray
     {
@@ -22,6 +23,8 @@ namespace Vertex
         virtual const std::shared_ptr<IndexBuffer>& GetIndexBuffer() const = 0;
 
         static VertexArray* Create();
+        template <VertexDataConcept T>
+        static VertexArray* Create(std::vector<T> vertices, std::vector<uint32_t> indices);
     };
 
 }

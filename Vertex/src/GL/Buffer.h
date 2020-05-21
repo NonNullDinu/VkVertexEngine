@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/Core.h"
+#include <GL/Vulkan/VulkanVertexArrayLayout.h>
 
 #include "Shader.h"
 
@@ -27,6 +28,9 @@ namespace Vertex
         virtual void                               BeforeRender() = 0;
         virtual void                               AfterRender() = 0;
         template <typename T> static VertexBuffer* Create(std::vector<T> vertices);
+        template <typename T> static VertexBuffer* Create(T* vertices, uint32_t count);
+        template <typename T>
+        static VertexBuffer* Create(std::vector<T> vertices, const VulkanVertexArrayLayoutElement& element);
     };
 
     // ----------------------------------
@@ -45,7 +49,7 @@ namespace Vertex
         virtual void BeforeRender() = 0;
         virtual void AfterRender() = 0;
 
-        static IndexBuffer* Create(uint32_t* indices, size_t size);
+        static IndexBuffer* Create(std::vector<uint32_t> indices);
     };
 
     // -------------------------------------

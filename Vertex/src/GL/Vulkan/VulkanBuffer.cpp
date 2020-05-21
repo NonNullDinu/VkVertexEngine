@@ -29,10 +29,10 @@ namespace Vertex
     // ----- Index Buffer -------
     // --------------------------
 
-    VulkanIndexBuffer::VulkanIndexBuffer(uint32_t* indices, uint32_t size)
+    VulkanIndexBuffer::VulkanIndexBuffer(std::vector<uint32_t> indices)
     {
         VulkanContext* context = VulkanContext::GetContext();
-        VkDeviceSize   buffer_size = sizeof(indices[0]) * size;
+        VkDeviceSize   buffer_size = sizeof(uint32_t) * indices.size();
 
         VkBuffer       staging_buffer;
         VkDeviceMemory staging_buffer_memory;
@@ -42,7 +42,7 @@ namespace Vertex
 
         void* data;
         vkMapMemory(context->GetDevice(), staging_buffer_memory, 0, buffer_size, 0, &data);
-        memcpy(data, indices, (size_t)buffer_size);
+        memcpy(data, indices.data(), (size_t)buffer_size);
         vkUnmapMemory(context->GetDevice(), staging_buffer_memory);
 
         context->CreateBuffer(buffer_size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
@@ -53,7 +53,7 @@ namespace Vertex
         vkDestroyBuffer(context->GetDevice(), staging_buffer, nullptr);
         vkFreeMemory(context->GetDevice(), staging_buffer_memory, nullptr);
 
-        m_Count = size;
+        m_Count = indices.size();
     }
 
     VulkanIndexBuffer::~VulkanIndexBuffer()

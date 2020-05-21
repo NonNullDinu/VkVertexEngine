@@ -11,7 +11,7 @@ namespace Vertex
 
     struct VertexData
     {
-        struct VertexStaticData : public VxDataBuffer<0, sizeof(glm::vec3) + sizeof(glm::vec4)>
+        struct VertexStaticData : public VxDataBuffer<STATIC, 0>
         {
             VertexField<glm::vec3, 0, 0>                 pos;
             VertexField<glm::vec4, sizeof(glm::vec3), 1> color;
@@ -46,16 +46,9 @@ namespace Vertex
             { { 0.5f, -0.5f, 0.0f }, { 0.4f, 0.8f, 0.4f, 1.0f } },
             { { -0.5f, 0.5f, 0.0f }, { 0.4f, 0.8f, 0.4f, 1.0f } } };
 
-        uint32_t indices[3] = { 0, 1, 2 };
+        std::vector<uint32_t> indices = { 0, 1, 2 };
 
-        m_VertexArray.reset(VertexArray::Create());
-        m_VertexBuffer.reset(VertexBuffer::Create(vertices));
-
-        m_VertexArray->AddVertexBuffer(m_VertexBuffer);
-
-        m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
-
-        m_VertexArray->SetIndexBuffer(m_IndexBuffer);
+        m_VertexArray.reset(VertexArray::Create(vertices, indices));
 
         // --------------------------------------
 
@@ -63,16 +56,9 @@ namespace Vertex
             { { 0.5f, 0.5f, 0.0f }, { 0.8f, 0.4f, 0.4f, 1.0f } },
             { { -0.5f, 0.5f, 0.0f }, { 0.8f, 0.4f, 0.4f, 1.0f } } };
 
-        uint32_t indices2[3] = { 0, 1, 2 };
+        std::vector<uint32_t> indices2 = { 0, 1, 2 };
 
-        m_VertexArray2.reset(VertexArray::Create());
-        m_VertexBuffer2.reset(VertexBuffer::Create(vertices2));
-
-        m_VertexArray2->AddVertexBuffer(m_VertexBuffer2);
-
-        m_IndexBuffer2.reset(IndexBuffer::Create(indices2, sizeof(indices2) / sizeof(uint32_t)));
-
-        m_VertexArray2->SetIndexBuffer(m_IndexBuffer2);
+        m_VertexArray2.reset(VertexArray::Create(vertices2, indices2));
 
         // SPIR-V of the glsl above
         std::vector<unsigned char> vertex_src = { 0x03, 0x02, 0x23, 0x07, 0x00, 0x00, 0x01, 0x00, 0x08, 0x00, 0x0D,

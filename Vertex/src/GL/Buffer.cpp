@@ -6,6 +6,9 @@ namespace Vertex
 {
     // VertexBuffer::Create implemented in Vulkan/VulkanTemplateImplementations.h
 
-    IndexBuffer* IndexBuffer::Create(uint32_t* indices, size_t size) { return new VulkanIndexBuffer(indices, size); }
+    IndexBuffer* IndexBuffer::Create(std::vector<uint32_t> indices)
+    {
+        return new VulkanIndexBuffer(indices);
+    }
 
 }

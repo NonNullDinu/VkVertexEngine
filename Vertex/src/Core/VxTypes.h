@@ -13,10 +13,12 @@ namespace Vertex
     typedef int64_t  VxInt64;
     typedef uint64_t VxUInt64;
 
-    typedef size_t  VxSize;
-    typedef ssize_t VxSSize;
+    typedef size_t   VxSize;
+    typedef ssize_t  VxSSize;
+    typedef void*    VxPtr;
+    typedef VxUInt8* VxArithPtr; // a pointer that can be used for arithmetic
 
-    typedef float_t     VxFloat32;
-    typedef double_t    VxFloat64;
+    typedef float       VxFloat32;
+    typedef double      VxFloat64;
     typedef long double VxFloat80;
 }
