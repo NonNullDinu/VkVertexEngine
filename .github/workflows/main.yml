@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install libglfw3 libglfw3-dev
+        run: sudo add-apt-repository ppa:ubuntu-toolchain-r/test && sudo apt-get update && sudo apt-get install libglfw3 libglfw3-dev g++-10
 
       - uses: actions/checkout@v2
         with:
