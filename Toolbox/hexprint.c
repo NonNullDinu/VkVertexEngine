@@ -1,8 +1,8 @@
 // a little program like hexdump, but outputs hex initializer lists instead of hex space concatenated
 
+#include <errno.h>
 #include <stdio.h>
 #include <string.h>
-#include <errno.h>
 
 unsigned char buffer[BUFSIZ];
 
@@ -19,7 +19,10 @@ int main(int argc, char* argv[])
         }
 
         size_t in_read;
-        fprintf(stdout, "//%s\n{", argv[in_file_index]);
+        if (argc == 2)
+            fprintf(stdout, "{");
+        else
+            fprintf(stdout, "//%s\n{", argv[in_file_index]);
         while ((in_read = fread(buffer, 1, sizeof buffer, fin)))
         {
             for (size_t i = 0; i < in_read; i++)
