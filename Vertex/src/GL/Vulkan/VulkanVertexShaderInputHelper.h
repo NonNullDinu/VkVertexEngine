@@ -5,7 +5,7 @@ namespace Vertex
 {
     namespace VertexShaderInputUtils
     {
-        template <typename T> static constexpr VkFormat DeductFormat()
+        template <typename T> static constexpr VkFormat DeduceFormat()
         {
             if constexpr (std::is_same_v<T, glm::vec1> || std::is_same_v<T, float>)
             {
@@ -42,10 +42,9 @@ namespace Vertex
         }
     }
 
-    template <typename T, int Offset, int Location, VkFormat Format = VertexShaderInputUtils::DeductFormat<T>()>
-    class VertexField : public T
+    template <typename T, int Offset, int Location, VkFormat Format = VertexShaderInputUtils::DeduceFormat<T>()>
+    struct VertexField : public T
     {
-    public:
         static constexpr VkVertexInputAttributeDescription GetAttributeDescription(int binding)
         {
             VkVertexInputAttributeDescription attribute_description {};
@@ -78,7 +77,7 @@ namespace Vertex
         DYNAMIC
     };
 
-    template <VxDataBufferType type, VxSize Binding> struct VxDataBuffer
+    template <VxDataBufferType type, VxSize Binding, VxSize Offset = 0> struct VxDataBuffer
     {
         static constexpr VkVertexInputBindingDescription GetBindingDescription(VxSize struct_size)
         {
@@ -91,21 +90,22 @@ namespace Vertex
 
         static constexpr VxDataBufferType GetDataBufferType() { return type; }
         static constexpr VxSize           GetBinding() { return type; }
+        static constexpr VxSize           GetOffset() { return Offset; }
     };
 
     namespace VertexShaderInputUtils
     {
         // https://stackoverflow.com/a/34672753/12576629
-        template <template <VxDataBufferType type, VxSize Binding> class base, typename derived>
+        template <template <VxDataBufferType type, VxSize Binding, VxSize Offset> class base, typename derived>
         struct is_base_of_template_impl
         {
-            template <VxDataBufferType type, VxSize Binding>
-            static constexpr std::true_type  test(const base<type, Binding>*);
+            template <VxDataBufferType type, VxSize Binding, VxSize Offset>
+            static constexpr std::true_type  test(const base<type, Binding, Offset>*);
             static constexpr std::false_type test(...);
             using type = decltype(test(std::declval<derived*>()));
         };
 
-        template <template <VxDataBufferType, VxSize> class base, typename derived>
+        template <template <VxDataBufferType, VxSize, VxSize> class base, typename derived>
         using is_base_of_template = typename is_base_of_template_impl<base, derived>::type;
 
         template <typename T> inline constexpr bool IsBuffer = is_base_of_template<VxDataBuffer, T>::value;
@@ -149,8 +149,8 @@ namespace Vertex
         {
             if constexpr (IsBuffer<First>)
             {
-                arr[I] = { Offset, sizeof(First) };
-                GenerateVAOLayout<I + 1, Size, Offset + sizeof(First), Rest...>(arr);
+                arr[I] = { Offset + First::GetOffset(), sizeof(First) };
+                GenerateVAOLayout<I + 1, Size, Offset + First::GetOffset() + sizeof(First), Rest...>(arr);
             }
             else
             {
@@ -178,10 +178,10 @@ namespace Vertex
                 binding_descriptions, attribute_descriptions, -1);
             return std::make_tuple(binding_descriptions, attribute_descriptions);
         }
-        static constexpr auto GetVertexArrayLayout()
+        template <VxSize BaseOffset> static constexpr auto GetVertexArrayLayout()
         {
             std::array<VulkanVertexArrayLayoutElement, s_VertexBuffers> arr;
-            VertexShaderInputUtils::GenerateVAOLayout<0, s_VertexBuffers, 0, Args...>(arr);
+            VertexShaderInputUtils::GenerateVAOLayout<0, s_VertexBuffers, BaseOffset, Args...>(arr);
             VulkanVertexArrayLayout<s_VertexBuffers> layout(arr);
             return layout;
         }

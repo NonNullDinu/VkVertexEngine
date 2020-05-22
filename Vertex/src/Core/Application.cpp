@@ -18,15 +18,16 @@ namespace Vertex
 
             VertexStaticData(glm::vec3 p_pos, glm::vec4 p_color) : pos(p_pos), color(p_color) { }
         } StaticData;
-
         using ShaderInputs = VulkanVertexShaderInputs<VertexStaticData, decltype(VertexStaticData::pos),
             decltype(VertexStaticData::color)>;
-
         VertexData() : StaticData { glm::vec3(), glm::vec4() } { }
         VertexData(glm::vec3 p_pos, glm::vec4 p_color) : StaticData { p_pos, p_color } { }
 
         static constexpr auto GetDescriptions() { return ShaderInputs::GetAttributeDescriptions(); }
-        static constexpr auto GetVertexArrayLayout() { return ShaderInputs::GetVertexArrayLayout(); }
+        static constexpr auto GetVertexArrayLayout()
+        {
+            return ShaderInputs::GetVertexArrayLayout<offsetof(VertexData, StaticData)>();
+        }
     };
 
     Application::Application() : m_Running(true), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f)
