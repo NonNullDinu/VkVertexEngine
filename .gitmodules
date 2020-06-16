@@ -7,6 +7,3 @@
 [submodule "Vertex/deps/glm"]
 	path = Vertex/deps/glm
 	url = https://github.com/g-truc/glm
-[submodule "Vertex/deps/glfw"]
-	path = Vertex/deps/glfw
-	url = https://github.com/VertexEngine/glfw
